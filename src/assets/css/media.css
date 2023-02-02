@@ -1,0 +1,199 @@
+/* Media Query */
+@media only screen and (max-width: 1680px) {
+    .auth-wrapper .auth-form{
+        max-width: 30%;
+    }
+    .send-message {
+        width: 10%;
+    }
+    .type-message-div{
+        width: 80%;
+    }
+    .common-wrapper .auth-form,.conformation-box{
+        max-width: 30%;
+    }
+}
+@media only screen and (max-width: 1200px) {
+    .auth-wrapper .auth-form,.conformation-box{
+        max-width: 50%;
+    }
+    .chat-room-footer .end-chat button,
+    .send-message button{
+        padding: 1rem 0rem;
+    }
+    .send-message {
+        width: 15%;
+    }
+    .type-message-div{
+        width: 75%;
+    }
+}
+@media only screen and (max-width: 992px) {
+    .navbar-collapse{
+        position: absolute;
+        right: 0px;
+        top: 43px;
+        background: rgb(255, 255, 255);
+        width: 13rem;
+        padding: 4rem 1rem;
+        height: calc(100vh - 43px);
+        
+    }
+    .dropdown-menu{
+        min-width: 7rem;
+    }
+    .navbar ul{
+        margin-left: 0rem !important;
+    }
+    .navbar ul li{
+        margin: 0px !important;
+    }
+    .navbar ul li{
+        text-align: center;
+    }
+    .common-wrapper .auth-form,.conformation-box{
+        max-width: 60%;
+    }
+    .send-message {
+        width: 20%;
+    }
+    .type-message-div{
+        width: 70%;
+    }
+    .chat_wrapper .random-stranger-div p{
+        left: 35%;
+        max-width: 30%;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .send-message button,
+    .chat-room-footer .end-chat button{
+        padding: 1rem 2rem;
+        width: auto;
+    }
+    .chat-room-footer .end-chat{
+        width: auto;
+    }
+    .send-message button span{
+        right: 10px;
+    }
+    .type-message-div{
+        padding: 1rem 0rem;
+    }
+    .type-message-div{
+        width: 100%;
+        margin: 0rem 1rem
+    }
+    .type-message-div .emoji-div, .type-message-div .img-div, .type-message-div .voice-msg-div{
+        width: 10%;
+    }
+    .audio-chat-functionality-div {
+      width: auto;
+      padding: 1.5rem 4.3rem;
+    }
+    
+}
+@media only screen and (max-width: 580px) {
+    .term-conditon-wrapper{
+        padding: 3rem 1rem;
+    }
+    .chat-room.regular-chat {
+        height: calc(100vh - 230px);
+    }
+    .main-header .logo{
+        left: 40%;
+    }
+    .main-header .logo.nav-link.active.position-absolute:after{
+        width: 160px;
+        height: 125px;
+        left: -2.5rem;
+    }
+    .main-header .logo {
+        top: 30%;
+        left: 41%;
+        width: 20%;
+    }
+    .chat-room-footer .end-chat button{
+        width: 70px;
+        padding: 0.65rem 0rem !important;
+    }
+    .disconnected-stranger p,
+    .rating-div .connected-user-text{
+        font-size: 14px;
+    }
+    .disconnected-stranger button,
+    .rating-div span,
+    .disconnected-stranger span{
+        font-size: 12px;
+    }
+    .chat-room ul li{
+        margin-bottom: 16px !important;
+    }
+    .chat-room .message-detail .message-para{
+        font-size: 0.75rem;
+    }
+    .common-wrapper .auth-form,.conformation-box{
+        max-width: 90%;
+    }
+    .conformation-box{
+        padding: 2rem .75rem;
+    }
+    .chat_wrapper{
+        height: calc(100vh - 46px);
+        padding: 3.5rem 0.813rem;
+    }
+    .send-message button span{
+        top: 7px;
+    }
+    .send-message button span img{
+        width: 0.875rem;
+    }
+    .chat-room {
+        height: calc(100vh - 320px);
+    }
+    .send-message button,
+    .chat-room-footer .end-chat button{
+        padding: 0.65rem 1.8rem;
+        font-size: 12px;
+    }
+    .type-message-div input{
+        font-size: 12px;
+    }
+    .type-message-div{
+        padding: 0.5rem 0.5rem;
+        margin: 0rem 0.5rem;
+    }
+    .type-message-div .emoji-div img, .type-message-div .img-div img, .type-message-div .voice-msg-div img{
+        width: 0.75rem;
+    }
+    .audio-chat-functionality-div {
+      padding: 1.5rem 1.3rem;
+    }
+    .audio-chat-functionality-div .btn-group a{
+        margin: 0 0.25rem;
+    }
+    .auth-wrapper .auth-form{
+        max-width: 90%;
+    }
+    .audio-chat-functionality-div .btn-group a{
+        width: 8.5rem;
+    }
+}
+@media only screen and (max-width: 480px) {
+    .main-header .logo.nav-link.active.position-absolute:after{
+        height: 100px;
+    }
+    .send-message button, .chat-room-footer .end-chat button{
+        padding: 0.65rem 1rem;
+    }
+    .send-message button span img{
+        display: none;
+    }
+    .chat_wrapper .random-stranger-div p {
+        left: 22%;
+        max-width: 60%;
+    }
+    .chat-room{
+        padding-top: 3rem;
+    }
+}

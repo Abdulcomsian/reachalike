@@ -1,0 +1,14 @@
+.chat-rating-div{
+    background-color: #fff;
+    width: 350px;
+    padding: 2.4rem;
+    text-align: center;
+}
+.chat-rating-div h5{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+}
+.chat-rating-div p{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}

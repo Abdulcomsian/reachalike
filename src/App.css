@@ -1,0 +1,89 @@
+@font-face {
+  font-family: Sf-Pro-Display-Regular;
+  src: url("./constant/fonts/SFPRODISPLAYREGULAR.OTF");
+}
+@font-face {
+  font-family: Sf-Pro-Display-Light;
+  src: url("./constant/fonts/FontsFree-Net-SFProDisplay-Light.ttf");
+}
+@font-face {
+  font-family: Gilroy-Medium;
+  src: url("./constant/fonts/gilroy-medium.ttf");
+}
+
+
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Common - style - Start */
+
+p,h1,h2,h3,h4,h5,h6,a,link,span,body{
+  padding: 0;
+  margin: 0;
+}
+a,a:hover{
+  text-decoration: none;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.w-100{
+  width: 100%;
+}
+input:focus,select:focus{
+  outline: none;
+  border: none;
+}
+ul{
+  padding: 0px;
+  margin: 0;
+}
+.inter-600{
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+.w-40{
+  width: 40%;
+}
+.w-80{
+  width: 80% !important;
+}
+.w-12{
+  width: 12% !important;
+}

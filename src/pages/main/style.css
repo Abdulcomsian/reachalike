@@ -1,0 +1,179 @@
+.main-div{
+    background-color: rgba(246, 246, 246, 1);
+    height: calc(100vh - 43px);
+    background-image: url('../../assets/img/Reachalike.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 0 1rem;
+}
+.main-div p{
+    font-size: 1.563rem;
+    font-family: Sf-Pro-Display-Regular;
+    width: 100%;
+    max-width: 589px;
+    margin: auto;
+}
+.audio-chat-functionality-div{
+    background: #FFFFFF;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.12);
+    padding: 1.5rem 7.3rem;
+    width: 38rem;
+    margin-top: 2.5rem;
+}
+.audio-chat-functionality-div .btn-group a{
+    border-radius: 34px;
+    width: 9.5rem;
+    height: 2.811rem;
+}
+.audio-chat-functionality-div .btn-group a.text{
+    background: linear-gradient(180deg, #21448F 0%, rgba(33, 68, 143, 0.86) 100%);
+}
+.audio-chat-functionality-div .btn-group a.audio{
+    background-color: #37C1F0;
+}
+.audio-chat-functionality-div .btn-group a{
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 1);
+    font-weight: 500;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+.audio-chat-functionality-div .btn-group a img{
+    width: 1.25rem;
+    height: 1.25rem;
+    object-fit: scale-down;
+}
+.audio-chat-functionality-div .btn-group a .icon-span{
+    background-color: rgba(44, 44, 44, 1);
+    padding: 0.825rem 0.875rem;
+    border-radius: 34.0206px;
+    display: flex;
+    align-items: center;
+
+}
+.audio-chat-functionality-div .btn-group a .icon-span i{
+    border: 1.36083px solid #FFFFFF;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 100%;
+    font-size: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.footer-widget{
+    margin-bottom: 1.68rem;
+}
+.footer-widget ul{
+    display: flex;
+    list-style: none;
+}
+.footer-widget ul li{
+    padding-left: 27px;
+    position: relative;
+}
+.footer-widget ul li:nth-child(2):before,
+.footer-widget ul li:nth-child(3):before{
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    background-color: rgba(39, 77, 212, 1);
+    position: absolute;
+    left: 12px;
+    top: 10px;
+}
+.footer-widget ul li a{
+    color: rgba(92, 98, 106, 1);
+}
+.footer-widget p{
+    color: rgba(92, 98, 106, 1);
+    font-size: 0.75rem;
+    
+}
+.footer-widget p a{
+    color: rgba(39, 77, 212, 1) !important;
+    cursor: pointer;
+}
+.common-wrapper{
+    height: 100vh;
+    top: 0px;
+    background: rgba(0, 0, 0, 0.26);
+    width: 100%;
+    left: 0;
+}
+.common-wrapper .auth-form{
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 1.063rem 2.75rem;
+    width: 100%;
+    max-width: 20%;
+    margin: auto;
+    z-index: 99999;
+}
+.common-wrapper .auth-form h2{
+    font-family: Sf-Pro-Display-Regular;
+}
+.common-wrapper .auth-form p{
+    font-size: 0.875rem;
+    line-height: 1rem;
+    font-family: Sf-Pro-Display-Regular;
+}
+.common-wrapper .auth-form .input-div .common-input{
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.17);
+    padding: 0.625rem 0.75rem;
+    width: 100%;
+    font-family: Sf-Pro-Display-Regular;
+}
+
+.input-div label{
+    font-family: Sf-Pro-Display-Regular;
+    color: rgba(0, 0, 0, 1);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+.common-wrapper .auth-form button{
+    background: #34C9FF;
+    border-radius: 4px;
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    color: #fff;
+    font-family: Sf-Pro-Display-Regular;
+    text-transform: uppercase;
+    letter-spacing: 0.055em;
+    font-size: 0.75rem;
+}
+.common-wrapper .auth-form .bottom-para a{
+    text-decoration: underline !important;
+    color: rgba(33, 68, 143, 1);
+}
+.near-me-btn-group button{
+    background: rgba(217, 217, 217, 0.15) !important;
+    border: 1px solid rgba(0, 0, 0, 0.13) !important;
+    color: rgba(0, 0, 0, 1) !important;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 1rem !important;
+    letter-spacing: 0.12em;
+}
+.near-me-form .input-select select{
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.13) !important;
+    font-family: Sf-Pro-Display-Regular;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: capitalize;
+}
+.ReactModal__Overlay {
+    background-color: rgba(0, 0, 0, 0.26) !important;
+}
+.stranger-disconnected{
+    margin-bottom: 0.75rem;
+    color: rgba(192, 46, 46, 1);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+}

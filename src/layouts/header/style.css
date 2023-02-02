@@ -1,0 +1,66 @@
+.main-header{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+.main-header .logo{
+    top: 0;
+    left: 46%;
+}
+.common-btn-link{
+    padding: 0.375rem 1.25rem !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    background: rgba(217, 217, 217, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.13);
+    font-family: Sf-Pro-Display-Regular;
+    color: rgba(0, 0, 0, 1) !important;
+    line-height: 0.75rem;
+    display: inline-block;
+}
+.auth-list a{
+    padding: 0.375rem 1.25rem !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-family: Sf-Pro-Display-Regular;
+    color: rgba(0, 0, 0, 1) !important;
+    line-height: 0.75rem;
+    display: inline-block;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+.auth-list a.active,
+.auth-list a:hover{
+    border-color: rgba(55, 193, 240, 1);
+}
+.main-header .logo.nav-link.active.position-absolute:after {
+    content: "";
+    width: 200px;
+    height: 150px;
+    background: #fff;
+    position: absolute;
+    left: -20px;
+    top: -31px;
+    border-radius: 0px 0px 100px 100px;
+}
+.main-header .logo img{
+    position: relative;
+    z-index: 99999;
+}
+.navbar-light .navbar-toggler-icon{
+    background-image: url('../../assets//img/toggle-btn.png');
+    width: 48px;
+}
+.navbar-light .navbar-toggler:focus{
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+.navbar-light .navbar-toggler{
+    border: none;
+    padding: 0px;
+}
+.dropdown-menu li a{
+    font-family: Sf-Pro-Display-Regular;
+    font-size: 12px;
+}

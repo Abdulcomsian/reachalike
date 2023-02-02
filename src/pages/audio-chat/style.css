@@ -1,0 +1,49 @@
+.audio_chat_wrapper{
+    height: calc(100vh - 153px);
+    background-color: rgba(57, 57, 57, 1);
+}
+.audio-footer{
+    height: 110px;
+    background-color: rgba(57, 57, 57, 1);
+    border-top: 4px solid #e1ecef24;
+}
+.spacer{
+    width: 4px;
+    height: 100%;
+    background-color: #E1ECEF;
+    opacity: 0.1;
+}
+.spacer-column{
+    width: 100%;
+    height: 8px;
+    background-color: #E1ECEF;
+    opacity: 0.1;
+}
+.audio_chat_wrapper .audio-body .audio-body-left,
+.audio_chat_wrapper .audio-body .audio-body-right{
+    height: 100%;
+    width: 50%;
+}
+.end-call-btn{
+    background-color: rgba(217, 32, 41, 1) !important;
+}
+.common-footer-btn{
+    background-color: #fff;
+    box-shadow: 0px 2.64339px 6.60847px rgba(0, 0, 0, 0.11);
+    border: none;
+    width: 33px;
+    height: 33px;
+    border-radius: 100%;
+    margin: 0 0.5rem;
+}
+.audio-footer .footer-button button{
+    padding: 0.5rem 0.3rem;
+    background-color: rgba(52, 201, 255, 1);
+    color: #fff;
+}
+.audio-footer .footer-button span{
+    color: #fff;
+}
+.audio-footer .footer-button span span{
+    color: rgba(52, 201, 255, 1);
+}

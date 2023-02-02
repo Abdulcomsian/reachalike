@@ -1,0 +1,19 @@
+.conformation-box{
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 1.063rem 2.75rem;
+    width: 100%;
+    max-width: 40%;
+    margin: auto;
+    z-index: 99999;
+}
+.confirm-btn{
+    float: right;
+    border: none;
+    padding: 1rem;
+    background-color: #21448f;
+    color: #fff;
+}
+input{
+        accent-color: #21448f;
+}

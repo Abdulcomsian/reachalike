@@ -1,0 +1,21 @@
+.search-user-wrapper{
+    height: calc(100vh - 43px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(225, 236, 239, 1);
+}
+.search-user-wrapper .connecting-logo-div p{
+    color: rgba(33, 68, 143, 1);
+    font-family: 'Inter', sans-serif;
+}
+.search-user-wrapper .connecting-logo-div button{
+    padding: 0.813rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    border: none;
+    letter-spacing: 0.01em;
+    font-weight: 600;
+    background-color: rgba(52, 201, 255, 1);
+}

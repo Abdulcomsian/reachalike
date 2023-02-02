@@ -1,0 +1,27 @@
+.term-conditon-wrapper{
+    padding: 3rem 2rem;
+    background-color: #f6f6f6;
+    height: 100%;
+}
+.secondary-title{
+    padding: 1rem 0 0.5rem;
+    font-family: Sf-Pro-Display-Regular;
+    font-weight: 700;
+}
+.term-conditon-wrapper h4{
+    font-family: Sf-Pro-Display-Light;
+    font-size: 25px;
+}
+
+.term-conditon-wrapper p,.term-conditon-wrapper ul li{
+    font-weight: 300;
+    font-size: 14px;
+    font-family: Sf-Pro-Display-Light;
+    line-height: 24px;
+}
+.term-conditon-wrapper ul{
+    padding-left: 20px;
+}
+.term-conditon-wrapper ul ul{
+    padding-left: 20px;
+}
