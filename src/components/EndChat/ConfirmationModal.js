@@ -17,7 +17,7 @@ const tooltipArray = [
   "Awesome+",
 ];
 
-const RatingChat = (props) => {
+const EndChatModal = (props) => {
   const { asRef, user } = props;
   const [ratingValue, setRatingValue] = useState(0);
 
@@ -31,7 +31,10 @@ const RatingChat = (props) => {
 
   const submitRatingValue = (rate) => {
     props.setRatingModal(false);
-    navigate("/");
+    // props.submitEndChat(false);
+    // props.modalUserRatingClose();
+    // props.setEndChat(false);
+    // navigate("/");
   };
   console.log(ratingValue);
   return (
@@ -68,4 +71,4 @@ const RatingChat = (props) => {
     </div>
   );
 };
-export default RatingChat;
+export default EndChatModal;

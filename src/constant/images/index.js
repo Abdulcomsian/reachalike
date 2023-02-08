@@ -1,4 +1,5 @@
 const logo = require("../../assets/img/logo.png");
+const logo2 = require("../../assets/img/logo.svg");
 const T_icon = require("../../assets/img/T-text-icon.png");
 const audio_icon = require("../../assets/img/voice-img.png");
 const sender_icon = require("../../assets/img/sender.png");
@@ -12,16 +13,17 @@ const audio_two = require("../../assets/img/audio-2.png");
 const call_end = require("../../assets/img/call-end.png");
 
 export default {
-    logo,
-    T_icon,
-    audio_icon,
-    sender_icon,
-    receiver_icon,
-    emoji_icon,
-    image_icon,
-    voice_icon,
-    send_icon,
-    audio_one,
-    audio_two,
-    call_end
+  logo,
+  logo2,
+  T_icon,
+  audio_icon,
+  sender_icon,
+  receiver_icon,
+  emoji_icon,
+  image_icon,
+  voice_icon,
+  send_icon,
+  audio_one,
+  audio_two,
+  call_end,
 };
