@@ -8,9 +8,9 @@ import EndChatModal from "../../components/EndChat/ConfirmationModal";
 
 const ChatScreen = (props) => {
   const ref = useRef();
-  const { requestToChat, user } = props;
-  const [findUser, setFindUser] = useState(false);
-  const [endChat, setEndChat] = useState(false);
+  const { requestToChat, user, findUser, setFindUser, endChat, setEndChat } = props;
+  // const [findUser, setFindUser] = useState(false);
+  // const [endChat, setEndChat] = useState(false);
   const [newChat, setNewChat] = useState(false);
   const [connectText, setConnectText] = useState(true);
 
@@ -26,11 +26,22 @@ const ChatScreen = (props) => {
     setEndChat(true);
     setNewChat(true);
     setRatingModal(true);
-    setYes(false);
-    setConfirm(false);
+    // setYes(false);
+    // setConfirm(false);
   };
 
+  const onClickNewChat = () => {
+    setFindUser(false)
+    setNewChat(false)
+    setYes(false)
+    setConfirm(false)
+  }
+
   const toggleModal = () => setConfirm(!confirm);
+
+  const onClickEnd = () => {
+    setYes(true);
+  }
 
   useEffect(() => {
     if (requestToChat) {
@@ -64,14 +75,15 @@ const ChatScreen = (props) => {
     setEndChat(true);
   };
 
+
   return (
     <div
       className={
         requestToChat
           ? "chat_wrapper w-80"
           : findUser
-          ? "chat_wrapper"
-          : "chat_wrapper pt-0"
+            ? "chat_wrapper"
+            : "chat_wrapper pt-0"
       }
     >
       {findUser ? (
@@ -179,6 +191,7 @@ const ChatScreen = (props) => {
               </li>
             </ul>
           </div>
+
           {newChat && (
             <div className="disconnected-stranger mb-4">
               <p className="inter-600">Stranger has disconnected.</p>
@@ -195,14 +208,38 @@ const ChatScreen = (props) => {
               >
                 Switch to <span>Audio</span>
               </Link>
-              {/* <span className="inter-600">
-                or switch to <span>Audio</span>
-              </span> */}
             </div>
           )}
 
           <div className="chat-room-footer d-flex align-item-center justify-content-between">
-            {newChat ? (
+            {
+              yes ?
+                <div className="end-chat">
+                  {
+                    newChat ?
+                      <Button
+                        // className="btn btn-info"
+                        color="info bg-info text-dark"
+                        onClick={onClickNewChat}
+                      >
+                        New Chat
+                      </Button>
+                      :
+                      <Button
+                        className="rounded"
+                        onClick={onClickConfirm}
+                      >
+                        Confirm
+                      </Button>
+                  }
+                </div>
+                :
+                <div className="end-chat">
+                  <Button
+                    className="rounded" onClick={onClickEnd}>End</Button>
+                </div>
+            }
+            {/* {newChat ? (
               <div className="end-chat">
                 <button
                   className="rounded"
@@ -218,11 +255,10 @@ const ChatScreen = (props) => {
                   color="danger"
                   onClick={toggleModal}
                 >
-                  {/* () => [setEndChat(true), setNewChat(true)] */}
                   End
                 </Button>
               </div>
-            )}
+            )} */}
             {/* End Chat Modal */}
             <Modal isOpen={confirm} toggle={toggleModal}>
               <ModalHeader toggle={toggleModal}>Confirmation</ModalHeader>
@@ -263,8 +299,8 @@ const ChatScreen = (props) => {
                 requestToChat
                   ? "send-message w-12"
                   : newChat
-                  ? "send-message disable"
-                  : "send-message"
+                    ? "send-message disable"
+                    : "send-message"
               }
               style={{ opacity: newChat && "0.5" }}
             >
@@ -294,6 +330,8 @@ const ChatScreen = (props) => {
               asRef={ref}
               setRatingModal={setRatingModal}
               modalUserRatingClose={modalUserRatingClose}
+              loginHandler={props.loginHandler}
+              registerHandler={props.registerHandler}
             />
           )}
         </div>

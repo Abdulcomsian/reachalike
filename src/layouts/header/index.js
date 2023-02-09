@@ -9,7 +9,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 const Header = (props) => {
   let location = useLocation();
   const navigate = useNavigate();
-
+  const { endChat, setEndChat } = props;
   const [confirm, setConfirm] = React.useState(false);
   const [selected, setSelected] = React.useState("Default");
 
@@ -20,13 +20,20 @@ const Header = (props) => {
   const toggleModal = () => setConfirm(!confirm);
 
   const changePage = () => {
-    if (location.pathname === "/chat") {
-      setConfirm(true);
-    } else if (location.pathname === "/audio-chat") {
-      setConfirm(true);
-    } else {
-      navigate("/");
+    if (endChat) {
+      setEndChat(false)
+      navigate("/")
     }
+    else {
+      if (location.pathname === "/chat") {
+        setConfirm(true);
+      } else if (location.pathname === "/audio-chat") {
+        setConfirm(true);
+      } else {
+        navigate("/");
+      }
+    }
+
   };
   const { loginHandler, registerHandler, nearMeHandler } = props;
   return (
@@ -36,20 +43,14 @@ const Header = (props) => {
           confirm={confirm}
           setConfirm={setConfirm}
           toggleModal={toggleModal}
+          loginHandler={loginHandler}
+          registerHandler={registerHandler}
         />
-
-        {/* <span
-          classNameName="common-btn-link rounded cursor-pointer"
-          onClick={nearMeHandler}
-        >
-          <a>near me</a>
-        </span> */}
         <ul className="navbar-nav m-auto mb-2 mb-lg-0">
           <li className="nav-item">
             <a
               className="logo nav-link active position-absolute cursor-pointer"
               aria-current="page"
-              // href="/Reach-Alike"
               onClick={changePage}
             >
               <img src={logo} className="img-fluid" />
@@ -86,9 +87,8 @@ const Header = (props) => {
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Default" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Default" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Default")}
                   >
@@ -97,9 +97,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Lifestyle" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Lifestyle" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Lifestyle")}
                   >
@@ -108,9 +107,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Enterprenuership" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Enterprenuership" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Enterprenuership")}
                   >
@@ -119,9 +117,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Business" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Business" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Business")}
                   >
@@ -130,9 +127,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Entertainment" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Entertainment" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Entertainment")}
                   >
@@ -141,9 +137,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Education" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Education" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Education")}
                   >
@@ -152,9 +147,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Near Me" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Near Me" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => {
                       handleSelected("Near Me");
@@ -163,12 +157,6 @@ const Header = (props) => {
                   >
                     Near Me
                   </a>
-                  {/* <a
-                    className="dropdown-item cursor-pointer"
-                    onClick={nearMeHandler}
-                  >
-                    Near Me
-                  </a> */}
                 </li>
               </ul>
             </li>

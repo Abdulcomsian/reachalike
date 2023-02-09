@@ -6,9 +6,10 @@ import ChatScreen from "../chat";
 import { Link } from "react-router-dom";
 import RatingAudio from "../../components/RatingAudio/RatingAudio";
 
-const AudioChat = ({ user }) => {
-  const [findUser, setFindUser] = useState(false);
-  const [endChat, setEndChat] = useState(false);
+const AudioChat = (props) => {
+  // const [findUser, setFindUser] = useState(false);
+  // const [endChat, setEndChat] = useState(false);
+  const { user, findUser, setFindUser, endChat, setEndChat } = props;
   const ref = useRef();
   const [mute, setMute] = useState(false);
   const [startChat, setStartChat] = useState(false);
@@ -50,8 +51,8 @@ const AudioChat = ({ user }) => {
                     startChat
                       ? "audio-body-left w-100 d-flex align-items-center justify-content-center"
                       : !endChat
-                      ? "audio-body-left d-flex align-items-center justify-content-center"
-                      : "audio-body-left w-100 d-flex align-items-center justify-content-center"
+                        ? "audio-body-left d-flex align-items-center justify-content-center"
+                        : "audio-body-left w-100 d-flex align-items-center justify-content-center"
                   }
                 >
                   <div className="common-audio">
@@ -104,6 +105,8 @@ const AudioChat = ({ user }) => {
                         user={user}
                         asRef={ref}
                         modalUserRatingClose={modalUserRatingClose}
+                        loginHandler={props.loginHandler}
+                        registerHandler={props.registerHandler}
                       />
                     ) : (
                       ""

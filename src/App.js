@@ -18,6 +18,11 @@ function App() {
   const [authLogin, setAuthLogin] = useState(false);
   const [authRegister, setAuthRegister] = useState(false);
   const [nearMe, setNearMe] = useState(false);
+
+  const [findUser, setFindUser] = useState(false);
+  const [endChat, setEndChat] = useState(false);
+
+
   const loginHandler = (e) => {
     setAuthLogin(!authLogin);
     if (authRegister) {
@@ -73,12 +78,16 @@ function App() {
           loginHandler={loginHandler}
           registerHandler={registerHandler}
           nearMeHandler={nearMeHandler}
+          endChat={endChat}
+          setEndChat={setEndChat}
         />
         <Routes>
           {/* <Route exact path="/" element={<MainScreen authLogin={authLogin} authRegister={authRegister} loginHandler={loginHandler} registerHandler={registerHandler} nearMe={nearMe} nearMeHandler={nearMeHandler} />} /> */}
           <Route exact path="/" element={<MainScreen />} />
-          <Route exact path="/chat" element={<ChatScreen user={user} />} />
-          <Route exact path="/audio-chat" element={<AudioChat user={user} />} />
+          <Route exact path="/chat" element={<ChatScreen user={user} findUser={findUser} setFindUser={setFindUser} endChat={endChat} setEndChat={setEndChat} loginHandler={loginHandler}
+            registerHandler={registerHandler} />} />
+          <Route exact path="/audio-chat" element={<AudioChat user={user} findUser={findUser} setFindUser={setFindUser} endChat={endChat} setEndChat={setEndChat} loginHandler={loginHandler}
+            registerHandler={registerHandler} />} />
           <Route exact path="/term-condition" element={<TermCondition />} />
           <Route exact path="/policy" element={<Policy />} />
         </Routes>

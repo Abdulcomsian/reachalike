@@ -48,6 +48,8 @@ const ConfirmationModal = (props) => {
           setRatingModal={setRatingModal}
           asRef={ref}
           modalUserRatingClose={modalUserRatingClose}
+          loginHandler={props.loginHandler}
+          registerHandler={props.registerHandler}
         />
       )}
     </>
