@@ -8,9 +8,7 @@ import EndChatModal from "../../components/EndChat/ConfirmationModal";
 
 const ChatScreen = (props) => {
   const ref = useRef();
-  const { requestToChat, user, findUser, setFindUser, endChat, setEndChat } = props;
-  // const [findUser, setFindUser] = useState(false);
-  // const [endChat, setEndChat] = useState(false);
+  const { requestToChat, user, findUser, setFindUser, endChat, setEndChat, wsConnection, setWsConnection, handleConnect, handleClose } = props;
   const [newChat, setNewChat] = useState(false);
   const [connectText, setConnectText] = useState(true);
 
@@ -23,14 +21,14 @@ const ChatScreen = (props) => {
   };
 
   const onClickConfirm = () => {
+    handleClose();
     setEndChat(true);
     setNewChat(true);
     setRatingModal(true);
-    // setYes(false);
-    // setConfirm(false);
   };
 
   const onClickNewChat = () => {
+    handleConnect();
     setFindUser(false)
     setNewChat(false)
     setYes(false)
@@ -57,6 +55,7 @@ const ChatScreen = (props) => {
         setConnectText(false);
       }, 3000);
     }
+
     const checkIfClickedOutside = (e) => {
       if (endChat && ref.current && !ref.current.contains(e.target)) {
         setEndChat(false);
@@ -66,7 +65,6 @@ const ChatScreen = (props) => {
     document.addEventListener("mousedown", checkIfClickedOutside);
 
     return () => {
-      // Cleanup the event listener
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
   }, [findUser, endChat]);
@@ -197,7 +195,7 @@ const ChatScreen = (props) => {
               <p className="inter-600">Stranger has disconnected.</p>
               <button
                 className="btn btn-info bg-info px-3"
-                onClick={() => [setFindUser(false), setNewChat(false)]}
+                onClick={() => [setFindUser(false), setNewChat(false), handleConnect()]}
               >
                 New Chat
               </button>{" "}
@@ -308,6 +306,7 @@ const ChatScreen = (props) => {
                 className={
                   requestToChat ? "ps-4 text-start rounded" : "rounded"
                 }
+              // onClick={handleConnect}
               >
                 Send{" "}
                 <span>

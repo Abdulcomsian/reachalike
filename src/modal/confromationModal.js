@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ConfromationModal = (props) => {
-  const { asRef, chatType } = props;
+  const { wsConnection, setWsConnection, handleConnect, handleClose, asRef, chatType, connectWebSocket, socket } = props
   const [confoamtionBtn, setConformationBtn] = useState(false);
   const [checkedOurAge, setCheckedOurAge] = useState(false);
   const [checkedTermCondtion, setCheckedTermCondtion] = useState(false);
 
+  const navigate = useNavigate()
+
+  const handleChat = () => {
+    navigate("/chat")
+    handleConnect()
+    console.log("Websocket connected", wsConnection)
+  }
+
+  const handleAudioChat = () => {
+    navigate("/audio-chat")
+  }
+
   const ourAgeHandler = () => {
     setCheckedOurAge(!checkedOurAge);
   };
+
   const ourTermConditionHandler = () => {
     setCheckedTermCondtion(!checkedTermCondtion);
   };
+
   useEffect(() => {
     if (checkedOurAge && checkedTermCondtion) {
       setConformationBtn(true);
@@ -21,6 +35,7 @@ const ConfromationModal = (props) => {
       setConformationBtn(false);
     }
   }, [checkedOurAge, checkedTermCondtion]);
+
   return (
     <div className="common-wrapper d-flex align-items-center justify-content-center position-absolute">
       <div className="conformation-box" ref={asRef}>
@@ -57,17 +72,40 @@ const ConfromationModal = (props) => {
             Community Guidelines.
           </label>
         </div>
-        <Link to={chatType == "Text" ? "/chat" : "/audio-chat"}>
+        {
+          chatType == "Text" ?
+            <button
+              className="confirm-btn rounded"
+              style={{
+                opacity: confoamtionBtn ? 1 : 0.5,
+                pointerEvents: confoamtionBtn ? "all" : "none",
+              }}
+              onClick={handleChat}
+            >Confirm & Continue</button>
+            :
+            <button
+              onClick={handleAudioChat}
+              className="confirm-btn rounded"
+              style={{
+                opacity: confoamtionBtn ? 1 : 0.5,
+                pointerEvents: confoamtionBtn ? "all" : "none",
+              }}
+            >Confirm & Continue</button>
+        }
+        {/* <Link
+          to={chatType == "Text" ? "/chat" : "/audio-chat"}
+        >
           <button
             className="confirm-btn rounded"
             style={{
               opacity: confoamtionBtn ? 1 : 0.5,
               pointerEvents: confoamtionBtn ? "all" : "none",
             }}
+            onClick={handleConnect}
           >
             Confirm & Continue
           </button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
