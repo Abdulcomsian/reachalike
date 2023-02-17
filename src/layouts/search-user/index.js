@@ -4,7 +4,7 @@ import loader from "../../constant/lottie/lesson 3.json";
 import images from "../../constant/images";
 import "./style.css";
 
-const SearchUser = () => {
+const SearchUser = ({ handleConnect }) => {
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -23,10 +23,9 @@ const SearchUser = () => {
                 />
             </div>
             <div className="connecting-logo-div">
-                {/* <img src={images.logo}/> */}
                 <p className="fw-bold my-3">Connecting . . .</p>
                 <span className="d-block">OR</span>
-                <button className="rounded mt-2">Connect Randomly</button>
+                <button onClick={handleConnect} className="rounded mt-2">Connect Randomly</button>
             </div>
         </div>
     )

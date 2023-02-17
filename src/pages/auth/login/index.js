@@ -1,7 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
+import { authLogin } from "../../../store/actions";
 
 const Login = (props) => {
-    const { loginHandler, registerHandler,asRef } = props;
+    const { loginHandler, registerHandler, asRef, state, dispatch } = props;
     return (
         <div className="common-wrapper d-flex align-items-center justify-content-center position-absolute">
             <div className="auth-form" ref={asRef}>
@@ -24,7 +26,7 @@ const Login = (props) => {
                     <p className="text-end">
                         <a>Forgot Password?</a>
                     </p>
-                    <button className="my-3">Submit</button>
+                    <button className="my-3" onClick={() => dispatch(authLogin(state))}>Submit</button>
                     <p className="text-center bottom-para"> Already member ? <a className="fw-bold cursor-pointer" onClick={registerHandler}>Signup</a>
                     </p>
                 </div>
@@ -32,4 +34,14 @@ const Login = (props) => {
         </div>
     )
 }
-export default Login;
+
+const mapStateToProps = state => ({
+    state: state
+});
+
+// const mapDispatchToProps = dispatch => ({
+//     increment: () => dispatch({ type: 'AUTH_LOGIN' })
+// });
+
+
+export default connect(mapStateToProps)(Login);

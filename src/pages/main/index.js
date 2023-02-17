@@ -3,7 +3,8 @@ import "./style.css";
 import images from "../../constant/images";
 import { Link } from "react-router-dom";
 import ConfrormationModal from "../../modal/confromationModal";
-import ReconnectingWebSocket from "reconnecting-websocket";
+
+
 
 const MainScreen = (props) => {
   const ref = useRef();
@@ -31,33 +32,6 @@ const MainScreen = (props) => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
   }, [conformationModal]);
-
-  // Connection with Socket
-  const [backendAddr, setBackendAddr] = useState('websocket-dev.bayes-chat.com');
-  const [socket, setSocket] = useState(null);
-
-  const optionsWebsocket = {
-    debug: true,
-    automaticOpen: true,
-    reconnectInterval: 5000,
-    maxReconnectInterval: 60000,
-    reconnectDecay: 2,
-    timeoutInterval: 5000,
-    maxReconnectAttempts: 6
-  }
-
-  const connectWebSocket = () => {
-    const url = `ws://${backendAddr}`;
-    const newSocket = new ReconnectingWebSocket(url, [], optionsWebsocket);
-    setSocket(newSocket);
-  };
-
-  const disconnectWebSocket = () => {
-    if (socket) {
-      socket.close();
-      setSocket(null);
-    }
-  };
 
   return (
     <>
@@ -131,7 +105,7 @@ const MainScreen = (props) => {
         </div>
       </div>
       {conformationModal && (
-        <ConfrormationModal handleConnect={handleConnect} handleClose={handleClose} wsConnection={wsConnection} setWsConnection={setWsConnection} chatType={chatType} asRef={ref} socket={socket} connectWebSocket={connectWebSocket} />
+        <ConfrormationModal handleConnect={handleConnect} chatType={chatType} asRef={ref} />
       )}
     </>
   );

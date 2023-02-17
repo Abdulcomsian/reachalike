@@ -8,10 +8,25 @@ import EndChatModal from "../../components/EndChat/ConfirmationModal";
 
 const ChatScreen = (props) => {
   const ref = useRef();
-  const { requestToChat, user, findUser, setFindUser, endChat, setEndChat, wsConnection, setWsConnection, handleConnect, handleClose } = props;
+  const {
+    messages,
+    isChatActive,
+    handleConnect,
+    connectedText,
+    connectToUser,
+    requestToChat,
+    user,
+    findUser,
+    setFindUser,
+    endChat,
+    setEndChat,
+    sendMessage,
+    closeConnection
+  } = props;
+
+
   const [newChat, setNewChat] = useState(false);
   const [connectText, setConnectText] = useState(true);
-
   const [confirm, setConfirm] = useState(false);
   const [yes, setYes] = useState(false);
   const [ratingModal, setRatingModal] = useState(false);
@@ -21,9 +36,9 @@ const ChatScreen = (props) => {
   };
 
   const onClickConfirm = () => {
-    handleClose();
     setEndChat(true);
     setNewChat(true);
+    closeConnection();
     setRatingModal(true);
   };
 
@@ -47,23 +62,19 @@ const ChatScreen = (props) => {
     } else {
       setTimeout(() => {
         setFindUser(true);
-      }, 1000);
+      }, 10000);
     }
-
     if (findUser) {
       setTimeout(() => {
         setConnectText(false);
       }, 3000);
     }
-
     const checkIfClickedOutside = (e) => {
       if (endChat && ref.current && !ref.current.contains(e.target)) {
         setEndChat(false);
       }
     };
-
     document.addEventListener("mousedown", checkIfClickedOutside);
-
     return () => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
@@ -73,18 +84,34 @@ const ChatScreen = (props) => {
     setEndChat(true);
   };
 
+  const lastMessageRef = useRef()
+  const messageRef = useRef()
+  const handleSendMessage = (event) => {
+    event.preventDefault();
+    const input = messageRef.current;
+    sendMessage(input.value);
+    input.value = "";
+    lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+
+  // const onConnectionEstablish = () => {
+  //   connectToUser();
+  //   if (connectedText) {
+  //     sendMessage()
+  //   }
+  // }
 
   return (
     <div
       className={
         requestToChat
           ? "chat_wrapper w-80"
-          : findUser
+          : isChatActive
             ? "chat_wrapper"
             : "chat_wrapper pt-0"
       }
     >
-      {findUser ? (
+      {isChatActive ? (
         <div>
           <div className="random-stranger-div position-relative">
             <p>You're now chatting with a random stranger.</p>
@@ -116,77 +143,45 @@ const ChatScreen = (props) => {
           </div>
           <div className={newChat ? "chat-room" : "chat-room regular-chat"}>
             <ul>
-              <li className="d-flex mb-5">
-                <div className="user-detail position-relative cursor-pointer">
-                  <span className="user-avatar d-block text-center">
-                    <img src={images.sender_icon} className="img-fluid" />
-                  </span>
-                  <span className="indentifier text-center">You</span>
-                  <div className="user-rating d-flex justify-content-between  position-absolute">
-                    <div className="rating-div d-flex">
-                      <span>
-                        <i class="fa-solid fa-star"></i>
+              {
+                messages?.map((message, index) => (
+
+                  <li className="d-flex my-3" ref={messages.length - 1 === index ? lastMessageRef : null}>
+                    <div className="user-detail position-relative cursor-pointer">
+                      <span className="user-avatar d-block text-center">
+                        <img src={images.sender_icon} className="img-fluid" />
                       </span>
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span className="with-out-rating">
-                        <i class="fa-regular fa-star"></i>
-                      </span>
+                      <span className="indentifier text-center">You</span>
+                      <div className="user-rating d-flex justify-content-between  position-absolute">
+                        <div className="rating-div d-flex">
+                          <span>
+                            <i class="fa-solid fa-star"></i>
+                          </span>
+                          <span>
+                            <i class="fa-solid fa-star"></i>
+                          </span>
+                          <span>
+                            <i class="fa-solid fa-star"></i>
+                          </span>
+                          <span>
+                            <i class="fa-solid fa-star"></i>
+                          </span>
+                          <span className="with-out-rating">
+                            <i class="fa-regular fa-star"></i>
+                          </span>
+                        </div>
+                        <span className="ms-2 rating-rate">4.2 (45)</span>
+                      </div>
                     </div>
-                    <span className="ms-2 rating-rate">4.2 (45)</span>
-                  </div>
-                </div>
-                <div className="message-detail ms-2">
-                  <span className="message-para d-block">
-                    Hey, Devon. Can we got on a quick call?
-                  </span>
-                  <span className="message-time text-end d-block">23:00</span>
-                </div>
-              </li>
-              <li className="d-flex">
-                <div className="user-detail position-relative">
-                  <span className="user-avatar d-block text-center">
-                    <img src={images.receiver_icon} className="img-fluid" />
-                  </span>
-                  <span className="stranger-indentifier text-center">
-                    Stranger
-                  </span>
-                  <div className="user-rating d-flex justify-content-between  position-absolute">
-                    <div className="rating-div d-flex">
-                      <span>
-                        <i class="fa-solid fa-star"></i>
+                    <div className="message-detail ms-2">
+                      <span className="message-para d-block">
+                        {message}
                       </span>
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span className="with-out-rating">
-                        <i class="fa-regular fa-star"></i>
-                      </span>
-                      <span className="with-out-rating">
-                        <i class="fa-regular fa-star"></i>
-                      </span>
-                      <span className="with-out-rating">
-                        <i class="fa-regular fa-star"></i>
-                      </span>
+                      <span className="message-time text-end d-block">23:00</span>
                     </div>
-                    <span className="ms-2 rating-rate">4.2 (45)</span>
-                  </div>
-                </div>
-                <div className="message-detail ms-2">
-                  <span className="message-para d-block">
-                    Recently I saw properties in a great location that I did not
-                    pay attention to before
-                  </span>
-                  <span className="message-time text-end d-block">23:00</span>
-                </div>
-              </li>
+                  </li>
+                ))
+              }
             </ul>
           </div>
 
@@ -209,14 +204,13 @@ const ChatScreen = (props) => {
             </div>
           )}
 
-          <div className="chat-room-footer d-flex align-item-center justify-content-between">
+          <div className="chat-room-footer d-flex align-item-center justify-content-between fixed-bottom py-3 px-4">
             {
               yes ?
                 <div className="end-chat">
                   {
                     newChat ?
                       <Button
-                        // className="btn btn-info"
                         color="info bg-info text-dark"
                         onClick={onClickNewChat}
                       >
@@ -233,30 +227,11 @@ const ChatScreen = (props) => {
                 </div>
                 :
                 <div className="end-chat">
-                  <Button
-                    className="rounded" onClick={onClickEnd}>End</Button>
+                  <Button className="rounded" onClick={onClickEnd}>
+                    End
+                  </Button>
                 </div>
             }
-            {/* {newChat ? (
-              <div className="end-chat">
-                <button
-                  className="rounded"
-                  onClick={() => [setFindUser(false), setNewChat(false)]}
-                >
-                  New Chat
-                </button>
-              </div>
-            ) : (
-              <div className="end-chat">
-                <Button
-                  className="rounded"
-                  color="danger"
-                  onClick={toggleModal}
-                >
-                  End
-                </Button>
-              </div>
-            )} */}
             {/* End Chat Modal */}
             <Modal isOpen={confirm} toggle={toggleModal}>
               <ModalHeader toggle={toggleModal}>Confirmation</ModalHeader>
@@ -287,9 +262,10 @@ const ChatScreen = (props) => {
               <div className="emoji-div">
                 <img src={images.emoji_icon} />
               </div>
-              <input placeholder="Write Here Something..." />
+              <input placeholder="Write Here Something..." name="message" type="text" ref={messageRef} />
               <div className="voice-msg-div">
                 <img src={images.voice_icon} />
+                {/* <i class="fa-solid fa-microphone"></i> */}
               </div>
             </div>
             <div
@@ -306,23 +282,16 @@ const ChatScreen = (props) => {
                 className={
                   requestToChat ? "ps-4 text-start rounded" : "rounded"
                 }
-              // onClick={handleConnect}
+                type="button"
+                onClick={handleSendMessage}
               >
-                Send{" "}
-                <span>
+                Send{" "}<i class="fa-solid fa-paper-plane"></i>
+                {/* <span>
                   <img src={images.send_icon} />
-                </span>
+                </span> */}
               </button>
             </div>
           </div>
-          {/* {ratingModal && (
-            <RatingChat
-              user={user}
-              asRef={ref}
-              setRatingModal={setRatingModal}
-              modalUserRatingClose={modalUserRatingClose}
-            />
-          )} */}
           {ratingModal && (
             <EndChatModal
               user={user}
@@ -336,7 +305,7 @@ const ChatScreen = (props) => {
         </div>
       ) : (
         <div>
-          <SearchUser />
+          <SearchUser handleConnect={handleConnect} />
         </div>
       )}
     </div>

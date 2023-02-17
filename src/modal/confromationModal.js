@@ -3,7 +3,7 @@ import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
 
 const ConfromationModal = (props) => {
-  const { wsConnection, setWsConnection, handleConnect, handleClose, asRef, chatType, connectWebSocket, socket } = props
+  const { handleConnect, asRef, chatType, isChatActive } = props
   const [confoamtionBtn, setConformationBtn] = useState(false);
   const [checkedOurAge, setCheckedOurAge] = useState(false);
   const [checkedTermCondtion, setCheckedTermCondtion] = useState(false);
@@ -11,9 +11,13 @@ const ConfromationModal = (props) => {
   const navigate = useNavigate()
 
   const handleChat = () => {
-    navigate("/chat")
     handleConnect()
-    console.log("Websocket connected", wsConnection)
+    navigate("/chat")
+    // if (isChatActive) {
+    // }
+    // else {
+    //   navigate("/")
+    // }
   }
 
   const handleAudioChat = () => {
@@ -92,20 +96,6 @@ const ConfromationModal = (props) => {
               }}
             >Confirm & Continue</button>
         }
-        {/* <Link
-          to={chatType == "Text" ? "/chat" : "/audio-chat"}
-        >
-          <button
-            className="confirm-btn rounded"
-            style={{
-              opacity: confoamtionBtn ? 1 : 0.5,
-              pointerEvents: confoamtionBtn ? "all" : "none",
-            }}
-            onClick={handleConnect}
-          >
-            Confirm & Continue
-          </button>
-        </Link> */}
       </div>
     </div>
   );

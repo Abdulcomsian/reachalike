@@ -1,0 +1,1 @@
+export const SOCKET_API = "websocket-dev.bayes-chat.com";
