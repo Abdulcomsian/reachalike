@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ConfromationModal = (props) => {
-  const { handleConnect, asRef, chatType, isChatActive } = props
+  const { handleConnect, asRef, chatType } = props
   const [confoamtionBtn, setConformationBtn] = useState(false);
   const [checkedOurAge, setCheckedOurAge] = useState(false);
   const [checkedTermCondtion, setCheckedTermCondtion] = useState(false);
@@ -12,16 +12,11 @@ const ConfromationModal = (props) => {
 
   const handleChat = () => {
     handleConnect()
-    navigate("/chat")
-    // if (isChatActive) {
-    // }
-    // else {
-    //   navigate("/")
-    // }
+    navigate("/chat");
   }
 
   const handleAudioChat = () => {
-    navigate("/audio-chat")
+    navigate("/audio-chat");
   }
 
   const ourAgeHandler = () => {

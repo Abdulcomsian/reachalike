@@ -1,10 +1,9 @@
 import React from "react";
 import Lottie from 'react-lottie';
 import loader from "../../constant/lottie/lesson 3.json";
-import images from "../../constant/images";
 import "./style.css";
 
-const SearchUser = ({ handleConnect }) => {
+const SearchUser = (props) => {
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -13,6 +12,7 @@ const SearchUser = ({ handleConnect }) => {
             preserveAspectRatio: "xMidYMid slice"
         }
     };
+    const { handleConnect } = props;
     return (
         <div className="search-user-wrapper text-center">
             <div className="loader-div">

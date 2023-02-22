@@ -31,16 +31,12 @@ const OptionsWebsocket = {
 };
 
 
-function App() {
+const App = () => {
   const ref = useRef();
   const [user, setUser] = useState("");
   const [authLogin, setAuthLogin] = useState(false);
   const [authRegister, setAuthRegister] = useState(false);
   const [nearMe, setNearMe] = useState(false);
-
-  const [findUser, setFindUser] = useState(false);
-  const [endChat, setEndChat] = useState(false);
-
 
   const loginHandler = (e) => {
     setAuthLogin(!authLogin);
@@ -93,11 +89,18 @@ function App() {
 
 
   // Chat API Integration
+  const [findUser, setFindUser] = useState(false);
+  const [endChat, setEndChat] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+
   const [ws, setWs] = useState(null);
   const [websocketConnectionClosedIdx, setWebsocketConnectionClosedIdx] = useState(0);
   const [websocketConnectionErrorIdx, setWebsocketConnectionErrorIdx] = useState(0);
   const [connectedText, setConnectedText] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{
+    text: "",
+    timestamp: ""
+  }]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [isCaller, setIsCaller] = useState(false);
 
@@ -126,24 +129,28 @@ function App() {
         switch (message.type) {
           case 'msg':
             console.log('Received message: ' + message.ct);
-            setMessages([...messages, message.ct])
+            const newMessage = { text: message.ct, timestamp: new Date().getTime() };
+            setMessages([...messages, newMessage]);
             break;
-
           case 'cmd':
             switch (message.ct) {
               case 'connect_a':
                 isCaller = message.isCaller;
                 await openConnectionAudio(isCaller);
                 break;
-
               case 'connect_t':
                 openConnectionText();
+                setIsConnected(true);
                 break;
-
+              case 'wr_start':
+                console.log("Typing User: ");
+                break;
               case 'disconnect':
-                closeConnection();
+                if (isConnected) {
+                  closeConnection();
+                }
+                setIsConnected(false);
                 break;
-
               default:
                 console.log('DEFAULT CASE REACHED IN CMD MESSAGE FROM SERVER')
                 break;
@@ -182,16 +189,7 @@ function App() {
     }
   }, [ws, messages, isChatActive]);
 
-  const sendConnectTextRequest = () => {
-    console.log('Sending connection request to server...');
-    let messageContent = {
-      type: 'cmd',
-      ct: 'connect_t',
-    };
-    ws.send(JSON.stringify(messageContent));
-  };
-
-  const sendDisconnectRequest = () => {
+  const sendDisconnectRequest = async () => {
     console.log('Sending disconnect request to server...');
     let messageContent = {
       type: 'cmd',
@@ -263,24 +261,24 @@ function App() {
     ws.send(JSON.stringify(messageContent));
   };
 
+  const typingPrompt = () => {
+    ws.send({ 'type': 'wr_start' });
+  }
+
   const openConnectionText = () => {
     console.log('Text connection to stranger...');
     setConnectedText(true);
-    addMessageList('You are connected to a new stranger. Say Hi!');
     setIsChatActive(true);
   };
 
   function closeConnection() {
-    console.log('Closing connection...');
-    addMessageList('The chat has ended.');
     sendDisconnectRequest();
-    setEndChat(true)
-    setIsChatActive(false);
-    setConnectedText(false);
   }
 
   function handleConnect() {
+    setMessages([]);
     connectToUser();
+    typingPrompt();
   }
 
   return (
@@ -306,6 +304,7 @@ function App() {
               element={
                 <ChatScreen
                   isChatActive={isChatActive}
+                  setIsChatActive={setIsChatActive}
                   messages={messages}
                   handleConnect={handleConnect}
                   sendMessage={sendMessage}

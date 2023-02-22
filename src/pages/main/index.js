@@ -11,7 +11,7 @@ const MainScreen = (props) => {
   const [conformationModal, setConformationModal] = useState(false);
   const [chatType, setChatType] = useState(null);
 
-  const { wsConnection, setWsConnection, handleConnect, handleClose } = props
+  const { handleConnect } = props
 
   const conformationTextHandler = () => {
     setConformationModal(true);

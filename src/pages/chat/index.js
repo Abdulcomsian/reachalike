@@ -5,15 +5,15 @@ import SearchUser from "../../layouts/search-user";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { Link } from "react-router-dom";
 import EndChatModal from "../../components/EndChat/ConfirmationModal";
+import moment from "moment/moment";
 
 const ChatScreen = (props) => {
   const ref = useRef();
   const {
     messages,
     isChatActive,
+    setIsChatActive,
     handleConnect,
-    connectedText,
-    connectToUser,
     requestToChat,
     user,
     findUser,
@@ -38,17 +38,13 @@ const ChatScreen = (props) => {
   const onClickConfirm = () => {
     setEndChat(true);
     setNewChat(true);
-    closeConnection();
     setRatingModal(true);
+    closeConnection();
   };
 
   const onClickNewChat = () => {
     handleConnect();
-    setFindUser(false)
-    setNewChat(false)
-    setYes(false)
-    setConfirm(false)
-  }
+  };
 
   const toggleModal = () => setConfirm(!confirm);
 
@@ -57,18 +53,29 @@ const ChatScreen = (props) => {
   }
 
   useEffect(() => {
-    if (requestToChat) {
-      setFindUser(true);
-    } else {
+    // if (requestToChat) {
+    //   setFindUser(true);
+    // } else {
+    //   setTimeout(() => {
+    //     setFindUser(true);
+    //   }, 10000);
+    // }
+    // if (findUser) {
+    //   setTimeout(() => {
+    //     setConnectText(false);
+    //   }, 10000);
+    // }
+
+    if (isChatActive) {
       setTimeout(() => {
-        setFindUser(true);
-      }, 10000);
+        setConnectText(false)
+      }, 5000)
     }
-    if (findUser) {
-      setTimeout(() => {
-        setConnectText(false);
-      }, 3000);
+
+    if (endChat) {
+      setNewChat(true)
     }
+
     const checkIfClickedOutside = (e) => {
       if (endChat && ref.current && !ref.current.contains(e.target)) {
         setEndChat(false);
@@ -78,14 +85,14 @@ const ChatScreen = (props) => {
     return () => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
-  }, [findUser, endChat]);
+  }, [findUser, endChat, isChatActive, confirm]);
 
   const modalUserRatingClose = (val) => {
     setEndChat(true);
   };
 
-  const lastMessageRef = useRef()
-  const messageRef = useRef()
+  const lastMessageRef = useRef();
+  const messageRef = useRef();
   const handleSendMessage = (event) => {
     event.preventDefault();
     const input = messageRef.current;
@@ -94,12 +101,11 @@ const ChatScreen = (props) => {
     lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
   }
 
-  // const onConnectionEstablish = () => {
-  //   connectToUser();
-  //   if (connectedText) {
-  //     sendMessage()
-  //   }
-  // }
+  function handleKeyDown(event) {
+    if (event.key === "Enter") {
+      document.getElementById("send_btn").click();
+    }
+  }
 
   return (
     <div
@@ -144,66 +150,107 @@ const ChatScreen = (props) => {
           <div className={newChat ? "chat-room" : "chat-room regular-chat"}>
             <ul>
               {
-                messages?.map((message, index) => (
-
-                  <li className="d-flex my-3" ref={messages.length - 1 === index ? lastMessageRef : null}>
-                    <div className="user-detail position-relative cursor-pointer">
-                      <span className="user-avatar d-block text-center">
-                        <img src={images.sender_icon} className="img-fluid" />
-                      </span>
-                      <span className="indentifier text-center">You</span>
-                      <div className="user-rating d-flex justify-content-between  position-absolute">
-                        <div className="rating-div d-flex">
-                          <span>
-                            <i class="fa-solid fa-star"></i>
-                          </span>
-                          <span>
-                            <i class="fa-solid fa-star"></i>
-                          </span>
-                          <span>
-                            <i class="fa-solid fa-star"></i>
-                          </span>
-                          <span>
-                            <i class="fa-solid fa-star"></i>
-                          </span>
-                          <span className="with-out-rating">
-                            <i class="fa-regular fa-star"></i>
-                          </span>
+                messages?.map((message, index) => {
+                  return (
+                    <li className="d-flex align-items-end my-4" ref={messages.length - 1 === index ? lastMessageRef : null}>
+                      <div className="user-detail position-relative cursor-pointer">
+                        <span className="user-avatar d-block text-center">
+                          <img src={images.sender_icon} alt="User Img" className="img-fluid" />
+                          <p className="text-muted" style={{ fontSize: "0.8rem" }}>{typeof message === "object" ? "Stranger" : "You"}</p>
+                        </span>
+                        <div className="user-rating d-flex justify-content-between align-items-center position-absolute">
+                          <div className="rating-div d-flex">
+                            <span>
+                              <i class="fa-solid fa-star"></i>
+                            </span>
+                            <span>
+                              <i class="fa-solid fa-star"></i>
+                            </span>
+                            <span>
+                              <i class="fa-solid fa-star"></i>
+                            </span>
+                            <span>
+                              <i class="fa-solid fa-star"></i>
+                            </span>
+                            <span className="with-out-rating">
+                              <i class="fa-regular fa-star"></i>
+                            </span>
+                          </div>
+                          <span className="ms-2 rating-rate">4.2 (45)</span>
                         </div>
-                        <span className="ms-2 rating-rate">4.2 (45)</span>
                       </div>
-                    </div>
-                    <div className="message-detail ms-2">
-                      <span className="message-para d-block">
-                        {message}
-                      </span>
-                      <span className="message-time text-end d-block">23:00</span>
-                    </div>
-                  </li>
-                ))
+                      <div className="message-detail ms-3">
+                        <span className="message-para d-block">
+                          {typeof message === "object" ? message.text : message.slice(5)}
+                        </span>
+                        <span className="message-time text-end d-block">
+                          {moment(message.timestamp).format("hh:mm A")}
+                        </span>
+                      </div>
+                    </li>
+                  )
+                })
               }
+              {/* Typing Item */}
+              <li className="d-flex align-items-end my-4">
+                <div className="user-detail position-relative cursor-pointer">
+                  <span className="user-avatar d-block text-center">
+                    <img src={images.sender_icon} className="img-fluid" alt="User Alt" />
+                    <p className="text-muted" style={{ fontSize: "0.8rem" }}>Stranger</p>
+                  </span>
+                  <div className="user-rating d-flex justify-content-between align-items-center position-absolute">
+                    <div className="rating-div d-flex">
+                      <span>
+                        <i class="fa-solid fa-star"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-star"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-star"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-star"></i>
+                      </span>
+                      <span className="with-out-rating">
+                        <i class="fa-regular fa-star"></i>
+                      </span>
+                    </div>
+                    <span className="ms-2 rating-rate">4.2 (45)</span>
+                  </div>
+                </div>
+                <div className="typing-bubble ms-3">
+                  <div class="typing">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </li>
+              {/* Typing Item End */}
             </ul>
           </div>
 
-          {newChat && (
-            <div className="disconnected-stranger mb-4">
-              <p className="inter-600">Stranger has disconnected.</p>
-              <button
-                className="btn btn-info bg-info px-3"
-                onClick={() => [setFindUser(false), setNewChat(false), handleConnect()]}
-              >
-                New Chat
-              </button>{" "}
-              <span className="inter-600 ms-2 mr-2">or {"   "}</span>
-              <Link
-                to="/audio-chat"
-                className="btn btn-primary bg-primary px-3 py-2"
-              >
-                Switch to <span>Audio</span>
-              </Link>
-            </div>
-          )}
-
+          {
+            newChat && (
+              <div className="disconnected-stranger mb-4">
+                <p className="inter-600">Stranger has disconnected.</p>
+                <button
+                  className="btn btn-info bg-info px-3"
+                  onClick={() => [setFindUser(false), setNewChat(false), handleConnect()]}
+                >
+                  New Chat
+                </button>{" "}
+                <span className="inter-600 ms-2 mr-2">or {"   "}</span>
+                <Link
+                  to="/audio-chat"
+                  className="btn btn-primary bg-primary px-3 py-2"
+                >
+                  Switch to <span>Audio</span>
+                </Link>
+              </div>
+            )
+          }
           <div className="chat-room-footer d-flex align-item-center justify-content-between fixed-bottom py-3 px-4">
             {
               yes ?
@@ -254,18 +301,17 @@ const ChatScreen = (props) => {
             {/* End Chat Modal End */}
             <div
               className={
-                requestToChat
+                isChatActive
                   ? "type-message-div d-flex align-item-center rounded justify-space-between w-80"
                   : "type-message-div d-flex align-item-center rounded justify-space-between"
               }
             >
               <div className="emoji-div">
-                <img src={images.emoji_icon} />
+                <img src={images.emoji_icon} alt="Emoji" />
               </div>
-              <input placeholder="Write Here Something..." name="message" type="text" ref={messageRef} />
+              <input placeholder="Write Here Something..." name="message" type="text" ref={messageRef} onKeyDown={handleKeyDown} />
               <div className="voice-msg-div">
-                <img src={images.voice_icon} />
-                {/* <i class="fa-solid fa-microphone"></i> */}
+                <img src={images.voice_icon} alt="Microphone" />
               </div>
             </div>
             <div
@@ -282,13 +328,11 @@ const ChatScreen = (props) => {
                 className={
                   requestToChat ? "ps-4 text-start rounded" : "rounded"
                 }
+                id="send_btn"
                 type="button"
                 onClick={handleSendMessage}
               >
                 Send{" "}<i class="fa-solid fa-paper-plane"></i>
-                {/* <span>
-                  <img src={images.send_icon} />
-                </span> */}
               </button>
             </div>
           </div>
