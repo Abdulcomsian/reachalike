@@ -16,12 +16,14 @@ const ChatScreen = (props) => {
     handleConnect,
     requestToChat,
     user,
+    handleTypingPrompt,
     findUser,
     setFindUser,
     endChat,
     setEndChat,
     sendMessage,
-    closeConnection
+    closeConnection,
+    typingPrompt
   } = props;
 
 
@@ -31,49 +33,78 @@ const ChatScreen = (props) => {
   const [yes, setYes] = useState(false);
   const [ratingModal, setRatingModal] = useState(false);
 
+  // ********** My States ********** //
+  const [searchingUser, setSearchingUser] = useState(false);
+  const [end, setEnd] = useState(false);
+  const [endConfirm, setEndConfirm] = useState(false);
+  const [startNew, setStartNew] = useState(false);
+  const [ratingPopup, setRatingPopup] = useState(false);
+
+  // ********** Functions Handling States ********** //
+  const onClickEndBtn = () => {
+    //console.log("End Btn Clicked");
+    setEnd(true);
+  }
+
+  const onClickEndConfirmBtn = () => {
+    //console.log("End Confirm Clicked");
+    setStartNew(true);
+    setEndConfirm(true);
+    setRatingPopup(true);
+    closeConnection();
+  }
+
+  const onClickStartNewChatBtn = () => {
+    //console.log("Starting New Chat");
+    handleConnect();
+    setIsChatActive(false);
+  }
+
+  // ********** UseEffect Running on Mount ********** //
+  useEffect(() => {
+    if (isChatActive) {
+      setSearchingUser(true);
+      setStartNew(false);
+      setEnd(false)
+      setEndConfirm(false)
+    }
+    else {
+      setSearchingUser(false)
+    }
+  }, [isChatActive]);
+
+  // ********** Navigation Modal Functions ********** //
+
+  const toggleModal = () => setConfirm(!confirm);
+
   const onClickYes = () => {
     setYes(true);
   };
 
   const onClickConfirm = () => {
-    setEndChat(true);
-    setNewChat(true);
-    setRatingModal(true);
+    // setEndChat(true);
+    // setNewChat(true);
+    // setRatingModal(true);
+    // closeConnection();
+    setStartNew(true);
+    setEndConfirm(true);
+    setRatingPopup(true);
     closeConnection();
   };
 
-  const onClickNewChat = () => {
-    handleConnect();
+  const modalUserRatingClose = (val) => {
+    setEndConfirm(true);
+    setEndChat(true);
   };
 
-  const toggleModal = () => setConfirm(!confirm);
-
-  const onClickEnd = () => {
-    setYes(true);
-  }
+  // ********** My States End ********** //
 
   useEffect(() => {
-    // if (requestToChat) {
-    //   setFindUser(true);
-    // } else {
-    //   setTimeout(() => {
-    //     setFindUser(true);
-    //   }, 10000);
-    // }
-    // if (findUser) {
-    //   setTimeout(() => {
-    //     setConnectText(false);
-    //   }, 10000);
-    // }
-
     if (isChatActive) {
       setTimeout(() => {
         setConnectText(false)
       }, 5000)
-    }
-
-    if (endChat) {
-      setNewChat(true)
+      // setEndChat(false)
     }
 
     const checkIfClickedOutside = (e) => {
@@ -85,11 +116,9 @@ const ChatScreen = (props) => {
     return () => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
-  }, [findUser, endChat, isChatActive, confirm]);
+  }, [endChat, isChatActive]);
 
-  const modalUserRatingClose = (val) => {
-    setEndChat(true);
-  };
+
 
   const lastMessageRef = useRef();
   const messageRef = useRef();
@@ -112,12 +141,12 @@ const ChatScreen = (props) => {
       className={
         requestToChat
           ? "chat_wrapper w-80"
-          : isChatActive
+          : searchingUser
             ? "chat_wrapper"
             : "chat_wrapper pt-0"
       }
     >
-      {isChatActive ? (
+      {searchingUser ? (
         <div>
           <div className="random-stranger-div position-relative">
             <p>You're now chatting with a random stranger.</p>
@@ -232,12 +261,14 @@ const ChatScreen = (props) => {
           </div>
 
           {
-            newChat && (
+            endConfirm && (
               <div className="disconnected-stranger mb-4">
                 <p className="inter-600">Stranger has disconnected.</p>
                 <button
                   className="btn btn-info bg-info px-3"
-                  onClick={() => [setFindUser(false), setNewChat(false), handleConnect()]}
+                  // onClick={() => [setFindUser(false), setNewChat(false), handleConnect(), setEndChat(false)]}
+                  // onClick={onClickNewChat}
+                  onClick={onClickStartNewChatBtn}
                 >
                   New Chat
                 </button>{" "}
@@ -253,20 +284,22 @@ const ChatScreen = (props) => {
           }
           <div className="chat-room-footer d-flex align-item-center justify-content-between fixed-bottom py-3 px-4">
             {
-              yes ?
+              end ?
                 <div className="end-chat">
                   {
-                    newChat ?
+                    endConfirm ?
                       <Button
                         color="info bg-info text-dark"
-                        onClick={onClickNewChat}
+                        //onClick={onClickNewChat}
+                        //onClick={() => [setFindUser(false), setNewChat(false), handleConnect(), setEndChat(false)]}
+                        onClick={onClickStartNewChatBtn}
                       >
                         New Chat
                       </Button>
                       :
                       <Button
                         className="rounded"
-                        onClick={onClickConfirm}
+                        onClick={onClickEndConfirmBtn}
                       >
                         Confirm
                       </Button>
@@ -274,7 +307,7 @@ const ChatScreen = (props) => {
                 </div>
                 :
                 <div className="end-chat">
-                  <Button className="rounded" onClick={onClickEnd}>
+                  <Button className="rounded" onClick={onClickEndBtn}>
                     End
                   </Button>
                 </div>
@@ -336,16 +369,16 @@ const ChatScreen = (props) => {
               </button>
             </div>
           </div>
-          {ratingModal && (
+          {ratingPopup ? (
             <EndChatModal
               user={user}
               asRef={ref}
-              setRatingModal={setRatingModal}
+              setRatingModal={setRatingPopup}
               modalUserRatingClose={modalUserRatingClose}
               loginHandler={props.loginHandler}
               registerHandler={props.registerHandler}
             />
-          )}
+          ) : ""}
         </div>
       ) : (
         <div>

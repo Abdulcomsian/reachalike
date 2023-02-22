@@ -45,7 +45,7 @@ const ConfromationModal = (props) => {
             onChange={ourAgeHandler}
             id="age-check"
           />
-          <label className="form-check-label" for="age-check">
+          <label className="form-check-label" htmlFor="age-check">
             <b>
               OUR AGE RESTRICTIONS HAVE CHANGED. YOU MUST BE 18 OR OLDER TO USE
               REACH ALIKE.
@@ -65,7 +65,7 @@ const ConfromationModal = (props) => {
             onChange={ourTermConditionHandler}
             id="privacy-check"
           />
-          <label className="form-check-label" for="privacy-check">
+          <label className="form-check-label" htmlFor="privacy-check">
             By checking the box you acknowledge that you have reviewed and agree
             to be bound by Reach Alike Terms of Service, Privacy Policy, and
             Community Guidelines.

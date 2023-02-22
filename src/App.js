@@ -138,12 +138,12 @@ const App = () => {
                 isCaller = message.isCaller;
                 await openConnectionAudio(isCaller);
                 break;
+              case 'wr_start':
+                console.log("Typing User: ");
+                break;
               case 'connect_t':
                 openConnectionText();
                 setIsConnected(true);
-                break;
-              case 'wr_start':
-                console.log("Typing User: ");
                 break;
               case 'disconnect':
                 if (isConnected) {
@@ -187,7 +187,7 @@ const App = () => {
         }
       };
     }
-  }, [ws, messages, isChatActive]);
+  }, [ws, messages]);
 
   const sendDisconnectRequest = async () => {
     console.log('Sending disconnect request to server...');
@@ -262,8 +262,26 @@ const App = () => {
   };
 
   const typingPrompt = () => {
-    ws.send({ 'type': 'wr_start' });
+    let typingState = {
+      type: 'cmd',
+      ct: 'wr_start'
+    }
+    ws.send(JSON.stringify(typingState));
+    // ws.send(JSON.stringify({ type: 'wr_start' }));
   }
+
+  const handleTypingPrompt = (message) => {
+    if (connectedText) {
+      const messageContent = {
+        type: 'wr_start',
+        ct: message,
+      };
+      ws.send(JSON.stringify(messageContent));
+      addMessageList("You: " + message);
+    } else {
+      console.warn('Cannot send message: not connected to another user');
+    }
+  };
 
   const openConnectionText = () => {
     console.log('Text connection to stranger...');
@@ -272,13 +290,14 @@ const App = () => {
   };
 
   function closeConnection() {
+    // setIsChatActive(false);
     sendDisconnectRequest();
   }
 
   function handleConnect() {
     setMessages([]);
     connectToUser();
-    typingPrompt();
+    // typingPrompt();
   }
 
   return (
@@ -291,6 +310,7 @@ const App = () => {
             nearMeHandler={nearMeHandler}
             endChat={endChat}
             setEndChat={setEndChat}
+            isChatActive={isChatActive}
           />
           <Routes>
             <Route exact path="/" element={<MainScreen
@@ -309,6 +329,8 @@ const App = () => {
                   handleConnect={handleConnect}
                   sendMessage={sendMessage}
                   closeConnection={closeConnection}
+                  typingPrompt={typingPrompt}
+                  handleTypingPrompt={handleTypingPrompt}
                   user={user}
                   findUser={findUser}
                   setFindUser={setFindUser}

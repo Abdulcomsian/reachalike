@@ -9,7 +9,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 const Header = (props) => {
   let location = useLocation();
   const navigate = useNavigate();
-  const { endChat, setEndChat } = props;
+  const { endChat, setEndChat, isChatActive } = props;
   const [confirm, setConfirm] = React.useState(false);
   const [selected, setSelected] = React.useState("Default");
 
@@ -20,8 +20,8 @@ const Header = (props) => {
   const toggleModal = () => setConfirm(!confirm);
 
   const changePage = () => {
-    if (endChat) {
-      setEndChat(false)
+    if (!isChatActive) {
+      // setEndChat(false)
       navigate("/")
     }
     else {
