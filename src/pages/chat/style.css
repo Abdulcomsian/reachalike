@@ -5,7 +5,34 @@
   height: calc(100vh - 43px);
 }
 
+/* .chat_wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+.chat_wrapper::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #cfcfcf;
+  border-radius: 10px;
+}
+
+
+.chat_wrapper::-webkit-scrollbar-thumb {
+  background: #b2e1fa;
+  border-radius: 10px;
+}
+
+
+.chat_wrapper::-webkit-scrollbar-thumb:hover {
+  background: #b2e1fa;
+} */
+
+/* Scrollbar CSS Start */
+
 .chat_wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat_wrapper::-moz-scrollbar {
   width: 8px;
 }
 
@@ -15,16 +42,32 @@
   border-radius: 10px;
 }
 
+.chat_wrapper::-moz-scrollbar-track {
+  box-shadow: inset 0 0 5px #cfcfcf;
+  border-radius: 10px;
+}
+
 /* Handle */
+
+.chat_wrapper::-moz-scrollbar-thumb {
+  background: #b2e1fa;
+  border-radius: 10px;
+}
 .chat_wrapper::-webkit-scrollbar-thumb {
   background: #b2e1fa;
   border-radius: 10px;
 }
 
 /* Handle on hover */
+
+.chat_wrapper::-moz-scrollbar-thumb:hover {
+  background: #b2e1fa;
+}
 .chat_wrapper::-webkit-scrollbar-thumb:hover {
   background: #b2e1fa;
 }
+
+/* Scrollbar CSS End */
 
 .chat_wrapper .random-stranger-div {
   width: 100%;
@@ -181,6 +224,17 @@
   }
 }
 
+@media only screen and (max-width: 720px) {
+  .type-message-div .voice-msg-div {
+    /* width: 1%; */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    margin-right: 1.2rem;
+  }
+}
+
 @media only screen and (max-width: 560px) {
   .type-message-div .voice-msg-div {
     /* width: 3%; */
@@ -316,3 +370,283 @@
     opacity: 0.1;
   }
 }
+
+/* Bootstrap Message Bar */
+.message-bar {
+  background: #e1ecef !important;
+  box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+.btn-end {
+  padding: 0.7rem;
+}
+
+.btn-send {
+  padding: 0.8rem;
+}
+
+.input-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: solid 1px #d0d0d0;
+  padding: 0.3rem 1.3rem;
+  border-radius: 5px;
+}
+
+.input-div .emoji-btn {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+.input-div .emoji-btn:hover {
+  cursor: pointer;
+}
+
+.input-div input {
+  border: none;
+  outline: 0;
+  padding: 0;
+  font-size: 1rem;
+  background: transparent;
+}
+
+.input-div input:focus {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.input-div .mic-btn {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+}
+.input-div .mic-btn:hover {
+  cursor: pointer;
+}
+
+/* @media screen and (max-width: 1024px) {
+  .btn-end {
+    padding: 0.7rem;
+  }
+
+  .btn-send {
+    padding: 0.8rem;
+  }
+
+  .input-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #d0d0d0;
+    padding: 0.3rem 1.3rem;
+    border-radius: 5px;
+  }
+
+  .input-div .emoji-btn {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+
+  .input-div input {
+    border: none;
+    outline: 0;
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+  }
+
+  .input-div input:focus {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .input-div .mic-btn {
+    font-size: 1.5rem;
+    margin-left: 1rem;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .btn-end {
+    padding: 0.7rem;
+  }
+
+  .btn-send {
+    padding: 0.8rem;
+  }
+
+  .input-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #d0d0d0;
+    padding: 0.3rem 1.3rem;
+    border-radius: 5px;
+  }
+
+  .input-div .emoji-btn {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+
+  .input-div input {
+    border: none;
+    outline: 0;
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+  }
+
+  .input-div input:focus {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .input-div .mic-btn {
+    font-size: 1.5rem;
+    margin-left: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .btn-end {
+    padding: 0.7rem;
+  }
+
+  .btn-send {
+    padding: 0.8rem;
+  }
+
+  .input-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #d0d0d0;
+    padding: 0.3rem 1.3rem;
+    border-radius: 5px;
+  }
+
+  .input-div .emoji-btn {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+
+  .input-div input {
+    border: none;
+    outline: 0;
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+  }
+
+  .input-div input:focus {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .input-div .mic-btn {
+    font-size: 1.5rem;
+    margin-left: 1rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .btn-end {
+    width: 50px !important;
+    height: 3rem;
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  .btn-send {
+    width: 50px !important;
+    height: 3rem;
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  .btn-send i {
+    display: none;
+  }
+
+  .input-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #d0d0d0;
+    padding: 0.1rem 0.5rem;
+    border-radius: 5px;
+  }
+
+  .input-div .emoji-btn {
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+  }
+
+  .input-div input {
+    border: none;
+    outline: 0;
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+  }
+
+  .input-div .mic-btn {
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .btn-end {
+    padding: 0.7rem;
+  }
+
+  .btn-send {
+    padding: 0.8rem;
+  }
+
+  .input-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #d0d0d0;
+    padding: 0.3rem 1.3rem;
+    border-radius: 5px;
+  }
+
+  .input-div .emoji-btn {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+
+  .input-div input {
+    border: none;
+    outline: 0;
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+  }
+
+  .input-div input:focus {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .input-div .mic-btn {
+    font-size: 1.5rem;
+    margin-left: 1rem;
+  }
+} */

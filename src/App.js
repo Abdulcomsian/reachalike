@@ -10,7 +10,7 @@ import NearME from "./pages/near-me";
 import TermCondition from "./pages/term-condition";
 import Policy from "./pages/term-condition/index-policy";
 import "./assets/css/media.css";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { Provider, useDispatch } from "react-redux";
 import store from "./store";
@@ -37,6 +37,16 @@ const App = () => {
   const [authLogin, setAuthLogin] = useState(false);
   const [authRegister, setAuthRegister] = useState(false);
   const [nearMe, setNearMe] = useState(false);
+
+  const typingRef = useRef(null);
+
+  // const location = useLocation();
+
+  // useEffect(() => {
+  //   if (location === '/') {
+  //     window.location.reload()
+  //   }
+  // }, [location])
 
   const loginHandler = (e) => {
     setAuthLogin(!authLogin);
@@ -88,6 +98,7 @@ const App = () => {
   }, [authLogin, authRegister, nearMe]);
 
 
+
   // Chat API Integration
   const [findUser, setFindUser] = useState(false);
   const [endChat, setEndChat] = useState(false);
@@ -103,6 +114,11 @@ const App = () => {
   }]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [isCaller, setIsCaller] = useState(false);
+
+  const [otherUserTyping, setOtherUserTyping] = useState(false);
+  const [typingPrompt, setTypingPrompt] = useState("");
+
+  const [userStatus, setUserStatus] = useState("");
 
 
   useEffect(() => {
@@ -132,24 +148,29 @@ const App = () => {
             const newMessage = { text: message.ct, timestamp: new Date().getTime() };
             setMessages([...messages, newMessage]);
             break;
+          case 'wr_start':
+            console.log('Typing User: ', message.ct);
+            setOtherUserTyping(true);
+            setTypingPrompt(message.ct);
+            break;
           case 'cmd':
             switch (message.ct) {
               case 'connect_a':
                 isCaller = message.isCaller;
                 await openConnectionAudio(isCaller);
                 break;
-              case 'wr_start':
-                console.log("Typing User: ");
-                break;
               case 'connect_t':
                 openConnectionText();
                 setIsConnected(true);
+                setUserStatus("connected");
                 break;
               case 'disconnect':
                 if (isConnected) {
                   closeConnection();
                 }
-                setIsConnected(false);
+                // setIsConnected(false);
+                setUserStatus("disconnected");
+                // setIsChatActive(false);
                 break;
               default:
                 console.log('DEFAULT CASE REACHED IN CMD MESSAGE FROM SERVER')
@@ -258,16 +279,24 @@ const App = () => {
       type: 'cmd',
       ct: 'connect_t',
     };
+
     ws.send(JSON.stringify(messageContent));
   };
 
-  const typingPrompt = () => {
-    let typingState = {
-      type: 'cmd',
-      ct: 'wr_start'
-    }
-    ws.send(JSON.stringify(typingState));
-    // ws.send(JSON.stringify({ type: 'wr_start' }));
+  const openConnectionText = () => {
+    console.log('Text connection to stranger...');
+    setConnectedText(true);
+    setIsChatActive(true);
+  };
+
+  function closeConnection() {
+    sendDisconnectRequest();
+    setIsConnected(false);
+  }
+
+  function handleConnect() {
+    setMessages([]);
+    connectToUser();
   }
 
   const handleTypingPrompt = (message) => {
@@ -283,21 +312,54 @@ const App = () => {
     }
   };
 
-  const openConnectionText = () => {
-    console.log('Text connection to stranger...');
-    setConnectedText(true);
-    setIsChatActive(true);
-  };
-
-  function closeConnection() {
-    // setIsChatActive(false);
-    sendDisconnectRequest();
+  function sendTypingStatus() {
+    const message = {
+      type: 'wr_start',
+      ct: 'typing...',
+    };
+    ws.send(JSON.stringify(message));
   }
 
-  function handleConnect() {
+  function handleMessageChange(event) {
+    if (event.target.value !== '') {
+      sendTypingStatus();
+    }
+    else {
+      setOtherUserTyping(false)
+      setTypingPrompt(false)
+    }
+  }
+
+  console.log("Message from Connection: ", userStatus);
+  // Chat Module States
+  const [searchingUser, setSearchingUser] = useState(false);
+  const [end, setEnd] = useState(false);
+  const [endConfirm, setEndConfirm] = useState(false);
+  const [startNew, setStartNew] = useState(false);
+  const [ratingPopup, setRatingPopup] = useState(false);
+
+  const onClickEndBtn = () => {
+    setEnd(true);
+  }
+
+  const onClickEndConfirmBtn = () => {
+    setStartNew(true);
+    setEndConfirm(true);
+    setRatingPopup(true);
+    closeConnection();
+  }
+
+  const onClickConfirm = () => {
+    closeConnection();
+    setStartNew(true);
+    setEndConfirm(true);
+    setRatingPopup(true);
+  };
+
+  const onClickStartNewChatBtn = () => {
+    handleConnect();
+    setIsChatActive(false);
     setMessages([]);
-    connectToUser();
-    // typingPrompt();
   }
 
   return (
@@ -311,6 +373,7 @@ const App = () => {
             endChat={endChat}
             setEndChat={setEndChat}
             isChatActive={isChatActive}
+            onClickEndConfirmBtn={onClickEndConfirmBtn}
           />
           <Routes>
             <Route exact path="/" element={<MainScreen
@@ -323,6 +386,23 @@ const App = () => {
               path="/chat"
               element={
                 <ChatScreen
+                  onClickEndBtn={onClickEndBtn}
+                  onClickEndConfirmBtn={onClickEndConfirmBtn}
+                  onClickConfirm={onClickConfirm}
+                  onClickStartNewChatBtn={onClickStartNewChatBtn}
+                  searchingUser={searchingUser}
+                  setSearchingUser={setSearchingUser}
+                  end={end}
+                  setEnd={setEnd}
+                  endConfirm={endConfirm}
+                  setEndConfirm={setEndConfirm}
+                  startNew={startNew}
+                  setStartNew={setStartNew}
+                  ratingPopup={ratingPopup}
+                  setRatingPopup={setRatingPopup}
+                  setOtherUserTyping={setOtherUserTyping}
+                  handleMessageChange={handleMessageChange}
+                  userStatus={userStatus}
                   isChatActive={isChatActive}
                   setIsChatActive={setIsChatActive}
                   messages={messages}
@@ -330,6 +410,11 @@ const App = () => {
                   sendMessage={sendMessage}
                   closeConnection={closeConnection}
                   typingPrompt={typingPrompt}
+                  setTypingPrompt={setTypingPrompt}
+                  otherUserTyping={otherUserTyping}
+                  setMessages={setMessages}
+                  // typingPrompt={typingPrompt}
+                  isConnected={isConnected}
                   handleTypingPrompt={handleTypingPrompt}
                   user={user}
                   findUser={findUser}

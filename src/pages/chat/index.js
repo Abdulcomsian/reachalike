@@ -11,6 +11,7 @@ const ChatScreen = (props) => {
   const ref = useRef();
   const {
     messages,
+    handleMessageChange,
     isChatActive,
     setIsChatActive,
     handleConnect,
@@ -23,7 +24,14 @@ const ChatScreen = (props) => {
     setEndChat,
     sendMessage,
     closeConnection,
-    typingPrompt
+    typingPrompt,
+    isConnected,
+    setTypingPrompt,
+    otherUserTyping,
+    setMessages,
+    userStatus,
+    setOtherUserTyping,
+    onClickEndBtn, onClickEndConfirmBtn, onClickConfirm, onClickStartNewChatBtn, searchingUser, setSearchingUser, end, setEnd, endConfirm, setEndConfirm, startNew, setStartNew, ratingPopup, setRatingPopup
   } = props;
 
 
@@ -33,43 +41,62 @@ const ChatScreen = (props) => {
   const [yes, setYes] = useState(false);
   const [ratingModal, setRatingModal] = useState(false);
 
+
+
   // ********** My States ********** //
-  const [searchingUser, setSearchingUser] = useState(false);
-  const [end, setEnd] = useState(false);
-  const [endConfirm, setEndConfirm] = useState(false);
-  const [startNew, setStartNew] = useState(false);
-  const [ratingPopup, setRatingPopup] = useState(false);
+  // const [searchingUser, setSearchingUser] = useState(false);
+  // const [end, setEnd] = useState(false);
+  // const [endConfirm, setEndConfirm] = useState(false);
+  // const [startNew, setStartNew] = useState(false);
+  // const [ratingPopup, setRatingPopup] = useState(false);
 
   // ********** Functions Handling States ********** //
-  const onClickEndBtn = () => {
-    //console.log("End Btn Clicked");
-    setEnd(true);
-  }
+  // const onClickEndBtn = () => {
+  //   setEnd(true);
+  // }
 
-  const onClickEndConfirmBtn = () => {
-    //console.log("End Confirm Clicked");
-    setStartNew(true);
-    setEndConfirm(true);
-    setRatingPopup(true);
-    closeConnection();
-  }
+  // const onClickEndConfirmBtn = () => {
+  //   setStartNew(true);
+  //   setEndConfirm(true);
+  //   setRatingPopup(true);
+  //   closeConnection();
+  // }
 
-  const onClickStartNewChatBtn = () => {
-    //console.log("Starting New Chat");
-    handleConnect();
-    setIsChatActive(false);
-  }
+  // const onClickConfirm = () => {
+  //   // setEndChat(true);
+  //   // setNewChat(true);
+  //   // setRatingModal(true);
+  //   // closeConnection();
+  //   closeConnection();
+  //   setStartNew(true);
+  //   setEndConfirm(true);
+  //   setRatingPopup(true);
+  // };
+
+  // const onClickStartNewChatBtn = () => {
+  //   handleConnect();
+  //   setIsChatActive(false);
+  //   setMessages([]);
+  // }
 
   // ********** UseEffect Running on Mount ********** //
+  useEffect(() => {
+    if (userStatus === "disconnected") {
+      onClickEndConfirmBtn();
+      onClickConfirm();
+      setMessages([]);
+    }
+  }, [userStatus]);
+
   useEffect(() => {
     if (isChatActive) {
       setSearchingUser(true);
       setStartNew(false);
-      setEnd(false)
-      setEndConfirm(false)
+      setEnd(false);
+      setEndConfirm(false);
     }
     else {
-      setSearchingUser(false)
+      setSearchingUser(false);
     }
   }, [isChatActive]);
 
@@ -81,20 +108,10 @@ const ChatScreen = (props) => {
     setYes(true);
   };
 
-  const onClickConfirm = () => {
-    // setEndChat(true);
-    // setNewChat(true);
-    // setRatingModal(true);
-    // closeConnection();
-    setStartNew(true);
-    setEndConfirm(true);
-    setRatingPopup(true);
-    closeConnection();
-  };
-
   const modalUserRatingClose = (val) => {
     setEndConfirm(true);
     setEndChat(true);
+    window.location.reload();
   };
 
   // ********** My States End ********** //
@@ -102,7 +119,7 @@ const ChatScreen = (props) => {
   useEffect(() => {
     if (isChatActive) {
       setTimeout(() => {
-        setConnectText(false)
+        setConnectText(false);
       }, 5000)
       // setEndChat(false)
     }
@@ -122,12 +139,18 @@ const ChatScreen = (props) => {
 
   const lastMessageRef = useRef();
   const messageRef = useRef();
+
   const handleSendMessage = (event) => {
     event.preventDefault();
     const input = messageRef.current;
     sendMessage(input.value);
     input.value = "";
     lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+
+  const handleBlur = () => {
+    setOtherUserTyping(false);
+    setTypingPrompt(false);
   }
 
   function handleKeyDown(event) {
@@ -221,41 +244,43 @@ const ChatScreen = (props) => {
                 })
               }
               {/* Typing Item */}
-              <li className="d-flex align-items-end my-4">
-                <div className="user-detail position-relative cursor-pointer">
-                  <span className="user-avatar d-block text-center">
-                    <img src={images.sender_icon} className="img-fluid" alt="User Alt" />
-                    <p className="text-muted" style={{ fontSize: "0.8rem" }}>Stranger</p>
-                  </span>
-                  <div className="user-rating d-flex justify-content-between align-items-center position-absolute">
-                    <div className="rating-div d-flex">
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                      <span className="with-out-rating">
-                        <i class="fa-regular fa-star"></i>
-                      </span>
+              {/* {otherUserTyping && <p style={{ marginTop: "500px" }}>{typingPrompt}</p>} */}
+              {otherUserTyping &&
+                <li className="d-flex align-items-end my-4">
+                  <div className="user-detail position-relative cursor-pointer">
+                    <span className="user-avatar d-block text-center">
+                      <img src={images.sender_icon} className="img-fluid" alt="User Alt" />
+                      <p className="text-muted" style={{ fontSize: "0.8rem" }}>Stranger</p>
+                    </span>
+                    <div className="user-rating d-flex justify-content-between align-items-center position-absolute">
+                      <div className="rating-div d-flex">
+                        <span>
+                          <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span>
+                          <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span>
+                          <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span>
+                          <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span className="with-out-rating">
+                          <i class="fa-regular fa-star"></i>
+                        </span>
+                      </div>
+                      <span className="ms-2 rating-rate">4.2 (45)</span>
                     </div>
-                    <span className="ms-2 rating-rate">4.2 (45)</span>
                   </div>
-                </div>
-                <div className="typing-bubble ms-3">
-                  <div class="typing">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                  <div className="typing-bubble ms-3">
+                    <div class="typing">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
                   </div>
-                </div>
-              </li>
+                </li>}
               {/* Typing Item End */}
             </ul>
           </div>
@@ -282,7 +307,7 @@ const ChatScreen = (props) => {
               </div>
             )
           }
-          <div className="chat-room-footer d-flex align-item-center justify-content-between fixed-bottom py-3 px-4">
+          {/* <div className="chat-room-footer d-flex align-item-center justify-content-between fixed-bottom py-3 px-4">
             {
               end ?
                 <div className="end-chat">
@@ -312,26 +337,7 @@ const ChatScreen = (props) => {
                   </Button>
                 </div>
             }
-            {/* End Chat Modal */}
-            <Modal isOpen={confirm} toggle={toggleModal}>
-              <ModalHeader toggle={toggleModal}>Confirmation</ModalHeader>
-              <ModalBody>
-                Are you sure you want to leave this converstion?
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  color={yes ? "danger" : "warning"}
-                  className="px-4"
-                  onClick={yes ? onClickConfirm : onClickYes}
-                >
-                  {yes ? "Confirm" : "Yes"}
-                </Button>{" "}
-                <Button color="success" className="px-4" onClick={toggleModal}>
-                  No
-                </Button>
-              </ModalFooter>
-            </Modal>
-            {/* End Chat Modal End */}
+
             <div
               className={
                 isChatActive
@@ -368,7 +374,71 @@ const ChatScreen = (props) => {
                 Send{" "}<i class="fa-solid fa-paper-plane"></i>
               </button>
             </div>
+          </div> */}
+
+
+          {/* My Messagebar */}
+          <div className="fixed-bottom container-fluid bg-light p-3 message-bar">
+            <div className="row align-items-center">
+              <div className="col-1">
+                {
+                  end ?
+                    endConfirm ?
+                      <button className="btn btn-primary w-100 btn-send" onClick={onClickStartNewChatBtn}>New Chat</button> :
+                      <button className="btn btn-danger w-100 btn-end" onClick={onClickEndConfirmBtn}>Confirm</button>
+                    : <button className="btn btn-danger w-100 btn-end" onClick={onClickEndBtn}>End</button>
+                }
+              </div>
+              <div className="col-10 rounded border-1">
+                <div className="input-div">
+                  <span className="emoji-btn">
+                    <i class="fa-regular fa-face-smile"></i>
+                  </span>
+                  <input
+                    onChange={handleMessageChange}
+                    name="message"
+                    type="text"
+                    ref={messageRef}
+                    // onKeyDown={handleKeyDown}
+                    onKeyDown={() => [handleMessageChange, handleKeyDown]}
+                    onBlur={handleBlur}
+                    className="form-control-lg form-control"
+                    placeholder="Type something here..." />
+                  <span className="mic-btn"><i class="fa-solid fa-microphone"></i></span>
+                </div>
+              </div>
+              <div className="col-1">
+                <button className={!startNew ? "btn btn-primary w-100 btn-send" : "btn btn-primary w-100 btn-send disabled"} onClick={handleSendMessage}>Send </button>
+              </div>
+            </div>
           </div>
+          {/* My Messagebar */}
+          {/* End Chat Modal */}
+          {/* <Modal isOpen={confirm} toggle={toggleModal}>
+            <ModalHeader toggle={toggleModal}>Confirmation</ModalHeader>
+            <ModalBody>
+              Are you sure you want to leave this converstion?
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color={yes ? "danger" : "warning"}
+                className="px-4"
+                onClick={yes ?
+                  onClickConfirm
+                  // onClickEndConfirmBtn
+                  :
+                  onClickYes
+                  // onClickEndBtn
+                }
+              >
+                {yes ? "Confirm" : "Yes"}
+              </Button>{" "}
+              <Button color="success" className="px-4" onClick={toggleModal}>
+                No
+              </Button>
+            </ModalFooter>
+          </Modal> */}
+          {/* End Chat Modal End */}
           {ratingPopup ? (
             <EndChatModal
               user={user}

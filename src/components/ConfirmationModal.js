@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import RatingChat from "../layouts/rating-chat";
@@ -9,6 +9,18 @@ const ConfirmationModal = (props) => {
   const ref = React.useRef();
   const [ratingModal, setRatingModal] = React.useState(false);
 
+  // useEffect(() => {
+  //   const unlisten = navigate((location) => location.pathname);
+
+  //   return () => {
+  //     unlisten();
+  //   };
+  // }, [navigate]);
+
+  function handleRedirect() {
+    navigate('/');
+  }
+
   const onClickYes = () => {
     setYes(true);
   };
@@ -16,13 +28,14 @@ const ConfirmationModal = (props) => {
   const onClickConfirm = () => {
     setRatingModal(true);
     setYes(false);
+    props.onClickEndConfirmBtn();
     props.setConfirm(false);
   };
 
   const modalUserRatingClose = (val) => {
     props.setConfirm(false);
     props.modalUserRatingClose();
-    navigate("/");
+    handleRedirect();
   };
 
   return (

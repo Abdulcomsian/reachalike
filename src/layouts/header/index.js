@@ -9,7 +9,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 const Header = (props) => {
   let location = useLocation();
   const navigate = useNavigate();
-  const { endChat, setEndChat, isChatActive } = props;
+  const { endChat, setEndChat, isChatActive, onClickEndConfirmBtn } = props;
   const [confirm, setConfirm] = React.useState(false);
   const [selected, setSelected] = React.useState("Default");
 
@@ -41,6 +41,7 @@ const Header = (props) => {
       <div className="container-fluid">
         <ConfirmationModal
           confirm={confirm}
+          onClickEndConfirmBtn={onClickEndConfirmBtn}
           setConfirm={setConfirm}
           toggleModal={toggleModal}
           loginHandler={loginHandler}
