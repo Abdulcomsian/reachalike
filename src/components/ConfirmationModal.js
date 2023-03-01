@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import RatingChat from "../layouts/rating-chat";
@@ -18,7 +18,7 @@ const ConfirmationModal = (props) => {
   // }, [navigate]);
 
   function handleRedirect() {
-    navigate('/');
+    navigate("/");
   }
 
   const onClickYes = () => {

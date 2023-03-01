@@ -45,11 +45,29 @@ const EndChatModal = (props) => {
         <p>Click on a star to rate it!</p>
         {user !== null || user !== "" ? (
           <>
-            <p style={{ fontSize: "0.8rem" }} className="text-danger">You are not connected, please</p>
-            <button style={{ fontSize: "0.9rem", fontWeight: "600" }} className="btn btn-sm my-1 btn-primary" onClick={props.loginHandler}>Login</button>
-            <p style={{ fontSize: "0.8rem" }} className="text-danger">or</p>
-            <button style={{ fontSize: "0.9rem", fontWeight: "600" }} className="btn btn-sm my-1 btn-warning" onClick={props.registerHandler}>Register</button>
-            <p style={{ fontSize: "0.8rem" }} className="text-danger">for better matches</p>
+            <p style={{ fontSize: "0.8rem" }} className="text-danger">
+              You are not connected, please
+            </p>
+            <button
+              style={{ fontSize: "0.9rem", fontWeight: "600" }}
+              className="btn btn-sm my-1 btn-primary"
+              onClick={props.loginHandler}
+            >
+              Login
+            </button>
+            <p style={{ fontSize: "0.8rem" }} className="text-danger">
+              or
+            </p>
+            <button
+              style={{ fontSize: "0.9rem", fontWeight: "600" }}
+              className="btn btn-sm my-1 btn-warning"
+              onClick={props.registerHandler}
+            >
+              Register
+            </button>
+            <p style={{ fontSize: "0.8rem" }} className="text-danger">
+              for better matches
+            </p>
           </>
         ) : (
           ""

@@ -12,11 +12,11 @@ import Policy from "./pages/term-condition/index-policy";
 import "./assets/css/media.css";
 import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import store from "./store";
 import { authLogin as LoginAction } from "./store/actions";
 
-const BackendAddr = 'websocket-dev.bayes-chat.com';
+const BackendAddr = "websocket-dev.bayes-chat.com";
 const NumClosedWebsocketForWarning = 5;
 const NumErrorsWebsocketForWarning = 5;
 
@@ -29,7 +29,6 @@ const OptionsWebsocket = {
   timeoutInterval: 5000,
   maxReconnectAttempts: 6,
 };
-
 
 const App = () => {
   const ref = useRef();
@@ -77,7 +76,7 @@ const App = () => {
     const checkIfClickedOutside = (e) => {
       if (authLogin && ref.current && !ref.current.contains(e.target)) {
         setAuthLogin(false);
-        LoginAction()
+        LoginAction();
       } else if (
         authRegister &&
         ref.current &&
@@ -97,21 +96,23 @@ const App = () => {
     };
   }, [authLogin, authRegister, nearMe]);
 
-
-
   // Chat API Integration
   const [findUser, setFindUser] = useState(false);
   const [endChat, setEndChat] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
   const [ws, setWs] = useState(null);
-  const [websocketConnectionClosedIdx, setWebsocketConnectionClosedIdx] = useState(0);
-  const [websocketConnectionErrorIdx, setWebsocketConnectionErrorIdx] = useState(0);
+  const [websocketConnectionClosedIdx, setWebsocketConnectionClosedIdx] =
+    useState(0);
+  const [websocketConnectionErrorIdx, setWebsocketConnectionErrorIdx] =
+    useState(0);
   const [connectedText, setConnectedText] = useState(false);
-  const [messages, setMessages] = useState([{
-    text: "",
-    timestamp: ""
-  }]);
+  const [messages, setMessages] = useState([
+    {
+      text: "",
+      timestamp: "",
+    },
+  ]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [isCaller, setIsCaller] = useState(false);
 
@@ -120,9 +121,12 @@ const App = () => {
 
   const [userStatus, setUserStatus] = useState("");
 
-
   useEffect(() => {
-    const websocket = new ReconnectingWebSocket(`wss://${BackendAddr}/ws`, null, OptionsWebsocket);
+    const websocket = new ReconnectingWebSocket(
+      `wss://${BackendAddr}/ws`,
+      null,
+      OptionsWebsocket
+    );
     setWs(websocket);
 
     return () => {
@@ -136,35 +140,44 @@ const App = () => {
   useEffect(() => {
     if (ws) {
       ws.onopen = () => {
-        console.log('Websocket connected');
+        console.log("Websocket connected");
       };
 
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data);
-        console.log('Message from backend: ' + JSON.stringify(message));
+        console.log("Message from backend: " + JSON.stringify(message));
         switch (message.type) {
-          case 'msg':
-            console.log('Received message: ' + message.ct);
-            const newMessage = { text: message.ct, timestamp: new Date().getTime() };
+          case "msg":
+            console.log("Received message: " + message.ct);
+            const newMessage = {
+              text: message.ct,
+              timestamp: new Date().getTime(),
+            };
             setMessages([...messages, newMessage]);
+            sendNotTypingStatus();
             break;
-          case 'wr_start':
-            console.log('Typing User: ', message.ct);
+          case "wr_start":
+            console.log("Typing User: ", message.ct);
             setOtherUserTyping(true);
             setTypingPrompt(message.ct);
             break;
-          case 'cmd':
+          case "wr_stop":
+            console.log("Not typing User: ", message.ct);
+            setOtherUserTyping(false);
+            setTypingPrompt(message.ct);
+            break;
+          case "cmd":
             switch (message.ct) {
-              case 'connect_a':
+              case "connect_a":
                 isCaller = message.isCaller;
                 await openConnectionAudio(isCaller);
                 break;
-              case 'connect_t':
+              case "connect_t":
                 openConnectionText();
                 setIsConnected(true);
                 setUserStatus("connected");
                 break;
-              case 'disconnect':
+              case "disconnect":
                 if (isConnected) {
                   closeConnection();
                 }
@@ -173,51 +186,57 @@ const App = () => {
                 // setIsChatActive(false);
                 break;
               default:
-                console.log('DEFAULT CASE REACHED IN CMD MESSAGE FROM SERVER')
+                console.log("DEFAULT CASE REACHED IN CMD MESSAGE FROM SERVER");
                 break;
             }
             break;
 
-          case 'info':
+          case "info":
             addMessageList(message.ct);
             break;
 
-          case 'error':
+          case "error":
             addMessageList("Error: " + message.ct);
             break;
 
           default:
-            console.warn('Message from server invalid: ' + JSON.stringify(message));
+            console.warn(
+              "Message from server invalid: " + JSON.stringify(message)
+            );
             break;
         }
       };
 
       ws.onclose = (event) => {
         setWebsocketConnectionClosedIdx(websocketConnectionClosedIdx + 1);
-        console.warn('Connection closed with websocket');
+        console.warn("Connection closed with websocket");
         if (websocketConnectionClosedIdx % NumClosedWebsocketForWarning === 0) {
-          alert('Your internet connection seems to be unstable. The service has trouble connecting the server.');
+          alert(
+            "Your internet connection seems to be unstable. The service has trouble connecting the server."
+          );
         }
       };
 
       ws.onerror = (event) => {
-        console.warn('Connection error with websocket');
+        console.warn("Connection error with websocket");
         setWebsocketConnectionErrorIdx(websocketConnectionErrorIdx + 1);
         if (websocketConnectionErrorIdx % NumErrorsWebsocketForWarning === 0) {
-          alert('Your internet connection seems to be unstable. The service has trouble connecting the server.');
+          alert(
+            "Your internet connection seems to be unstable. The service has trouble connecting the server."
+          );
         }
       };
     }
   }, [ws, messages]);
 
   const sendDisconnectRequest = async () => {
-    console.log('Sending disconnect request to server...');
+    console.log("Sending disconnect request to server...");
     let messageContent = {
-      type: 'cmd',
-      ct: 'disconnect',
-    }
+      type: "cmd",
+      ct: "disconnect",
+    };
     ws.send(JSON.stringify(messageContent));
-  }
+  };
 
   const openConnectionAudio = async (isCaller) => {
     try {
@@ -231,7 +250,7 @@ const App = () => {
       peerConnection.onicecandidate = (event) => {
         if (event.candidate) {
           const messageContent = {
-            type: 'audio-ice-candidate',
+            type: "audio-ice-candidate",
             candidate: event.candidate,
           };
           ws.send(JSON.stringify(messageContent));
@@ -243,7 +262,7 @@ const App = () => {
         await peerConnection.setLocalDescription(offer);
 
         const messageContent = {
-          type: 'audio-offer',
+          type: "audio-offer",
           offer: offer,
         };
         ws.send(JSON.stringify(messageContent));
@@ -251,40 +270,41 @@ const App = () => {
         // Wait for an offer from the caller
       }
     } catch (error) {
-      console.error('Error while opening audio connection:', error);
+      console.error("Error while opening audio connection:", error);
     }
-  }
+  };
 
   const addMessageList = (text) => {
-    console.log('Adding message: ' + text);
+    console.log("Adding message: " + text);
     setMessages((messages) => [...messages, text]);
   };
 
   const sendMessage = (message) => {
     if (connectedText) {
       const messageContent = {
-        type: 'msg',
+        type: "msg",
         ct: message,
       };
       ws.send(JSON.stringify(messageContent));
       addMessageList("You: " + message);
+      sendNotTypingStatus();
     } else {
-      console.warn('Cannot send message: not connected to another user');
+      console.warn("Cannot send message: not connected to another user");
     }
   };
 
   const connectToUser = () => {
-    console.log('Sending connection request to server...');
+    console.log("Sending connection request to server...");
     let messageContent = {
-      type: 'cmd',
-      ct: 'connect_t',
+      type: "cmd",
+      ct: "connect_t",
     };
 
     ws.send(JSON.stringify(messageContent));
   };
 
   const openConnectionText = () => {
-    console.log('Text connection to stranger...');
+    console.log("Text connection to stranger...");
     setConnectedText(true);
     setIsChatActive(true);
   };
@@ -296,41 +316,30 @@ const App = () => {
 
   function handleConnect() {
     setMessages([]);
+    setRatingPopup(false);
+    setEnd(true);
+    setIsChatActive(false);
     connectToUser();
   }
 
-  const handleTypingPrompt = (message) => {
-    if (connectedText) {
-      const messageContent = {
-        type: 'wr_start',
-        ct: message,
-      };
-      ws.send(JSON.stringify(messageContent));
-      addMessageList("You: " + message);
-    } else {
-      console.warn('Cannot send message: not connected to another user');
-    }
-  };
-
   function sendTypingStatus() {
     const message = {
-      type: 'wr_start',
-      ct: 'typing...',
+      type: "wr_start",
+      ct: "typing",
     };
     ws.send(JSON.stringify(message));
   }
 
-  function handleMessageChange(event) {
-    if (event.target.value !== '') {
-      sendTypingStatus();
-    }
-    else {
-      setOtherUserTyping(false)
-      setTypingPrompt(false)
-    }
+  function sendNotTypingStatus() {
+    const message = {
+      type: "wr_stop",
+      ct: "",
+    };
+    ws.send(JSON.stringify(message));
   }
 
   console.log("Message from Connection: ", userStatus);
+
   // Chat Module States
   const [searchingUser, setSearchingUser] = useState(false);
   const [end, setEnd] = useState(false);
@@ -340,14 +349,15 @@ const App = () => {
 
   const onClickEndBtn = () => {
     setEnd(true);
-  }
+  };
 
   const onClickEndConfirmBtn = () => {
     setStartNew(true);
+    setEnd(true);
     setEndConfirm(true);
     setRatingPopup(true);
     closeConnection();
-  }
+  };
 
   const onClickConfirm = () => {
     closeConnection();
@@ -360,7 +370,7 @@ const App = () => {
     handleConnect();
     setIsChatActive(false);
     setMessages([]);
-  }
+  };
 
   return (
     <>
@@ -374,18 +384,31 @@ const App = () => {
             setEndChat={setEndChat}
             isChatActive={isChatActive}
             onClickEndConfirmBtn={onClickEndConfirmBtn}
+            endConfirm={endConfirm}
+            closeConnection={closeConnection}
           />
           <Routes>
-            <Route exact path="/" element={<MainScreen
-              isChatActive={isChatActive}
-              messages={messages}
-              handleConnect={handleConnect}
-            />} />
+            <Route
+              exact
+              path="/"
+              element={
+                <MainScreen
+                  isChatActive={isChatActive}
+                  messages={messages}
+                  setMessages={setMessages}
+                  handleConnect={handleConnect}
+                  onClickStartNewChatBtn={onClickStartNewChatBtn}
+                  setRatingPopup={setRatingPopup}
+                />
+              }
+            />
             <Route
               exact
               path="/chat"
               element={
                 <ChatScreen
+                  sendNotTypingStatus={sendNotTypingStatus}
+                  sendTypingStatus={sendTypingStatus}
                   onClickEndBtn={onClickEndBtn}
                   onClickEndConfirmBtn={onClickEndConfirmBtn}
                   onClickConfirm={onClickConfirm}
@@ -401,7 +424,7 @@ const App = () => {
                   ratingPopup={ratingPopup}
                   setRatingPopup={setRatingPopup}
                   setOtherUserTyping={setOtherUserTyping}
-                  handleMessageChange={handleMessageChange}
+                  // handleMessageChange={handleMessageChange}
                   userStatus={userStatus}
                   isChatActive={isChatActive}
                   setIsChatActive={setIsChatActive}
@@ -413,9 +436,8 @@ const App = () => {
                   setTypingPrompt={setTypingPrompt}
                   otherUserTyping={otherUserTyping}
                   setMessages={setMessages}
-                  // typingPrompt={typingPrompt}
                   isConnected={isConnected}
-                  handleTypingPrompt={handleTypingPrompt}
+                  // handleTypingPrompt={handleTypingPrompt}
                   user={user}
                   findUser={findUser}
                   setFindUser={setFindUser}
@@ -465,6 +487,6 @@ const App = () => {
       </Provider>
     </>
   );
-}
+};
 
 export default App;

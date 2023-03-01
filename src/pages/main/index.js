@@ -4,23 +4,26 @@ import images from "../../constant/images";
 import { Link } from "react-router-dom";
 import ConfrormationModal from "../../modal/confromationModal";
 
-
-
 const MainScreen = (props) => {
   const ref = useRef();
   const [conformationModal, setConformationModal] = useState(false);
   const [chatType, setChatType] = useState(null);
 
-  const { handleConnect } = props
+  const { handleConnect, messages, setMessages } = props;
 
   const conformationTextHandler = () => {
     setConformationModal(true);
     setChatType("Text");
+    setMessages("");
+    // props.setRatingPopup(true);
+    // props.onClickStartNewChatBtn();
   };
+
   const conformationAudioHandler = () => {
     setConformationModal(true);
     setChatType("Audio");
   };
+
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (conformationModal && ref.current && !ref.current.contains(e.target)) {
@@ -105,7 +108,11 @@ const MainScreen = (props) => {
         </div>
       </div>
       {conformationModal && (
-        <ConfrormationModal handleConnect={handleConnect} chatType={chatType} asRef={ref} />
+        <ConfrormationModal
+          handleConnect={handleConnect}
+          chatType={chatType}
+          asRef={ref}
+        />
       )}
     </>
   );
