@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./style.css";
 import images from "../../constant/images";
 import SearchUser from "../../layouts/search-user";
@@ -15,14 +15,11 @@ const ChatScreen = (props) => {
     handleConnect,
     requestToChat,
     user,
-    endChat,
     setEndChat,
     sendMessage,
-    setTypingPrompt,
     otherUserTyping,
     setMessages,
     userStatus,
-    setOtherUserTyping,
     onClickEndBtn,
     onClickEndConfirmBtn,
     onClickConfirm,
@@ -45,12 +42,10 @@ const ChatScreen = (props) => {
 
   // ********** My States ********** //
 
-  // ********** Functions Handling States ********** //
-
   // ********** UseEffect Running on Mount ********** //
   useEffect(() => {
     if (userStatus === "disconnected") {
-      onClickEndConfirmBtn();
+      // onClickEndConfirmBtn();
       onClickConfirm();
       setMessages([]);
     }
@@ -79,24 +74,24 @@ const ChatScreen = (props) => {
 
   // ********** My States End ********** //
 
-  useEffect(() => {
-    if (isChatActive) {
-      setTimeout(() => {
-        setConnectText(false);
-      }, 5000);
-      // setEndChat(false)
-    }
+  // useEffect(() => {
+  //   if (isChatActive) {
+  //     setTimeout(() => {
+  //       setConnectText(false);
+  //     }, 5000);
+  //     // setEndChat(false)
+  //   }
 
-    const checkIfClickedOutside = (e) => {
-      if (endChat && ref.current && !ref.current.contains(e.target)) {
-        setEndChat(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [endChat, isChatActive]);
+  //   const checkIfClickedOutside = (e) => {
+  //     if (endChat && ref.current && !ref.current.contains(e.target)) {
+  //       setEndChat(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", checkIfClickedOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", checkIfClickedOutside);
+  //   };
+  // }, [endChat, isChatActive]);
 
   const lastMessageRef = useRef();
   const messageRef = useRef();
@@ -106,7 +101,6 @@ const ChatScreen = (props) => {
     const input = messageRef.current;
     if (input.value !== "") {
       sendMessage(input.value);
-      // setOtherUserTyping(false);
       input.value = "";
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
     } else {
@@ -120,9 +114,9 @@ const ChatScreen = (props) => {
     }
   }
   function handleMessageChange(event) {
-    if (event.target.value.length !== 0) {
+    if (event.target.value.length === 1) {
       sendTypingStatus();
-    } else {
+    } else if (event.target.value.length === 0) {
       sendNotTypingStatus();
     }
   }
@@ -333,7 +327,7 @@ const ChatScreen = (props) => {
                 name="message"
                 type="text"
                 ref={messageRef}
-                onKeyDown={() => [handleMessageChange, handleKeyDown]}
+                onKeyDown={handleKeyDown}
                 onChange={handleMessageChange}
                 // onChange={handleTyping}
               />

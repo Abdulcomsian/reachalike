@@ -181,9 +181,7 @@ const App = () => {
                 if (isConnected) {
                   closeConnection();
                 }
-                // setIsConnected(false);
                 setUserStatus("disconnected");
-                // setIsChatActive(false);
                 break;
               default:
                 console.log("DEFAULT CASE REACHED IN CMD MESSAGE FROM SERVER");
@@ -356,14 +354,17 @@ const App = () => {
     setEnd(true);
     setEndConfirm(true);
     setRatingPopup(true);
-    closeConnection();
+    // closeConnection();
+    sendDisconnectRequest();
   };
 
   const onClickConfirm = () => {
-    closeConnection();
     setStartNew(true);
+    setEnd(true);
     setEndConfirm(true);
     setRatingPopup(true);
+    // closeConnection();
+    // sendDisconnectRequest();
   };
 
   const onClickStartNewChatBtn = () => {
