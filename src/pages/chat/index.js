@@ -35,6 +35,10 @@ const ChatScreen = (props) => {
     setRatingPopup,
     sendTypingStatus,
     sendNotTypingStatus,
+    userIdentify,
+    setUserIdentify,
+    typingUser,
+    setTypingUser,
   } = props;
 
   const [newChat, setNewChat] = useState(false);
@@ -74,25 +78,6 @@ const ChatScreen = (props) => {
 
   // ********** My States End ********** //
 
-  // useEffect(() => {
-  //   if (isChatActive) {
-  //     setTimeout(() => {
-  //       setConnectText(false);
-  //     }, 5000);
-  //     // setEndChat(false)
-  //   }
-
-  //   const checkIfClickedOutside = (e) => {
-  //     if (endChat && ref.current && !ref.current.contains(e.target)) {
-  //       setEndChat(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", checkIfClickedOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", checkIfClickedOutside);
-  //   };
-  // }, [endChat, isChatActive]);
-
   const lastMessageRef = useRef();
   const messageRef = useRef();
 
@@ -102,24 +87,54 @@ const ChatScreen = (props) => {
     if (input.value !== "") {
       sendMessage(input.value);
       input.value = "";
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
     } else {
       alert("Can't send empty message!");
     }
   };
+
+  const scrollToBottom = () => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       document.getElementById("send_btn").click();
     }
   }
+
+  let prevLength = 0;
+
   function handleMessageChange(event) {
-    if (event.target.value.length === 1) {
-      sendTypingStatus();
-    } else if (event.target.value.length === 0) {
-      sendNotTypingStatus();
+    const currentLength = event.target.value.length;
+    if (typingUser === "typing") {
+      if (currentLength === 1 && prevLength === 0) {
+        sendTypingStatus();
+      } else if (currentLength === 0) {
+        sendNotTypingStatus();
+      }
     }
+
+    prevLength = currentLength;
   }
+
+  function handleInputFocus() {
+    setTypingUser("typing");
+    console.log("Typing User Focus: ", typingUser)
+  }
+
+  function handleInputBlur() {
+    setTypingUser("");
+    console.log("Typing User Blur: ", typingUser)
+  }
+
+
+
 
   return (
     <div
@@ -127,8 +142,8 @@ const ChatScreen = (props) => {
         requestToChat
           ? "chat_wrapper w-80"
           : searchingUser
-          ? "chat_wrapper"
-          : "chat_wrapper pt-0"
+            ? "chat_wrapper"
+            : "chat_wrapper pt-0"
       }
     >
       {searchingUser ? (
@@ -162,7 +177,7 @@ const ChatScreen = (props) => {
             </p>
           </div>
           <div className={newChat ? "chat-room" : "chat-room regular-chat"}>
-            <ul>
+            <ul className="messages-list">
               {messages?.map((message, index) => {
                 return (
                   <li
@@ -218,8 +233,7 @@ const ChatScreen = (props) => {
                 );
               })}
               {/* Typing Item */}
-              {/* {otherUserTyping && <p style={{ marginTop: "500px" }}>{typingPrompt}</p>} */}
-              {otherUserTyping ? (
+              {otherUserTyping && userStatus !== "disconnected" ? (
                 <li className="d-flex align-items-end my-4">
                   <div className="user-detail position-relative cursor-pointer">
                     <span className="user-avatar d-block text-center">
@@ -267,10 +281,9 @@ const ChatScreen = (props) => {
               {/* Typing Item End */}
             </ul>
           </div>
-
           {endConfirm && (
             <div className="disconnected-stranger mb-4">
-              <p className="inter-600">Stranger has disconnected.</p>
+              <p className="inter-600">{userIdentify ? "You have disconnected" : "Stranger has disconnected."}</p>
               <button
                 className="btn btn-info bg-info px-3"
                 onClick={onClickStartNewChatBtn}
@@ -292,8 +305,6 @@ const ChatScreen = (props) => {
                 {endConfirm ? (
                   <Button
                     color="info bg-info text-dark"
-                    //onClick={onClickNewChat}
-                    //onClick={() => [setFindUser(false), setNewChat(false), handleConnect(), setEndChat(false)]}
                     onClick={onClickStartNewChatBtn}
                   >
                     New Chat
@@ -328,8 +339,9 @@ const ChatScreen = (props) => {
                 type="text"
                 ref={messageRef}
                 onKeyDown={handleKeyDown}
-                onChange={handleMessageChange}
-                // onChange={handleTyping}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                onChange={userStatus !== "disconnected" ? handleMessageChange : null}
               />
               <div className="voice-msg-div">
                 <img src={images.voice_icon} alt="Microphone" />
@@ -340,8 +352,8 @@ const ChatScreen = (props) => {
                 requestToChat
                   ? "send-message w-12"
                   : newChat
-                  ? "send-message disable"
-                  : "send-message"
+                    ? "send-message disable"
+                    : "send-message"
               }
               style={{ opacity: newChat && "0.5" }}
             >
@@ -352,102 +364,12 @@ const ChatScreen = (props) => {
                 id="send_btn"
                 type="button"
                 onClick={handleSendMessage}
+                disabled={userStatus === "disconnected" ? true : false}
               >
                 Send
               </button>
             </div>
           </div>
-
-          {/* My Messagebar */}
-          {/* <div className="fixed-bottom container-fluid bg-light p-3 message-bar">
-            <div className="row align-items-center">
-              <div className="col-lg-1 col-md-1 col-sm-3 col-xs-3 my-2">
-                {end ? (
-                  endConfirm ? (
-                    <button
-                      className="btn btn-primary px-3 btn-send"
-                      onClick={onClickStartNewChatBtn}
-                    >
-                      New Chat
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-danger px-3 btn-end"
-                      onClick={onClickEndConfirmBtn}
-                    >
-                      Confirm
-                    </button>
-                  )
-                ) : (
-                  <button
-                    className="btn btn-danger px-3 btn-end"
-                    onClick={onClickEndBtn}
-                  >
-                    End
-                  </button>
-                )}
-              </div>
-              <div className="col-lg-10 col-md-10 col-sm-3 col-xs-3 my-2 rounded border-1">
-                <div className="input-div">
-                  <span className="emoji-btn">
-                    <i class="fa-regular fa-face-smile"></i>
-                  </span>
-                  <input
-                    onChange={handleMessageChange}
-                    name="message"
-                    type="text"
-                    ref={messageRef}
-                    onKeyDown={() => [handleMessageChange, handleKeyDown]}
-                    onBlur={handleBlur}
-                    className="form-control-lg form-control"
-                    placeholder="Type something here..."
-                  />
-                  <span className="mic-btn">
-                    <i class="fa-solid fa-microphone"></i>
-                  </span>
-                </div>
-              </div>
-              <div className="col-lg-1 col-md-1 col-sm-3 col-xs-3 my-2">
-                <button
-                  className={
-                    !startNew
-                      ? "btn btn-primary btn-send"
-                      : "btn btn-primary btn-send disabled"
-                  }
-                  onClick={handleSendMessage}
-                >
-                  Send{" "}
-                </button>
-              </div>
-            </div>
-          </div> */}
-          {/* My Messagebar */}
-          {/* End Chat Modal */}
-          {/* <Modal isOpen={confirm} toggle={toggleModal}>
-            <ModalHeader toggle={toggleModal}>Confirmation</ModalHeader>
-            <ModalBody>
-              Are you sure you want to leave this converstion?
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color={yes ? "danger" : "warning"}
-                className="px-4"
-                onClick={yes ?
-                  onClickConfirm
-                  // onClickEndConfirmBtn
-                  :
-                  onClickYes
-                  // onClickEndBtn
-                }
-              >
-                {yes ? "Confirm" : "Yes"}
-              </Button>{" "}
-              <Button color="success" className="px-4" onClick={toggleModal}>
-                No
-              </Button>
-            </ModalFooter>
-          </Modal> */}
-          {/* End Chat Modal End */}
           {ratingPopup ? (
             <EndChatModal
               user={user}

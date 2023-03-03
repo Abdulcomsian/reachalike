@@ -178,9 +178,9 @@ const App = () => {
                 setUserStatus("connected");
                 break;
               case "disconnect":
-                if (isConnected) {
-                  closeConnection();
-                }
+                // if (isConnected) {
+                //   closeConnection();
+                // }
                 setUserStatus("disconnected");
                 break;
               default:
@@ -344,6 +344,8 @@ const App = () => {
   const [endConfirm, setEndConfirm] = useState(false);
   const [startNew, setStartNew] = useState(false);
   const [ratingPopup, setRatingPopup] = useState(false);
+  const [userIdentify, setUserIdentify] = useState(false);
+  const [typingUser, setTypingUser] = useState("");
 
   const onClickEndBtn = () => {
     setEnd(true);
@@ -355,6 +357,7 @@ const App = () => {
     setEndConfirm(true);
     setRatingPopup(true);
     // closeConnection();
+    setUserIdentify(true);
     sendDisconnectRequest();
   };
 
@@ -370,7 +373,9 @@ const App = () => {
   const onClickStartNewChatBtn = () => {
     handleConnect();
     setIsChatActive(false);
+    setOtherUserTyping(false);
     setMessages([]);
+    setUserIdentify(false);
   };
 
   return (
@@ -408,6 +413,10 @@ const App = () => {
               path="/chat"
               element={
                 <ChatScreen
+                  typingUser={typingUser}
+                  setTypingUser={setTypingUser}
+                  userIdentify={userIdentify}
+                  setUserIdentify={setUserIdentify}
                   sendNotTypingStatus={sendNotTypingStatus}
                   sendTypingStatus={sendTypingStatus}
                   onClickEndBtn={onClickEndBtn}

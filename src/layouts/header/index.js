@@ -28,7 +28,7 @@ const Header = (props) => {
 
   const changePage = () => {
     if (!isChatActive || endConfirm) {
-      closeConnection();
+      // closeConnection();
       navigate("/");
     } else {
       if (location.pathname === "/chat") {
