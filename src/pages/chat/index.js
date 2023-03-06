@@ -18,6 +18,7 @@ const ChatScreen = (props) => {
     setEndChat,
     sendMessage,
     otherUserTyping,
+    setOtherUserTyping,
     setMessages,
     userStatus,
     onClickEndBtn,
@@ -86,6 +87,7 @@ const ChatScreen = (props) => {
     const input = messageRef.current;
     if (input.value !== "") {
       sendMessage(input.value);
+      setOtherUserTyping(false);
       input.value = "";
     } else {
       alert("Can't send empty message!");
@@ -119,7 +121,6 @@ const ChatScreen = (props) => {
         sendNotTypingStatus();
       }
     }
-
     prevLength = currentLength;
   }
 

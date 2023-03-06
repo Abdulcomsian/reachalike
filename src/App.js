@@ -154,7 +154,8 @@ const App = () => {
               timestamp: new Date().getTime(),
             };
             setMessages([...messages, newMessage]);
-            sendNotTypingStatus();
+            // sendNotTypingStatus();
+            setOtherUserTyping(false);
             break;
           case "wr_start":
             console.log("Typing User: ", message.ct);
@@ -285,7 +286,8 @@ const App = () => {
       };
       ws.send(JSON.stringify(messageContent));
       addMessageList("You: " + message);
-      sendNotTypingStatus();
+      // sendNotTypingStatus();
+
     } else {
       console.warn("Cannot send message: not connected to another user");
     }
