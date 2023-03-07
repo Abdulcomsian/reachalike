@@ -235,7 +235,7 @@ const ChatScreen = (props) => {
               })}
               {/* Typing Item */}
               {otherUserTyping && userStatus !== "disconnected" ? (
-                <li className="d-flex align-items-end my-4">
+                <li className="d-flex align-items-end my-4 pe-5">
                   <div className="user-detail position-relative cursor-pointer">
                     <span className="user-avatar d-block text-center">
                       <img

@@ -167,6 +167,17 @@ const App = () => {
             setOtherUserTyping(false);
             setTypingPrompt(message.ct);
             break;
+          case "cancel_connect_t":
+            // sendDisconnectRequest();
+            console.log("Message from cancel: ", message.ct);
+            // setSearchingUser(false);
+            // setConnectedText(false);
+            // setIsConnected(false);
+            // setIsChatActive(false);
+            // setOtherUserTyping(false);
+            // setEnd(true);
+            setUserStatus("disconnected");
+            break;
           case "cmd":
             switch (message.ct) {
               case "connect_a":
@@ -179,9 +190,6 @@ const App = () => {
                 setUserStatus("connected");
                 break;
               case "disconnect":
-                // if (isConnected) {
-                //   closeConnection();
-                // }
                 setUserStatus("disconnected");
                 break;
               default:
@@ -236,6 +244,15 @@ const App = () => {
     };
     ws.send(JSON.stringify(messageContent));
   };
+
+  const cancelConnect = () => {
+    console.log("Cancelling the connection...");
+    let messageContent = {
+      type: "cmd",
+      ct: "cancel_connect_t",
+    };
+    ws.send(JSON.stringify(messageContent));
+  }
 
   const openConnectionAudio = async (isCaller) => {
     try {
@@ -394,6 +411,7 @@ const App = () => {
             onClickEndConfirmBtn={onClickEndConfirmBtn}
             endConfirm={endConfirm}
             closeConnection={closeConnection}
+            cancelConnect={cancelConnect}
           />
           <Routes>
             <Route

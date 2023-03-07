@@ -71,9 +71,9 @@
   /* height: calc(100vh - 375px); */
   padding-top: 2.313rem;
 }
-.chat-room ul li:last-child {
+/* .chat-room ul li:last-child {
   margin-bottom: 2.5rem !important;
-}
+} */
 
 .chat-room .message-detail {
   margin-top: -1rem;
@@ -631,5 +631,11 @@
 } */
 
 .chat-room .messages-list li:last-child {
-  margin-bottom: 7rem !important;
+  margin-bottom: 2rem !important;
+}
+
+@media screen and (max-width: 540px) {
+  .chat-room .messages-list > li:last-child {
+    padding-bottom: 5rem !important;
+  }
 }

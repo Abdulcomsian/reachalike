@@ -16,6 +16,7 @@ const Header = (props) => {
     onClickEndConfirmBtn,
     endConfirm,
     closeConnection,
+    cancelConnect
   } = props;
   const [confirm, setConfirm] = React.useState(false);
   const [selected, setSelected] = React.useState("Default");
@@ -29,6 +30,7 @@ const Header = (props) => {
   const changePage = () => {
     if (!isChatActive || endConfirm) {
       // closeConnection();
+      cancelConnect();
       navigate("/");
     } else {
       if (location.pathname === "/chat") {
@@ -93,9 +95,8 @@ const Header = (props) => {
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Default" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Default" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Default")}
                   >
@@ -104,9 +105,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Lifestyle" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Lifestyle" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Lifestyle")}
                   >
@@ -115,9 +115,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Enterprenuership" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Enterprenuership" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Enterprenuership")}
                   >
@@ -126,9 +125,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Business" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Business" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Business")}
                   >
@@ -137,9 +135,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Entertainment" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Entertainment" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Entertainment")}
                   >
@@ -148,9 +145,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Education" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Education" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => handleSelected("Education")}
                   >
@@ -159,9 +155,8 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a
-                    className={`dropdown-item ${
-                      selected === "Near Me" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${selected === "Near Me" ? "active" : ""
+                      }`}
                     href="#"
                     onClick={() => {
                       handleSelected("Near Me");

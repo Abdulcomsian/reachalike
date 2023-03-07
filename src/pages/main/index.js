@@ -41,12 +41,13 @@ const MainScreen = (props) => {
       <div className="main-div d-flex align-items-center justify-content-center position-relative">
         <div className="px-3">
           <p className="text-center">
-            Great way to <span className="fw-bold">meet new friends</span>, even
+            {/* Great way to <span className="fw-bold">meet new friends</span>, even
             while practicing social distancing. When you use{" "}
             <span className="logo-text fw-bold">
               <span style={{ color: "rgba(33, 68, 143, 1)" }}>Reach</span>
               <span style={{ color: "rgba(55, 193, 240, 1)" }}>Alike</span>
-            </span>
+            </span> */}
+            Audio call with strangers like you. Let <span style={{ color: "rgba(33, 68, 143, 1)", fontWeight: "600" }}>Machine</span> <span style={{ color: "rgba(55, 193, 240, 1)", fontWeight: "600" }}>Learning</span> find the best matches for you !
           </p>
           <div className="audio-chat-functionality-div rounded">
             <div className="btn-group d-flex justify-content-between">
