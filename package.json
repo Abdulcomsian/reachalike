@@ -5,9 +5,13 @@
   "private": true,
   "dependencies": {
     "@cogent-labs/react-rating-component": "^1.1.0",
+    "@emoji-mart/data": "^1.1.2",
+    "@emoji-mart/react": "^1.1.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "emoji-mart": "^5.5.2",
+    "emoji-picker-react": "^4.4.7",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

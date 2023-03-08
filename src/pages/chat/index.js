@@ -7,6 +7,12 @@ import EndChatModal from "../../components/EndChat/ConfirmationModal";
 import moment from "moment/moment";
 import { Button } from "reactstrap";
 
+// Emoji Picker
+import EmojiPicker from "emoji-picker-react";
+
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+
 const ChatScreen = (props) => {
   const ref = useRef();
   const {
@@ -79,20 +85,25 @@ const ChatScreen = (props) => {
 
   // ********** My States End ********** //
 
+  // Emoji Functionality
+  const [messageValue, setMessageValue] = useState("");
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const lastMessageRef = useRef();
-  const messageRef = useRef();
 
   const handleSendMessage = (event) => {
     event.preventDefault();
-    const input = messageRef.current;
-    if (input.value !== "") {
-      sendMessage(input.value);
+    if (messageValue !== "") {
+      sendMessage(messageValue + (chosenEmoji ? chosenEmoji.native : ""));
       setOtherUserTyping(false);
-      input.value = "";
+      setMessageValue("");
+      setChosenEmoji(null);
     } else {
       alert("Can't send empty message!");
     }
   };
+
+
 
   const scrollToBottom = () => {
     if (lastMessageRef.current) {
@@ -107,6 +118,7 @@ const ChatScreen = (props) => {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       document.getElementById("send_btn").click();
+      setChosenEmoji(null);
     }
   }
 
@@ -122,20 +134,68 @@ const ChatScreen = (props) => {
       }
     }
     prevLength = currentLength;
+    if (chosenEmoji && currentLength === 0) {
+      setMessageValue("");
+      setChosenEmoji(null);
+    } else if (chosenEmoji && currentLength === 1) {
+      setMessageValue(chosenEmoji.native);
+      setChosenEmoji(null);
+    } else {
+      setMessageValue(event.target.value + (chosenEmoji ? chosenEmoji.native : ""));
+    }
+
   }
+
+  const emojiRef = useRef(null);
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (emojiRef.current && !emojiRef.current.contains(event.target)) {
+      setShowEmojiPicker(false);
+    }
+  };
+
+  const toggleEmojiPicker = (event) => {
+    event.stopPropagation();
+    setShowEmojiPicker(!showEmojiPicker);
+  }
+
+  // function handleMessageChange(event) {
+  //   const currentLength = event.target.value.length;
+  //   if (typingUser === "typing") {
+  //     if (currentLength === 1 && prevLength === 0) {
+  //       sendTypingStatus();
+  //     } else if (currentLength === 0) {
+  //       sendNotTypingStatus();
+  //     }
+  //   }
+  //   prevLength = currentLength;
+  //   const newMessageValue = event.target.value;
+  //   if (chosenEmoji) {
+  //     setMessageValue(chosenEmoji.native + newMessageValue);
+  //   } else {
+  //     setMessageValue(newMessageValue);
+  //   }
+  // }
+
 
   function handleInputFocus() {
     setTypingUser("typing");
+    setChosenEmoji(null);
     console.log("Typing User Focus: ", typingUser)
   }
 
   function handleInputBlur() {
     setTypingUser("");
+    setChosenEmoji(null)
     console.log("Typing User Blur: ", typingUser)
   }
-
-
-
 
   return (
     <div
@@ -323,18 +383,38 @@ const ChatScreen = (props) => {
                 </Button>
               </div>
             )}
-
             <div
               className={
                 isChatActive
                   ? "type-message-div d-flex align-items-center rounded justify-space-between w-80"
                   : "type-message-div d-flex align-items-center rounded justify-space-between"
               }
+
             >
               <div className="emoji-div">
-                <img src={images.emoji_icon} alt="Emoji" />
+                <img src={images.emoji_icon} alt="Emoji" onClick={toggleEmojiPicker} />
               </div>
+              {showEmojiPicker && (
+                <div style={{ position: 'absolute', bottom: 80, left: 20 }} ref={emojiRef}>
+                  <Picker
+                    onEmojiSelect={(emoji) => {
+                      setChosenEmoji(emoji);
+                      setMessageValue((messageValue || "") + emoji.native);
+                    }}
+                    data={data}
+                  />
+                </div>
+              )}
               <input
+                placeholder="Write Here Something..."
+                value={messageValue}
+                type="text"
+                onKeyDown={handleKeyDown}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                onChange={userStatus !== "disconnected" ? handleMessageChange : null}
+              />
+              {/* <input
                 placeholder="Write Here Something..."
                 name="message"
                 type="text"
@@ -343,7 +423,8 @@ const ChatScreen = (props) => {
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 onChange={userStatus !== "disconnected" ? handleMessageChange : null}
-              />
+                value={chosenEmoji ? messageRef.current?.value + chosenEmoji : messageRef.current?.value}
+              /> */}
               <div className="voice-msg-div">
                 <img src={images.voice_icon} alt="Microphone" />
               </div>
