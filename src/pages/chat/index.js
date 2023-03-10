@@ -8,7 +8,6 @@ import moment from "moment/moment";
 import { Button } from "reactstrap";
 
 // Emoji Picker
-import EmojiPicker from "emoji-picker-react";
 
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
@@ -90,12 +89,17 @@ const ChatScreen = (props) => {
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const lastMessageRef = useRef();
+  const typingStatusRef = useRef();
 
   const handleSendMessage = (event) => {
     event.preventDefault();
     if (messageValue !== "") {
       sendMessage(messageValue + (chosenEmoji ? chosenEmoji.native : ""));
-      setOtherUserTyping(false);
+      // Scroll to bottom with a small delay
+      setTimeout(() => {
+        scrollToBottom();
+        scrollToBottomTyping();
+      }, 100);
       setMessageValue("");
       setChosenEmoji(null);
     } else {
@@ -103,17 +107,21 @@ const ChatScreen = (props) => {
     }
   };
 
-
-
   const scrollToBottom = () => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }
 
+  const scrollToBottomTyping = () => {
+    if (typingStatusRef.current) {
+      typingStatusRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+    scrollToBottomTyping();
+  }, [messages, otherUserTyping]);
 
   function handleKeyDown(event) {
     if (event.key === "Enter") {
@@ -295,7 +303,7 @@ const ChatScreen = (props) => {
               })}
               {/* Typing Item */}
               {otherUserTyping && userStatus !== "disconnected" ? (
-                <li className="d-flex align-items-end my-4 pe-5">
+                <li className="scroll-up d-flex align-items-end my-4 pe-5">
                   <div className="user-detail position-relative cursor-pointer">
                     <span className="user-avatar d-block text-center">
                       <img

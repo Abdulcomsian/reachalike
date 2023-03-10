@@ -639,3 +639,13 @@
     padding-bottom: 5rem !important;
   }
 }
+
+.chat-room .messages-list .scroll-up {
+  margin-bottom: 2rem !important;
+}
+
+@media screen and (max-width: 540px) {
+  .chat-room .messages-list .scroll-up {
+    padding-bottom: 5rem !important;
+  }
+}
