@@ -8,6 +8,7 @@ const ConfirmationModal = (props) => {
   const [yes, setYes] = React.useState(false);
   const ref = React.useRef();
   const [ratingModal, setRatingModal] = React.useState(false);
+  const { starRating, setStarRating, sendStarRating, userIdentify } = props
 
   // useEffect(() => {
   //   const unlisten = navigate((location) => location.pathname);
@@ -63,6 +64,10 @@ const ConfirmationModal = (props) => {
           modalUserRatingClose={modalUserRatingClose}
           loginHandler={props.loginHandler}
           registerHandler={props.registerHandler}
+          userIdentify={userIdentify}
+          setStarRating={setStarRating}
+          sendStarRating={sendStarRating}
+          starRating={starRating}
         />
       )}
     </>

@@ -121,6 +121,9 @@ const App = () => {
 
   const [userStatus, setUserStatus] = useState("");
 
+  const [percentMatch, setPercentMatch] = useState("");
+  const [numConversations, setNumConverstations] = useState("");
+
   useEffect(() => {
     const websocket = new ReconnectingWebSocket(
       `wss://${BackendAddr}/ws`,
@@ -140,12 +143,14 @@ const App = () => {
   useEffect(() => {
     if (ws) {
       ws.onopen = () => {
-        console.log("Websocket connected");
+        console.log("Websocket connected: ", ws);
       };
 
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data);
         console.log("Message from backend: " + JSON.stringify(message));
+        // setPercentMatch(JSON.parse(message.connection_info.percent_match))
+        // setNumConverstations(JSON.parse(message.connection_info.num_conversations))
         switch (message.type) {
           case "msg":
             console.log("Received message: " + message.ct);
@@ -166,6 +171,9 @@ const App = () => {
             console.log("Not typing User: ", message.ct);
             setOtherUserTyping(false);
             setTypingPrompt(message.ct);
+            break;
+          case 'rate_user':
+            sendStarRating();
             break;
           case "cancel_connect_t":
             // sendDisconnectRequest();
@@ -397,6 +405,18 @@ const App = () => {
     setUserIdentify(false);
   };
 
+  // Star Rating Implementation
+  const [starRating, setStarRating] = useState(0);
+  function sendStarRating() {
+    // const message = {
+    //   type: "cmd",
+    //   ct: "rate_user",
+    // };
+    ws.send(JSON.stringify({ "type": "cmd", "ct": "rate_user", "stars": starRating }));
+  }
+
+  // ws.send(JSON.stringify({"type": "cmd", "ct": "rate_user", "stars": 4.5}))
+
   return (
     <>
       <Provider store={store}>
@@ -412,6 +432,11 @@ const App = () => {
             endConfirm={endConfirm}
             closeConnection={closeConnection}
             cancelConnect={cancelConnect}
+            starRating={starRating}
+            setStarRating={setStarRating}
+            sendStarRating={sendStarRating}
+            userIdentify={userIdentify}
+            isConnected={isConnected}
           />
           <Routes>
             <Route
@@ -454,7 +479,6 @@ const App = () => {
                   ratingPopup={ratingPopup}
                   setRatingPopup={setRatingPopup}
                   setOtherUserTyping={setOtherUserTyping}
-                  // handleMessageChange={handleMessageChange}
                   userStatus={userStatus}
                   isChatActive={isChatActive}
                   setIsChatActive={setIsChatActive}
@@ -467,7 +491,6 @@ const App = () => {
                   otherUserTyping={otherUserTyping}
                   setMessages={setMessages}
                   isConnected={isConnected}
-                  // handleTypingPrompt={handleTypingPrompt}
                   user={user}
                   findUser={findUser}
                   setFindUser={setFindUser}
@@ -475,6 +498,11 @@ const App = () => {
                   setEndChat={setEndChat}
                   loginHandler={loginHandler}
                   registerHandler={registerHandler}
+                  starRating={starRating}
+                  setStarRating={setStarRating}
+                  sendStarRating={sendStarRating}
+                // percentMatch={percentMatch}
+                // numConversations={numConversations}
                 />
               }
             />

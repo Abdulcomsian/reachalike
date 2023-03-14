@@ -3,11 +3,17 @@ import "./style.css";
 import images from "../../constant/images";
 import { Link } from "react-router-dom";
 import ConfrormationModal from "../../modal/confromationModal";
+import { Tooltip } from "reactstrap";
 
 const MainScreen = (props) => {
   const ref = useRef();
   const [conformationModal, setConformationModal] = useState(false);
   const [chatType, setChatType] = useState(null);
+
+  const [toolTipOpen, setToolTipOpen] = useState(false);
+  const toggleToolTip = () => {
+    setToolTipOpen(!toolTipOpen)
+  }
 
   const { handleConnect, messages, setMessages } = props;
 
@@ -65,7 +71,8 @@ const MainScreen = (props) => {
               </a>
               <a
                 className="audio d-flex align-items-center justify-content-between"
-                onClick={conformationAudioHandler}
+                // onClick={conformationAudioHandler}
+                id="audio-switch-action"
               >
                 <span className="ps-3">
                   <img src={images.audio_icon} className="img-fluid" />
@@ -74,6 +81,9 @@ const MainScreen = (props) => {
                 <span className="icon-span">
                   <i class="fa-solid fa-arrow-right"></i>
                 </span>
+                <Tooltip placement="right" isOpen={toolTipOpen} target="audio-switch-action" toggle={toggleToolTip}>
+                  Available Soon!
+                </Tooltip>
               </a>
             </div>
           </div>
@@ -103,8 +113,8 @@ const MainScreen = (props) => {
           <p className="text-center">
             © 2022<a> Reachalike</a>.All rights reserved.
             <br />
-            Like the website ? Support me so that I can advertise for it and
-            bring other awesome people to talk to.
+            {/* Like the website ? Support me so that I can advertise for it and
+            bring other awesome people to talk to. */}
           </p>
         </div>
       </div>

@@ -16,7 +16,12 @@ const Header = (props) => {
     onClickEndConfirmBtn,
     endConfirm,
     closeConnection,
-    cancelConnect
+    cancelConnect,
+    isConnected,
+    starRating,
+    setStarRating,
+    sendStarRating,
+    userIdentify
   } = props;
   const [confirm, setConfirm] = React.useState(false);
   const [selected, setSelected] = React.useState("Default");
@@ -53,6 +58,10 @@ const Header = (props) => {
           toggleModal={toggleModal}
           loginHandler={loginHandler}
           registerHandler={registerHandler}
+          starRating={starRating}
+          setStarRating={setStarRating}
+          sendStarRating={sendStarRating}
+          userIdentify={userIdentify}
         />
         <ul className="navbar-nav m-auto mb-2 mb-lg-0">
           <li className="nav-item">

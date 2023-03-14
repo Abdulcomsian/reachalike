@@ -5,7 +5,7 @@ import SearchUser from "../../layouts/search-user";
 import { Link } from "react-router-dom";
 import EndChatModal from "../../components/EndChat/ConfirmationModal";
 import moment from "moment/moment";
-import { Button } from "reactstrap";
+import { Button, Tooltip } from "reactstrap";
 
 // Emoji Picker
 
@@ -45,6 +45,9 @@ const ChatScreen = (props) => {
     setUserIdentify,
     typingUser,
     setTypingUser,
+    starRating,
+    setStarRating,
+    sendStarRating
   } = props;
 
   const [newChat, setNewChat] = useState(false);
@@ -57,7 +60,7 @@ const ChatScreen = (props) => {
     if (userStatus === "disconnected") {
       // onClickEndConfirmBtn();
       onClickConfirm();
-      setMessages([]);
+      // setMessages([]);
     }
   }, [userStatus]);
 
@@ -174,25 +177,6 @@ const ChatScreen = (props) => {
     setShowEmojiPicker(!showEmojiPicker);
   }
 
-  // function handleMessageChange(event) {
-  //   const currentLength = event.target.value.length;
-  //   if (typingUser === "typing") {
-  //     if (currentLength === 1 && prevLength === 0) {
-  //       sendTypingStatus();
-  //     } else if (currentLength === 0) {
-  //       sendNotTypingStatus();
-  //     }
-  //   }
-  //   prevLength = currentLength;
-  //   const newMessageValue = event.target.value;
-  //   if (chosenEmoji) {
-  //     setMessageValue(chosenEmoji.native + newMessageValue);
-  //   } else {
-  //     setMessageValue(newMessageValue);
-  //   }
-  // }
-
-
   function handleInputFocus() {
     setTypingUser("typing");
     setChosenEmoji(null);
@@ -203,6 +187,17 @@ const ChatScreen = (props) => {
     setTypingUser("");
     setChosenEmoji(null)
     console.log("Typing User Blur: ", typingUser)
+  }
+
+  // ToolTip Functionality
+  const [toolTipOpen, setToolTipOpen] = useState(false);
+  const [toolTipOpen1, setToolTipOpen1] = useState(false)
+
+  const toggleToolTip = () => {
+    setToolTipOpen(!toolTipOpen)
+  }
+  const toggleToolTip1 = () => {
+    setToolTipOpen1(!toolTipOpen1)
   }
 
   return (
@@ -238,6 +233,10 @@ const ChatScreen = (props) => {
                 <i class="fa-regular fa-star"></i>
               </span>
             </div>
+            {/* <div>
+              <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Percent Match: <span style={{ fontSize: '1.2rem', color: props.percentMatch === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{props.percentMatch}</span></p>
+              <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Number of Conversations: <span style={{ fontSize: '1.2rem', color: props.numConversations === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{props.numConversations}</span></p>
+            </div> */}
             <p
               className="connected-user-text text-center"
               style={{ opacity: connectText ? 1 : 0 }}
@@ -352,7 +351,7 @@ const ChatScreen = (props) => {
           </div>
           {endConfirm && (
             <div className="disconnected-stranger mb-4">
-              <p className="inter-600">{userIdentify ? "You have disconnected" : "Stranger has disconnected."}</p>
+              {/* <p className="inter-600">{userIdentify ? "You have disconnected" : "Stranger has disconnected."}</p> */}
               <button
                 className="btn btn-info bg-info px-3"
                 onClick={onClickStartNewChatBtn}
@@ -361,11 +360,15 @@ const ChatScreen = (props) => {
               </button>{" "}
               <span className="inter-600 ms-2 mr-2">or {"   "}</span>
               <Link
-                to="/audio-chat"
-                className="btn btn-primary bg-primary px-3 py-2"
+                // to="/audio-chat"
+                className="btn px-3 py-2"
+                id="audio-switch-action"
               >
                 Switch to <span>Audio</span>
               </Link>
+              <Tooltip placement="top" isOpen={toolTipOpen1} target="audio-switch-action" toggle={toggleToolTip1}>
+                Available Soon!
+              </Tooltip>
             </div>
           )}
           <div className="chat-room-footer d-flex align-items-center justify-content-between fixed-bottom py-3 px-4">
@@ -422,19 +425,12 @@ const ChatScreen = (props) => {
                 onBlur={handleInputBlur}
                 onChange={userStatus !== "disconnected" ? handleMessageChange : null}
               />
-              {/* <input
-                placeholder="Write Here Something..."
-                name="message"
-                type="text"
-                ref={messageRef}
-                onKeyDown={handleKeyDown}
-                onFocus={handleInputFocus}
-                onBlur={handleInputBlur}
-                onChange={userStatus !== "disconnected" ? handleMessageChange : null}
-                value={chosenEmoji ? messageRef.current?.value + chosenEmoji : messageRef.current?.value}
-              /> */}
               <div className="voice-msg-div">
-                <img src={images.voice_icon} alt="Microphone" />
+                {/* <img src={images.voice_icon} alt="Microphone" /> */}
+                <i class="fa-solid fa-microphone img" id="voice-msg"></i>
+                {/* <Tooltip placement="right" isOpen={toolTipOpen} target="voice-msg" toggle={toggleToolTip}>
+                  Available Soon!
+                </Tooltip> */}
               </div>
             </div>
             <div
@@ -468,6 +464,10 @@ const ChatScreen = (props) => {
               modalUserRatingClose={modalUserRatingClose}
               loginHandler={props.loginHandler}
               registerHandler={props.registerHandler}
+              userIdentify={userIdentify}
+              starRating={starRating}
+              setStarRating={setStarRating}
+              sendStarRating={sendStarRating}
             />
           ) : (
             ""
@@ -475,7 +475,7 @@ const ChatScreen = (props) => {
         </div>
       ) : (
         <div>
-          <SearchUser handleConnect={handleConnect} />
+          <SearchUser userIdentify={userIdentify} handleConnect={handleConnect} loginHandler={props.loginHandler} registerHandler={props.registerHandler} />
         </div>
       )}
     </div>

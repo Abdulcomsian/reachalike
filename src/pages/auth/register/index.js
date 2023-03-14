@@ -1,7 +1,7 @@
 import React from "react";
 
 const Register = (props) => {
-    const { registerHandler, loginHandler,asRef } = props;
+    const { registerHandler, loginHandler, asRef } = props;
     return (
         <div className="common-wrapper d-flex align-items-center justify-content-center position-absolute">
             <div className="auth-form" ref={asRef}>

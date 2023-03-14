@@ -175,11 +175,13 @@
 
 .type-message-div .emoji-div img,
 .type-message-div .img-div img,
-.type-message-div .voice-msg-div img {
+.type-message-div .voice-msg-div .img {
   width: 20px;
 }
-.type-message-div .voice-msg-div img {
+.type-message-div .voice-msg-div .img {
   margin-left: 4rem !important;
+  font-size: 1.5rem;
+  color: #0d0d0d;
 }
 
 @media only screen and (max-width: 996px) {
@@ -366,7 +368,7 @@
   padding: 0.8rem;
 }
 
-.input-div {
+/* .input-div {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -383,7 +385,6 @@
 .input-div .emoji-btn:hover {
   cursor: pointer;
 }
-
 .input-div input {
   border: none;
   outline: 0;
@@ -404,7 +405,7 @@
 }
 .input-div .mic-btn:hover {
   cursor: pointer;
-}
+} */
 
 /* @media screen and (max-width: 1024px) {
   .btn-end {
@@ -648,4 +649,12 @@
   .chat-room .messages-list .scroll-up {
     padding-bottom: 5rem !important;
   }
+}
+
+#audio-switch-action {
+  background-color: #adb5bd;
+  margin-left: 0.5rem;
+}
+#audio-switch-action:hover {
+  cursor: help;
 }
