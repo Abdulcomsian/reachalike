@@ -123,6 +123,7 @@ const App = () => {
 
   const [percentMatch, setPercentMatch] = useState("");
   const [numConversations, setNumConverstations] = useState("");
+  const [connectionInfo, setConnectionInfo] = useState({})
 
   useEffect(() => {
     const websocket = new ReconnectingWebSocket(
@@ -149,8 +150,8 @@ const App = () => {
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data);
         console.log("Message from backend: " + JSON.stringify(message));
-        // setPercentMatch(JSON.parse(message.connection_info.percent_match))
-        // setNumConverstations(JSON.parse(message.connection_info.num_conversations))
+        // setPercentMatch(JSON.stringify(message.connection_info.percent_match))
+        // setNumConverstations(JSON.stringify(message.connection_info.num_conversations))
         switch (message.type) {
           case "msg":
             console.log("Received message: " + message.ct);
@@ -195,6 +196,7 @@ const App = () => {
               case "connect_t":
                 openConnectionText();
                 setIsConnected(true);
+                setConnectionInfo(message.connection_info);
                 setUserStatus("connected");
                 break;
               case "disconnect":
@@ -243,6 +245,13 @@ const App = () => {
       };
     }
   }, [ws, messages]);
+
+  useEffect(() => {
+    if (connectionInfo) {
+      setPercentMatch(connectionInfo.percent_match);
+      setNumConverstations(connectionInfo.num_conversations);
+    }
+  }, [connectionInfo]);
 
   const sendDisconnectRequest = async () => {
     console.log("Sending disconnect request to server...");
@@ -501,8 +510,8 @@ const App = () => {
                   starRating={starRating}
                   setStarRating={setStarRating}
                   sendStarRating={sendStarRating}
-                // percentMatch={percentMatch}
-                // numConversations={numConversations}
+                  percentMatch={percentMatch}
+                  numConversations={numConversations}
                 />
               }
             />

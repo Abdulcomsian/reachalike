@@ -216,7 +216,7 @@ const ChatScreen = (props) => {
             <p>You're now chatting with a random stranger.</p>
           </div>
           <div className="rating-div text-center mt-4">
-            <div>
+            {/* <div>
               <span>
                 <i class="fa-solid fa-star"></i>
               </span>
@@ -232,11 +232,13 @@ const ChatScreen = (props) => {
               <span className="with-out-rating">
                 <i class="fa-regular fa-star"></i>
               </span>
-            </div>
-            {/* <div>
-              <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Percent Match: <span style={{ fontSize: '1.2rem', color: props.percentMatch === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{props.percentMatch}</span></p>
-              <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Number of Conversations: <span style={{ fontSize: '1.2rem', color: props.numConversations === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{props.numConversations}</span></p>
             </div> */}
+            <div>
+              <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Percent Match: <span style={{ fontSize: '1.2rem', color: props.percentMatch === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>
+                {Math.round(props.percentMatch)}
+              </span></p>
+              <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Number of Conversations: <span style={{ fontSize: '1.2rem', color: props.numConversations === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{props.numConversations}</span></p>
+            </div>
             <p
               className="connected-user-text text-center"
               style={{ opacity: connectText ? 1 : 0 }}
