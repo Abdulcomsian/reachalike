@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import images from "../../constant/images/index";
 import logo from "../../assets/img/logo.svg";
 import "./style.css";
@@ -21,22 +21,20 @@ const Header = (props) => {
     starRating,
     setStarRating,
     sendStarRating,
-    userIdentify
+    userIdentify,
+    searchingUser
   } = props;
   const [confirm, setConfirm] = React.useState(false);
-  const [selected, setSelected] = React.useState("Default");
 
-  const handleSelected = (item) => {
-    setSelected(item);
-  };
 
   const toggleModal = () => setConfirm(!confirm);
 
   const changePage = () => {
     if (!isChatActive || endConfirm) {
-      // closeConnection();
-      cancelConnect();
       navigate("/");
+      if (!searchingUser) {
+        cancelConnect();
+      }
     } else {
       if (location.pathname === "/chat") {
         setConfirm(true);
@@ -48,6 +46,32 @@ const Header = (props) => {
     }
   };
   const { loginHandler, registerHandler, nearMeHandler } = props;
+
+
+  // Getting Groups
+  const [groups, setGroups] = useState(null);
+  const [selected, setSelected] = React.useState("Default");
+
+  const params = useParams()
+
+  const handleSelected = (item) => {
+    setSelected(item);
+    // navigate(`/${item}`);
+    window.history.pushState(`#${item}`)
+  };
+
+  useEffect(() => {
+    fetch("https://websocket-dev.bayes-chat.com/groups")
+      .then(res => res.json())
+      .then(data => {
+        const transformedData = data.groups.map((groupName, index) => {
+          return { id: index, name: groupName }
+        })
+        setGroups(transformedData)
+      })
+      .catch(e => console.log(e.message))
+  }, [])
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light main-header">
       <div className="container-fluid">
@@ -102,7 +126,21 @@ const Header = (props) => {
                 {selected}
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
+                {
+                  groups?.map(group => (
+                    <li key={group.id}>
+                      <a
+                        className={`dropdown-item ${selected === group.name ? "active" : ""
+                          }`}
+                        href={`#${group.name}`}
+                        onClick={() => handleSelected(group.name)}
+                      >
+                        {group.name}
+                      </a>
+                    </li>
+                  ))
+                }
+                {/* <li>
                   <a
                     className={`dropdown-item ${selected === "Default" ? "active" : ""
                       }`}
@@ -161,7 +199,7 @@ const Header = (props) => {
                   >
                     Education
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <a
                     className={`dropdown-item ${selected === "Near Me" ? "active" : ""

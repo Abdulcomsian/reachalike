@@ -10,7 +10,7 @@ import NearME from "./pages/near-me";
 import TermCondition from "./pages/term-condition";
 import Policy from "./pages/term-condition/index-policy";
 import "./assets/css/media.css";
-import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
+import { Route, Routes, BrowserRouter, useLocation, HashRouter } from "react-router-dom";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -32,20 +32,65 @@ const OptionsWebsocket = {
 
 const App = () => {
   const ref = useRef();
+  const [nearMe, setNearMe] = useState(false);
+  // Auth Functionality
   const [user, setUser] = useState("");
   const [authLogin, setAuthLogin] = useState(false);
   const [authRegister, setAuthRegister] = useState(false);
-  const [nearMe, setNearMe] = useState(false);
 
-  const typingRef = useRef(null);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
-  // const location = useLocation();
+  const [userCreds, setUserCreds] = useState({
+    user_name: "",
+    password: ""
+  });
 
-  // useEffect(() => {
-  //   if (location === '/') {
-  //     window.location.reload()
-  //   }
-  // }, [location])
+  useEffect(() => {
+    setUserCreds({ user_name: userName, password: password });
+  }, [userName, password]);
+
+  const handleEmailChange = (e) => {
+    setUserName(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleRegistration = (e) => {
+    e.preventDefault();
+    fetch("https://websocket-dev.bayes-chat.com/register", {
+      method: "POST",
+      body: JSON.stringify(userCreds),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem("token", data.token);
+        // navigate to home page
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log(JSON.stringify(userCreds))
+    fetch("https://websocket-dev.bayes-chat.com/login", {
+      method: "POST",
+      // headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userCreds)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem("token", data.token);
+        // navigate to home page
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
   const loginHandler = (e) => {
     setAuthLogin(!authLogin);
@@ -64,6 +109,9 @@ const App = () => {
       setNearMe(false);
     }
   };
+
+  // Auth Functionality End
+
   const nearMeHandler = (e) => {
     setNearMe(!nearMe);
     if (authLogin) {
@@ -417,14 +465,8 @@ const App = () => {
   // Star Rating Implementation
   const [starRating, setStarRating] = useState(0);
   function sendStarRating() {
-    // const message = {
-    //   type: "cmd",
-    //   ct: "rate_user",
-    // };
     ws.send(JSON.stringify({ "type": "cmd", "ct": "rate_user", "stars": starRating }));
   }
-
-  // ws.send(JSON.stringify({"type": "cmd", "ct": "rate_user", "stars": 4.5}))
 
   return (
     <>
@@ -446,6 +488,7 @@ const App = () => {
             sendStarRating={sendStarRating}
             userIdentify={userIdentify}
             isConnected={isConnected}
+            searchingUser={searchingUser}
           />
           <Routes>
             <Route
@@ -541,6 +584,14 @@ const App = () => {
             asRef={ref}
             loginHandler={loginHandler}
             registerHandler={registerHandler}
+            userName={userName}
+            setUserName={setUserName}
+            password={password}
+            setPassword={setPassword}
+            handleEmailChange={handleEmailChange}
+            handlePasswordChange={handlePasswordChange}
+            handleRegistration={handleRegistration}
+            handleLogin={handleLogin}
           />
         )}
         {authRegister && (
@@ -548,6 +599,13 @@ const App = () => {
             asRef={ref}
             registerHandler={registerHandler}
             loginHandler={loginHandler}
+            userName={userName}
+            setUserName={setUserName}
+            password={password}
+            setPassword={setPassword}
+            handleEmailChange={handleEmailChange}
+            handlePasswordChange={handlePasswordChange}
+            handleRegistration={handleRegistration}
           />
         )}
         {nearMe && <NearME asRef={ref} nearMeHandler={nearMeHandler} />}

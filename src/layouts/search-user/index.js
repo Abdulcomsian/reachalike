@@ -28,12 +28,12 @@ const SearchUser = (props) => {
                 <p className="fw-bold my-3">Connecting . . .</p>
                 {/* <span className="d-block">OR</span> */}
                 {/* <button onClick={handleConnect} className="rounded mt-2">Connect Randomly</button> */}
-                <p style={{ marginTop: '1rem' }}><b>Like the website?</b> Support me so that I can advertise for it and bring other awesome people to talk to</p>
+                <p style={{ marginTop: '10rem' }}><b>Like the website?</b> Support me so that I can advertise for it and bring other awesome people to talk to</p>
                 <p style={{ marginTop: '1.5rem' }} className="text-center buy-me-coffee">
                     {/* Buy me a Coffee?{" "} */}
                     <a href="https://www.buymeacoffee.com" target="_blank">
                         {/* <i class="fa-solid fa-mug-saucer"></i> */}
-                        <img src={buyCoffee} width="300px" height="auto" />
+                        <img src={buyCoffee} width="200px" height="auto" />
                     </a>
                 </p>
 

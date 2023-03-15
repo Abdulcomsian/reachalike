@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { authLogin } from "../../../store/actions";
 
 const Login = (props) => {
-    const { loginHandler, registerHandler, asRef, state, dispatch } = props;
+    const { loginHandler, registerHandler, asRef, state, dispatch, handleLogin, userName, setUserName, password, setPassword, handleEmailChange, handlePasswordChange } = props;
     return (
         <div className="common-wrapper d-flex align-items-center justify-content-center position-absolute">
             <div className="auth-form" ref={asRef}>
@@ -17,16 +17,19 @@ const Login = (props) => {
                     <p className="text-center my-4" >You are not connected, please login or register for better matches</p>
                     <div className="input-div mb-3">
                         <label className="mb-2 fw-bold">Username</label>
-                        <input placeholder="John.doe@gmail.com" className="common-input" />
+                        <input placeholder="John.doe@gmail.com" value={userName} onChange={handleEmailChange} className="common-input" />
                     </div>
                     <div className="input-div mb-3">
                         <label className="mb-2 fw-bold">Password</label>
-                        <input className="common-input" type="password" />
+                        <input className="common-input" type="password" value={password} onChange={handlePasswordChange} />
                     </div>
                     <p className="text-end">
                         <a>Forgot Password?</a>
                     </p>
-                    <button className="my-3" onClick={() => dispatch(authLogin(state))}>Submit</button>
+                    <button className="my-3"
+                        // onClick={() => dispatch(authLogin(state))}
+                        onClick={handleLogin}
+                    >Submit</button>
                     <p className="text-center bottom-para"> Already member ? <a className="fw-bold cursor-pointer" onClick={registerHandler}>Signup</a>
                     </p>
                 </div>

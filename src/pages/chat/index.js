@@ -200,6 +200,30 @@ const ChatScreen = (props) => {
     setToolTipOpen1(!toolTipOpen1)
   }
 
+  // Color Matcher
+  function getMatchColor(percentMatch) {
+    let color;
+    if (percentMatch < 10) {
+      // Shades of gray
+      const grayValue = Math.round(percentMatch / 10 * 255);
+      color = `rgb(${grayValue}, ${grayValue}, ${grayValue})`;
+    } else if (percentMatch < 30) {
+      // Light blue
+      const blueValue = Math.round((percentMatch - 10) / 20 * 255);
+      color = `rgb(0, ${blueValue}, ${blueValue})`;
+    } else if (percentMatch < 70) {
+      // Shades of #1169d0
+      const blueValue = Math.round((percentMatch - 30) / 40 * 255);
+      color = `rgb(17, 105, ${blueValue})`;
+    } else {
+      // Shades of green
+      const greenValue = Math.round((percentMatch - 70) / 30 * 255);
+      color = `rgb(0, ${greenValue}, 0)`;
+    }
+    return color;
+  }
+
+
   return (
     <div
       className={
@@ -233,11 +257,32 @@ const ChatScreen = (props) => {
                 <i class="fa-regular fa-star"></i>
               </span>
             </div> */}
-            <div>
+            {/* <div>
               <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Percent Match: <span style={{ fontSize: '1.2rem', color: props.percentMatch === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>
                 {Math.round(props.percentMatch)}
               </span></p>
               <p style={{ color: "#0d0d0d", fontWeight: '600', fontSize: '0.9rem' }}>Number of Conversations: <span style={{ fontSize: '1.2rem', color: props.numConversations === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{props.numConversations}</span></p>
+            </div> */}
+            {/* <div>
+              <p><span style={{ fontSize: '1.2rem', fontWeight: '600', color: props.numConversations === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{Math.round(props.percentMatch)}</span>% match - <span style={{ fontSize: '1.2rem', fontWeight: '600', color: props.numConversations === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)' }}>{props.numConversations}</span> conversations</p>
+            </div> */}
+            <div>
+              <p>
+                <span style={{
+                  fontSize: '1.2rem',
+                  fontWeight: '600',
+                  color: props.numConversations === 0 ? '#8d99ae' : getMatchColor(props.percentMatch)
+                }}>
+                  {Math.round(props.percentMatch)}
+                </span>
+                % match - <span style={{
+                  fontSize: '1.2rem',
+                  fontWeight: '600',
+                  color: props.numConversations === 0 ? '#8d99ae' : 'rgba(17, 105, 208, 1)'
+                }}>
+                  {props.numConversations}
+                </span> conversations
+              </p>
             </div>
             <p
               className="connected-user-text text-center"
