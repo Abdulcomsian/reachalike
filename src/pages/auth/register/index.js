@@ -1,7 +1,7 @@
 import React from "react";
 
 const Register = (props) => {
-    const { registerHandler, loginHandler, asRef, userName, setUserName, password, setPassword, handleEmailChange, handlePasswordChange, handleRegistration } = props;
+    const { registerHandler, loginHandler, asRef, userName, setUserName, password, setPassword, confirmPassword, setConfirmPassword, handleEmailChange, handlePasswordChange, handleConfirmPasswordChange, handleRegistration } = props;
     return (
         <div className="common-wrapper d-flex align-items-center justify-content-center position-absolute">
             <div className="auth-form" ref={asRef}>
@@ -22,7 +22,8 @@ const Register = (props) => {
                     </div>
                     <div className="input-div mb-3">
                         <label className="mb-2 fw-bold">Confirm Password</label>
-                        <input className="common-input" type="password" />
+                        {/* <input className="common-input" type="password" /> */}
+                        <input className="common-input" type="password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
                     </div>
                     <button className="my-3" onClick={handleRegistration}>Submit</button>
                     <p className="text-center bottom-para">Already member ?

@@ -15,11 +15,14 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 import { Provider } from "react-redux";
 import store from "./store";
 import { authLogin as LoginAction } from "./store/actions";
+import axios from "axios";
 
+// Some constants
 const BackendAddr = "websocket-dev.bayes-chat.com";
 const NumClosedWebsocketForWarning = 5;
 const NumErrorsWebsocketForWarning = 5;
 
+// Websocket Options
 const OptionsWebsocket = {
   debug: true,
   automaticOpen: true,
@@ -30,68 +33,97 @@ const OptionsWebsocket = {
   maxReconnectAttempts: 6,
 };
 
+// Main App Component
 const App = () => {
+  //State Variables
   const ref = useRef();
   const [nearMe, setNearMe] = useState(false);
+
   // Auth Functionality
   const [user, setUser] = useState("");
   const [authLogin, setAuthLogin] = useState(false);
   const [authRegister, setAuthRegister] = useState(false);
 
+  // Authentication Field State Variables
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Authentication State Object
   const [userCreds, setUserCreds] = useState({
     user_name: "",
     password: ""
   });
 
+  //Setting Values from Input Fields to the Authentication State Object
   useEffect(() => {
     setUserCreds({ user_name: userName, password: password });
   }, [userName, password]);
 
+  // Handling Email Input Changes
   const handleEmailChange = (e) => {
     setUserName(e.target.value);
   };
 
+  // Handling Password Input Changes
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
+  // Handling Confirm Password Input Changes
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  // Handling Registration API
   const handleRegistration = (e) => {
     e.preventDefault();
-    fetch("https://websocket-dev.bayes-chat.com/register", {
-      method: "POST",
-      body: JSON.stringify(userCreds),
+    //Checking to see if the value in the password field matches with the confirm password field
+    if (password !== confirmPassword) {
+      alert("Password doesn't match!");
+      return;
+    }
+
+    // if above condition turns to be false, then this code executes
+    // where I am making the register user call to the register api
+    // with the user data that was saved in the userCreds object earlier
+    axios.post("https://websocket-dev.bayes-chat.com/register", userCreds, {
+      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }
     })
       .then((response) => response.json())
       .then((data) => {
+        // After the successful registration process
+        // setting up the token in the localStorage of the browser
         localStorage.setItem("token", data.token);
-        // navigate to home page
       })
       .catch((error) => {
+        // if api call fails, it will return errors
         console.error("Error:", error);
       });
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(JSON.stringify(userCreds))
-    fetch("https://websocket-dev.bayes-chat.com/login", {
-      method: "POST",
-      // headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userCreds)
+    //Taking values from the userCreds object and sending it the
+    //Login API where it checks for the credentials to be matching the
+    // credentials that are saved in the database.
+    axios.post('https://websocket-dev.bayes-chat.com/login', userCreds, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        localStorage.setItem("token", data.token);
-        // navigate to home page
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+      .then(data => (
+        //Setting up the token coming from the backend to the localStorage
+        //of the browser after successful login
+        localStorage.setItem("token", data.data.token)
+      ))
+      .catch(error => {
+        //If login fails then it will return an error here
+        console.error(error);
       });
   }
 
+  // This function controls the Login Popup to open and close
   const loginHandler = (e) => {
     setAuthLogin(!authLogin);
     if (authRegister) {
@@ -100,6 +132,8 @@ const App = () => {
       setNearMe(false);
     }
   };
+
+  // This function controls the Registeration Popup to open and close
   const registerHandler = (e) => {
     setAuthRegister(!authRegister);
     if (authLogin) {
@@ -110,8 +144,7 @@ const App = () => {
     }
   };
 
-  // Auth Functionality End
-
+  // This function handles the Near me popup toggling process
   const nearMeHandler = (e) => {
     setNearMe(!nearMe);
     if (authLogin) {
@@ -120,6 +153,11 @@ const App = () => {
       setAuthRegister(false);
     }
   };
+
+  // this effect re-renders the component everytime the any popup is toggled
+  // this also handling the click functionalities of the pointer if it's inside the scope
+  // of that popup or outside of it. If the user clicks outside, it will close the
+  // the popup automatically
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (authLogin && ref.current && !ref.current.contains(e.target)) {
@@ -148,37 +186,45 @@ const App = () => {
   const [findUser, setFindUser] = useState(false);
   const [endChat, setEndChat] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-
+  //Connection Object State Variables
   const [ws, setWs] = useState(null);
   const [websocketConnectionClosedIdx, setWebsocketConnectionClosedIdx] =
     useState(0);
   const [websocketConnectionErrorIdx, setWebsocketConnectionErrorIdx] =
     useState(0);
   const [connectedText, setConnectedText] = useState(false);
+  //Messages Object State Variable
   const [messages, setMessages] = useState([
     {
       text: "",
       timestamp: "",
     },
   ]);
+
+  //Connection Status variables that will check for different
+  //actions that will be executed after the connection between
+  //two users is established or not
   const [isChatActive, setIsChatActive] = useState(false);
   const [isCaller, setIsCaller] = useState(false);
-
+  //checking for typing status of users
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [typingPrompt, setTypingPrompt] = useState("");
 
   const [userStatus, setUserStatus] = useState("");
-
+  //checking for Percent Match and num of conversations
   const [percentMatch, setPercentMatch] = useState("");
   const [numConversations, setNumConverstations] = useState("");
   const [connectionInfo, setConnectionInfo] = useState({})
 
+  //Establishing a connection to the websocket when the component
+  //renders for the first time in the browser window
   useEffect(() => {
     const websocket = new ReconnectingWebSocket(
       `wss://${BackendAddr}/ws`,
       null,
       OptionsWebsocket
     );
+    //Setting response of websocket into the websocket state object
     setWs(websocket);
 
     return () => {
@@ -189,81 +235,98 @@ const App = () => {
     };
   }, []);
 
+  //After setting up the state object, the websocket functions
+  //are being called and their functionalities are being used
+  //accordingly in this useEffect
   useEffect(() => {
     if (ws) {
+      //opening the connection
       ws.onopen = () => {
         console.log("Websocket connected: ", ws);
       };
-
+      //function runs when a message is sent or received
       ws.onmessage = async (event) => {
+        //returns a json object with the data containing the message
+        //converting JSON data in string form into Javascript objects
         let message = JSON.parse(event.data);
-        console.log("Message from backend: " + JSON.stringify(message));
-        // setPercentMatch(JSON.stringify(message.connection_info.percent_match))
-        // setNumConverstations(JSON.stringify(message.connection_info.num_conversations))
+        // then the type of message is checked and
+        //functions are performed accordingly
+        //using the switch statement
         switch (message.type) {
+          //checks for the 'msg' case
           case "msg":
-            console.log("Received message: " + message.ct);
+            // creates a newMessage object with the content of message
+            // and the timestamp on which it was sent
             const newMessage = {
               text: message.ct,
               timestamp: new Date().getTime(),
             };
+            // Messages state object is filled up with the messages array
             setMessages([...messages, newMessage]);
-            // sendNotTypingStatus();
+            // other users typign status is set to false after the message
+            // is added to the array
             setOtherUserTyping(false);
             break;
+          //checks for the 'wr_start' case
+          //this case handles the user typing status
           case "wr_start":
-            console.log("Typing User: ", message.ct);
             setOtherUserTyping(true);
             setTypingPrompt(message.ct);
             break;
+          //checks for the 'wr_stop' case
+          //this case handles the user not typing status
           case "wr_stop":
-            console.log("Not typing User: ", message.ct);
             setOtherUserTyping(false);
             setTypingPrompt(message.ct);
             break;
+          //checks for the 'rate_user' case
+          //this case handles the user's rating
           case 'rate_user':
             sendStarRating();
             break;
+          //checks for the 'cancel_connect_t' case
+          //if the user is not connected to another user
+          //this case allows that user to cancel the request
           case "cancel_connect_t":
-            // sendDisconnectRequest();
-            console.log("Message from cancel: ", message.ct);
-            // setSearchingUser(false);
-            // setConnectedText(false);
-            // setIsConnected(false);
-            // setIsChatActive(false);
-            // setOtherUserTyping(false);
-            // setEnd(true);
             setUserStatus("disconnected");
             break;
+          //checks for the 'cmd' case
           case "cmd":
+            //this switch statement checks for the commands being sent
+            //to the websocket
             switch (message.ct) {
+              //checks for the audio connection
+              //not functional right now, just added up some dummy functionality
               case "connect_a":
                 isCaller = message.isCaller;
                 await openConnectionAudio(isCaller);
                 break;
+              //checks for the text connection
               case "connect_t":
                 openConnectionText();
                 setIsConnected(true);
                 setConnectionInfo(message.connection_info);
                 setUserStatus("connected");
                 break;
+              //checks for the disconnected user
               case "disconnect":
                 setUserStatus("disconnected");
                 break;
+              //default case
               default:
                 console.log("DEFAULT CASE REACHED IN CMD MESSAGE FROM SERVER");
                 break;
             }
             break;
-
+          //gets the information of messages from the server
           case "info":
             addMessageList(message.ct);
             break;
-
+          //gets the information of any errors in the server
           case "error":
             addMessageList("Error: " + message.ct);
             break;
-
+          //checks for the default case
           default:
             console.warn(
               "Message from server invalid: " + JSON.stringify(message)
@@ -271,7 +334,7 @@ const App = () => {
             break;
         }
       };
-
+      //function called when the connection with the websocket is closed
       ws.onclose = (event) => {
         setWebsocketConnectionClosedIdx(websocketConnectionClosedIdx + 1);
         console.warn("Connection closed with websocket");
@@ -281,7 +344,7 @@ const App = () => {
           );
         }
       };
-
+      //function called if the websocket is giving any error
       ws.onerror = (event) => {
         console.warn("Connection error with websocket");
         setWebsocketConnectionErrorIdx(websocketConnectionErrorIdx + 1);
@@ -292,15 +355,19 @@ const App = () => {
         }
       };
     }
-  }, [ws, messages]);
+  }, [ws, messages]); //component re-renders itself everytime when a connection status changes or messages array is updated
 
+
+  //this effect runs when the user's connection info is updated and maps the Percent Match and
+  //Number of Conversations with the specific user is changed or updated
   useEffect(() => {
     if (connectionInfo) {
       setPercentMatch(connectionInfo.percent_match);
       setNumConverstations(connectionInfo.num_conversations);
     }
-  }, [connectionInfo]);
+  }, [connectionInfo]); //everytime connectionInfo object is updated, this effect runs
 
+  //This function handles the disconnection of the users with each other
   const sendDisconnectRequest = async () => {
     console.log("Sending disconnect request to server...");
     let messageContent = {
@@ -310,6 +377,7 @@ const App = () => {
     ws.send(JSON.stringify(messageContent));
   };
 
+  //This function handles the connection cancellation before the users are connected to each other
   const cancelConnect = () => {
     console.log("Cancelling the connection...");
     let messageContent = {
@@ -319,6 +387,7 @@ const App = () => {
     ws.send(JSON.stringify(messageContent));
   }
 
+  //This function handles the Audio connection (This functionality is disabled for now)
   const openConnectionAudio = async (isCaller) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -355,11 +424,13 @@ const App = () => {
     }
   };
 
+  //This function is adding a single message to the messages array
   const addMessageList = (text) => {
     console.log("Adding message: " + text);
     setMessages((messages) => [...messages, text]);
   };
 
+  //This function is responsible for sending the messages
   const sendMessage = (message) => {
     if (connectedText) {
       const messageContent = {
@@ -375,6 +446,7 @@ const App = () => {
     }
   };
 
+  //This function is responsible for connecting a user with another for chatting
   const connectToUser = () => {
     console.log("Sending connection request to server...");
     let messageContent = {
@@ -385,17 +457,21 @@ const App = () => {
     ws.send(JSON.stringify(messageContent));
   };
 
+  //This function is handling the display of the text that is shown when a user is connected to another
+  //The text is shown for a specific time
   const openConnectionText = () => {
     console.log("Text connection to stranger...");
     setConnectedText(true);
     setIsChatActive(true);
   };
 
+  //This function is responsible for closing the connection between the two users
   function closeConnection() {
     sendDisconnectRequest();
     setIsConnected(false);
   }
 
+  //When the user is connected, this function resets all the necessary state variables
   function handleConnect() {
     setMessages([]);
     setRatingPopup(false);
@@ -404,6 +480,7 @@ const App = () => {
     connectToUser();
   }
 
+  //When the other user starts typing, this function runs and sends a command to the websocket for showing the typing status of the user
   function sendTypingStatus() {
     const message = {
       type: "wr_start",
@@ -412,6 +489,7 @@ const App = () => {
     ws.send(JSON.stringify(message));
   }
 
+  //When the other user stop typing, this function runs and sends a command to the websocket for hiding the typing status of the user
   function sendNotTypingStatus() {
     const message = {
       type: "wr_stop",
@@ -422,7 +500,7 @@ const App = () => {
 
   console.log("Message from Connection: ", userStatus);
 
-  // Chat Module States
+  // States that are responsible for the actions that are done on the chat page
   const [searchingUser, setSearchingUser] = useState(false);
   const [end, setEnd] = useState(false);
   const [endConfirm, setEndConfirm] = useState(false);
@@ -431,10 +509,14 @@ const App = () => {
   const [userIdentify, setUserIdentify] = useState(false);
   const [typingUser, setTypingUser] = useState("");
 
+  //Sets the End state to true
+  //This state is responsible for showing the confirm button
+  //after the user clicks end
   const onClickEndBtn = () => {
     setEnd(true);
   };
 
+  // This function is responsible for hadling the functionality after the user disconnects the chat
   const onClickEndConfirmBtn = () => {
     setStartNew(true);
     setEnd(true);
@@ -445,6 +527,7 @@ const App = () => {
     sendDisconnectRequest();
   };
 
+  // This function is responsible for hadling the functionality after the user disconnects the chat from the navbar
   const onClickConfirm = () => {
     setStartNew(true);
     setEnd(true);
@@ -454,6 +537,7 @@ const App = () => {
     // sendDisconnectRequest();
   };
 
+  // This funtion is responsible for starting a new chat from the button on the left of the message input
   const onClickStartNewChatBtn = () => {
     handleConnect();
     setIsChatActive(false);
@@ -462,17 +546,23 @@ const App = () => {
     setUserIdentify(false);
   };
 
-  // Star Rating Implementation
+  // Functionality for star rating
   const [starRating, setStarRating] = useState(0);
   function sendStarRating() {
     ws.send(JSON.stringify({ "type": "cmd", "ct": "rate_user", "stars": starRating }));
   }
 
+  // Component rendering starts here
   return (
     <>
       <Provider store={store}>
+        {/* Browser Router from React Router DOM */}
+        {/* The basename attribute sets the initial route https://localhost:3000/Reach-Alike */}
         <BrowserRouter basename="/Reach-Alike">
+          {/* Header/Navigation component */}
+          {/* This is placed outside of the Routes because if will not change and will appear on every other screen/layout */}
           <Header
+            //functions and states passed as props to the component that are being accessed in the component to perform different actions
             loginHandler={loginHandler}
             registerHandler={registerHandler}
             nearMeHandler={nearMeHandler}
@@ -490,7 +580,9 @@ const App = () => {
             isConnected={isConnected}
             searchingUser={searchingUser}
           />
+          {/* The main routes start here that contain the logic of all the components being rendered on the screen */}
           <Routes>
+            {/* Main Screen Route and Component */}
             <Route
               exact
               path="/"
@@ -505,6 +597,8 @@ const App = () => {
                 />
               }
             />
+            {/* Chat Screen Route and Component */}
+            {/* states and functions are passed as props to the component */}
             <Route
               exact
               path="/chat"
@@ -558,6 +652,8 @@ const App = () => {
                 />
               }
             />
+            {/* Audio Chat Screen Route and Component */}
+            {/* states and functions are passed as props to the component */}
             <Route
               exact
               path="/audio-chat"
@@ -575,26 +671,34 @@ const App = () => {
                 />
               }
             />
+            {/* Terms and Conditions Screen Route and Component */}
             <Route exact path="/term-condition" element={<TermCondition />} />
+
+            {/* Privacy Policy Screen Route and Component */}
             <Route exact path="/policy" element={<Policy />} />
           </Routes>
         </BrowserRouter>
-        {authLogin && (
-          <Login
-            asRef={ref}
-            loginHandler={loginHandler}
-            registerHandler={registerHandler}
-            userName={userName}
-            setUserName={setUserName}
-            password={password}
-            setPassword={setPassword}
-            handleEmailChange={handleEmailChange}
-            handlePasswordChange={handlePasswordChange}
-            handleRegistration={handleRegistration}
-            handleLogin={handleLogin}
-          />
-        )}
+        {/* Authenticated Routes start here */}
+        {
+          // Checking if the user is authenticated or not
+          authLogin && (
+            // Login component with its props
+            <Login
+              asRef={ref}
+              loginHandler={loginHandler}
+              registerHandler={registerHandler}
+              userName={userName}
+              setUserName={setUserName}
+              password={password}
+              setPassword={setPassword}
+              handleEmailChange={handleEmailChange}
+              handlePasswordChange={handlePasswordChange}
+              handleRegistration={handleRegistration}
+              handleLogin={handleLogin}
+            />
+          )}
         {authRegister && (
+          // register component with its props
           <Register
             asRef={ref}
             registerHandler={registerHandler}
@@ -603,11 +707,15 @@ const App = () => {
             setUserName={setUserName}
             password={password}
             setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
             handleEmailChange={handleEmailChange}
             handlePasswordChange={handlePasswordChange}
+            handleConfirmPasswordChange={handleConfirmPasswordChange}
             handleRegistration={handleRegistration}
           />
         )}
+        {/* Near Me component with its props and refs */}
         {nearMe && <NearME asRef={ref} nearMeHandler={nearMeHandler} />}
       </Provider>
     </>
