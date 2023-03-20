@@ -1,12 +1,11 @@
 .chat_wrapper {
-  padding: 5.5rem 0.813rem;
+  padding: 10.5rem 0.813rem 5.5rem 0.813rem;
   background-color: rgba(225, 236, 239, 1);
   overflow-y: auto;
   height: calc(100vh - 43px);
 }
 
 /* Scrollbar CSS Start */
-
 .chat_wrapper::-webkit-scrollbar {
   width: 8px;
 }
@@ -368,269 +367,6 @@
   padding: 0.8rem;
 }
 
-/* .input-div {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border: solid 1px #d0d0d0;
-  padding: 0.3rem 1.3rem;
-  border-radius: 5px;
-}
-
-.input-div .emoji-btn {
-  font-size: 1.5rem;
-  margin-right: 1rem;
-}
-.input-div .emoji-btn:hover {
-  cursor: pointer;
-}
-.input-div input {
-  border: none;
-  outline: 0;
-  padding: 0;
-  font-size: 1rem;
-  background: transparent;
-}
-
-.input-div input:focus {
-  outline: none;
-  box-shadow: none;
-  background: transparent;
-}
-
-.input-div .mic-btn {
-  font-size: 1.5rem;
-  margin-left: 1rem;
-}
-.input-div .mic-btn:hover {
-  cursor: pointer;
-} */
-
-/* @media screen and (max-width: 1024px) {
-  .btn-end {
-    padding: 0.7rem;
-  }
-
-  .btn-send {
-    padding: 0.8rem;
-  }
-
-  .input-div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: solid 1px #d0d0d0;
-    padding: 0.3rem 1.3rem;
-    border-radius: 5px;
-  }
-
-  .input-div .emoji-btn {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-  }
-
-  .input-div input {
-    border: none;
-    outline: 0;
-    padding: 0;
-    font-size: 1rem;
-    background: transparent;
-  }
-
-  .input-div input:focus {
-    outline: none;
-    box-shadow: none;
-    background: transparent;
-  }
-
-  .input-div .mic-btn {
-    font-size: 1.5rem;
-    margin-left: 1rem;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .btn-end {
-    padding: 0.7rem;
-  }
-
-  .btn-send {
-    padding: 0.8rem;
-  }
-
-  .input-div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: solid 1px #d0d0d0;
-    padding: 0.3rem 1.3rem;
-    border-radius: 5px;
-  }
-
-  .input-div .emoji-btn {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-  }
-
-  .input-div input {
-    border: none;
-    outline: 0;
-    padding: 0;
-    font-size: 1rem;
-    background: transparent;
-  }
-
-  .input-div input:focus {
-    outline: none;
-    box-shadow: none;
-    background: transparent;
-  }
-
-  .input-div .mic-btn {
-    font-size: 1.5rem;
-    margin-left: 1rem;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .btn-end {
-    padding: 0.7rem;
-  }
-
-  .btn-send {
-    padding: 0.8rem;
-  }
-
-  .input-div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: solid 1px #d0d0d0;
-    padding: 0.3rem 1.3rem;
-    border-radius: 5px;
-  }
-
-  .input-div .emoji-btn {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-  }
-
-  .input-div input {
-    border: none;
-    outline: 0;
-    padding: 0;
-    font-size: 1rem;
-    background: transparent;
-  }
-
-  .input-div input:focus {
-    outline: none;
-    box-shadow: none;
-    background: transparent;
-  }
-
-  .input-div .mic-btn {
-    font-size: 1.5rem;
-    margin-left: 1rem;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .btn-end {
-    width: 50px !important;
-    height: 3rem;
-    font-size: 0.7rem;
-    text-align: center;
-  }
-
-  .btn-send {
-    width: 50px !important;
-    height: 3rem;
-    font-size: 0.7rem;
-    text-align: center;
-  }
-
-  .btn-send i {
-    display: none;
-  }
-
-  .input-div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: solid 1px #d0d0d0;
-    padding: 0.1rem 0.5rem;
-    border-radius: 5px;
-  }
-
-  .input-div .emoji-btn {
-    font-size: 1.1rem;
-    margin-right: 0.5rem;
-  }
-
-  .input-div input {
-    border: none;
-    outline: 0;
-    padding: 0;
-    font-size: 1rem;
-    background: transparent;
-  }
-
-  .input-div .mic-btn {
-    font-size: 1.1rem;
-    margin-right: 0.5rem;
-  }
-}
-
-@media screen and (max-width: 320px) {
-  .btn-end {
-    padding: 0.7rem;
-  }
-
-  .btn-send {
-    padding: 0.8rem;
-  }
-
-  .input-div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: solid 1px #d0d0d0;
-    padding: 0.3rem 1.3rem;
-    border-radius: 5px;
-  }
-
-  .input-div .emoji-btn {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-  }
-
-  .input-div input {
-    border: none;
-    outline: 0;
-    padding: 0;
-    font-size: 1rem;
-    background: transparent;
-  }
-
-  .input-div input:focus {
-    outline: none;
-    box-shadow: none;
-    background: transparent;
-  }
-
-  .input-div .mic-btn {
-    font-size: 1.5rem;
-    margin-left: 1rem;
-  }
-} */
-
 .chat-room .messages-list li:last-child {
   margin-bottom: 2rem !important;
 }
@@ -657,4 +393,63 @@
 }
 #audio-switch-action:hover {
   cursor: help;
+}
+
+.connecting-logo-div .like-text {
+  margin-top: 10rem;
+}
+
+.connecting-logo-div .buy-me-coffee {
+  margin-top: 1.5rem;
+}
+
+@media only screen and (max-width: 1680px) {
+}
+
+@media only screen and (max-width: 1200px) {
+}
+
+@media only screen and (max-width: 992px) {
+}
+
+@media only screen and (max-width: 768px) {
+  .chat_wrapper {
+    height: 100vh;
+    padding-top: 3rem !important;
+  }
+  .random-stranger-div {
+    margin-top: 15rem;
+  }
+
+  .connecting-logo-div .like-text {
+    margin-top: 5rem;
+  }
+
+  .connecting-logo-div .buy-me-coffee {
+    margin-top: 1rem;
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  .random-stranger-div {
+    margin-top: 15rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .chat_wrapper {
+    height: 100vh !important;
+  }
+  .connection-login-message {
+    margin-top: 4.5rem;
+  }
+  .connecting-logo-div .like-text {
+    margin-top: 0rem;
+  }
+  .connecting-logo-div .buy-me-coffee {
+    margin-top: 0.3rem;
+  }
+  .random-stranger-div {
+    margin-top: 5rem;
+  }
 }

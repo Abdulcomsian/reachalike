@@ -73,7 +73,7 @@ const Header = (props) => {
   }, [])
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light main-header">
+    <nav className="navbar navbar-expand-lg navbar-light main-header fixed-top">
       <div className="container-fluid">
         <ConfirmationModal
           confirm={confirm}

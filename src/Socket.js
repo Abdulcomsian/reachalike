@@ -1,3 +1,7 @@
+// This File contains the code that you provided as a reference of your previous website
+// This file is not being used anywhere in the code
+// It is just for the reference, so even if you remove it, nothing will go wrong
+
 let backendAddr = 'websocket-dev.bayes-chat.com';
 
 let websocketConnectionClosedIdx = 0;

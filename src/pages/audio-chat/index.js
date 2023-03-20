@@ -6,24 +6,34 @@ import ChatScreen from "../chat";
 import { Link } from "react-router-dom";
 import RatingAudio from "../../components/RatingAudio/RatingAudio";
 
+// This is the code for the design and implementation of
+// Audio Chat Module of the App
+
 const AudioChat = (props) => {
   // const [findUser, setFindUser] = useState(false);
   // const [endChat, setEndChat] = useState(false);
+
+  // These are the props coming from the parent component
   const { user, findUser, setFindUser, endChat, setEndChat } = props;
   const ref = useRef();
+  //These are all the state variables that are being used in the component rendering
   const [mute, setMute] = useState(false);
   const [startChat, setStartChat] = useState(false);
   const [requestToChat, setRequestToChat] = useState(true);
 
+  // This side effect sets the dummy chat connection with the other user
   useEffect(() => {
+    // We are calling a setTimeout method to show the connecting animation before
+    // the users get connected to each other.
     setTimeout(() => {
       setFindUser(true);
       setHide(true);
-    }, 1000);
+    }, 10000);
   }, [findUser]);
 
+  // This state variable and the function under it are responsible for
+  // toggling the user rating modal's display
   const [hide, setHide] = useState(true);
-
   const modalUserRatingClose = (val) => {
     setHide(false);
     setEndChat(true);
@@ -37,6 +47,8 @@ const AudioChat = (props) => {
             startChat ? "audio_chat_wrapper w-40" : "audio_chat_wrapper"
           }
         >
+          {/* This is where the conditional rendering of the component starts */}
+          {/*  */}
           {findUser ? (
             <>
               <div

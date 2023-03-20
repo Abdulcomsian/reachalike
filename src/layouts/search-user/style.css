@@ -7,7 +7,7 @@
   background-color: rgba(225, 236, 239, 1);
 }
 .search-user-wrapper .connection-login-message {
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   font-size: 1.2rem;
   font-weight: 600;
   color: #bf0603;
@@ -34,4 +34,22 @@
   letter-spacing: 0.01em;
   font-weight: 600;
   background-color: rgba(52, 201, 255, 1);
+}
+
+@media only screen and (max-width: 1680px) {
+}
+
+@media only screen and (max-width: 1200px) {
+}
+
+@media only screen and (max-width: 992px) {
+}
+
+@media only screen and (max-width: 768px) {
+}
+
+@media only screen and (max-width: 580px) {
+}
+
+@media only screen and (max-width: 480px) {
 }

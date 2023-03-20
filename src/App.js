@@ -201,6 +201,14 @@ const App = () => {
     },
   ]);
 
+  // const location = useLocation()
+  // const groupFromURL = location.hash.slice(1)
+  // const [groupName, setGroupName] = useState(groupFromURL);
+
+  // console.log("Group Name: ", groupName);
+  // console.log("Group Name from URL: ", groupFromURL);
+
+
   //Connection Status variables that will check for different
   //actions that will be executed after the connection between
   //two users is established or not
@@ -558,126 +566,126 @@ const App = () => {
       <Provider store={store}>
         {/* Browser Router from React Router DOM */}
         {/* The basename attribute sets the initial route https://localhost:3000/Reach-Alike */}
-        <BrowserRouter basename="/Reach-Alike">
-          {/* Header/Navigation component */}
-          {/* This is placed outside of the Routes because if will not change and will appear on every other screen/layout */}
-          <Header
-            //functions and states passed as props to the component that are being accessed in the component to perform different actions
-            loginHandler={loginHandler}
-            registerHandler={registerHandler}
-            nearMeHandler={nearMeHandler}
-            endChat={endChat}
-            setEndChat={setEndChat}
-            isChatActive={isChatActive}
-            onClickEndConfirmBtn={onClickEndConfirmBtn}
-            endConfirm={endConfirm}
-            closeConnection={closeConnection}
-            cancelConnect={cancelConnect}
-            starRating={starRating}
-            setStarRating={setStarRating}
-            sendStarRating={sendStarRating}
-            userIdentify={userIdentify}
-            isConnected={isConnected}
-            searchingUser={searchingUser}
+        {/* <BrowserRouter basename="/Reach-Alike"> */}
+        {/* Header/Navigation component */}
+        {/* This is placed outside of the Routes because if will not change and will appear on every other screen/layout */}
+        <Header
+          //functions and states passed as props to the component that are being accessed in the component to perform different actions
+          loginHandler={loginHandler}
+          registerHandler={registerHandler}
+          nearMeHandler={nearMeHandler}
+          endChat={endChat}
+          setEndChat={setEndChat}
+          isChatActive={isChatActive}
+          onClickEndConfirmBtn={onClickEndConfirmBtn}
+          endConfirm={endConfirm}
+          closeConnection={closeConnection}
+          cancelConnect={cancelConnect}
+          starRating={starRating}
+          setStarRating={setStarRating}
+          sendStarRating={sendStarRating}
+          userIdentify={userIdentify}
+          isConnected={isConnected}
+          searchingUser={searchingUser}
+        />
+        {/* The main routes start here that contain the logic of all the components being rendered on the screen */}
+        <Routes>
+          {/* Main Screen Route and Component */}
+          <Route
+            exact
+            path="/"
+            element={
+              <MainScreen
+                isChatActive={isChatActive}
+                messages={messages}
+                setMessages={setMessages}
+                handleConnect={handleConnect}
+                onClickStartNewChatBtn={onClickStartNewChatBtn}
+                setRatingPopup={setRatingPopup}
+              />
+            }
           />
-          {/* The main routes start here that contain the logic of all the components being rendered on the screen */}
-          <Routes>
-            {/* Main Screen Route and Component */}
-            <Route
-              exact
-              path="/"
-              element={
-                <MainScreen
-                  isChatActive={isChatActive}
-                  messages={messages}
-                  setMessages={setMessages}
-                  handleConnect={handleConnect}
-                  onClickStartNewChatBtn={onClickStartNewChatBtn}
-                  setRatingPopup={setRatingPopup}
-                />
-              }
-            />
-            {/* Chat Screen Route and Component */}
-            {/* states and functions are passed as props to the component */}
-            <Route
-              exact
-              path="/chat"
-              element={
-                <ChatScreen
-                  typingUser={typingUser}
-                  setTypingUser={setTypingUser}
-                  userIdentify={userIdentify}
-                  setUserIdentify={setUserIdentify}
-                  sendNotTypingStatus={sendNotTypingStatus}
-                  sendTypingStatus={sendTypingStatus}
-                  onClickEndBtn={onClickEndBtn}
-                  onClickEndConfirmBtn={onClickEndConfirmBtn}
-                  onClickConfirm={onClickConfirm}
-                  onClickStartNewChatBtn={onClickStartNewChatBtn}
-                  searchingUser={searchingUser}
-                  setSearchingUser={setSearchingUser}
-                  end={end}
-                  setEnd={setEnd}
-                  endConfirm={endConfirm}
-                  setEndConfirm={setEndConfirm}
-                  startNew={startNew}
-                  setStartNew={setStartNew}
-                  ratingPopup={ratingPopup}
-                  setRatingPopup={setRatingPopup}
-                  setOtherUserTyping={setOtherUserTyping}
-                  userStatus={userStatus}
-                  isChatActive={isChatActive}
-                  setIsChatActive={setIsChatActive}
-                  messages={messages}
-                  handleConnect={handleConnect}
-                  sendMessage={sendMessage}
-                  closeConnection={closeConnection}
-                  typingPrompt={typingPrompt}
-                  setTypingPrompt={setTypingPrompt}
-                  otherUserTyping={otherUserTyping}
-                  setMessages={setMessages}
-                  isConnected={isConnected}
-                  user={user}
-                  findUser={findUser}
-                  setFindUser={setFindUser}
-                  endChat={endChat}
-                  setEndChat={setEndChat}
-                  loginHandler={loginHandler}
-                  registerHandler={registerHandler}
-                  starRating={starRating}
-                  setStarRating={setStarRating}
-                  sendStarRating={sendStarRating}
-                  percentMatch={percentMatch}
-                  numConversations={numConversations}
-                />
-              }
-            />
-            {/* Audio Chat Screen Route and Component */}
-            {/* states and functions are passed as props to the component */}
-            <Route
-              exact
-              path="/audio-chat"
-              element={
-                <AudioChat
-                  // handleConnect={openConnectionAudio}
-                  // handleClose={sendDisconnectRequest}
-                  user={user}
-                  findUser={findUser}
-                  setFindUser={setFindUser}
-                  endChat={endChat}
-                  setEndChat={setEndChat}
-                  loginHandler={loginHandler}
-                  registerHandler={registerHandler}
-                />
-              }
-            />
-            {/* Terms and Conditions Screen Route and Component */}
-            <Route exact path="/term-condition" element={<TermCondition />} />
+          {/* Chat Screen Route and Component */}
+          {/* states and functions are passed as props to the component */}
+          <Route
+            exact
+            path="/chat"
+            element={
+              <ChatScreen
+                typingUser={typingUser}
+                setTypingUser={setTypingUser}
+                userIdentify={userIdentify}
+                setUserIdentify={setUserIdentify}
+                sendNotTypingStatus={sendNotTypingStatus}
+                sendTypingStatus={sendTypingStatus}
+                onClickEndBtn={onClickEndBtn}
+                onClickEndConfirmBtn={onClickEndConfirmBtn}
+                onClickConfirm={onClickConfirm}
+                onClickStartNewChatBtn={onClickStartNewChatBtn}
+                searchingUser={searchingUser}
+                setSearchingUser={setSearchingUser}
+                end={end}
+                setEnd={setEnd}
+                endConfirm={endConfirm}
+                setEndConfirm={setEndConfirm}
+                startNew={startNew}
+                setStartNew={setStartNew}
+                ratingPopup={ratingPopup}
+                setRatingPopup={setRatingPopup}
+                setOtherUserTyping={setOtherUserTyping}
+                userStatus={userStatus}
+                isChatActive={isChatActive}
+                setIsChatActive={setIsChatActive}
+                messages={messages}
+                handleConnect={handleConnect}
+                sendMessage={sendMessage}
+                closeConnection={closeConnection}
+                typingPrompt={typingPrompt}
+                setTypingPrompt={setTypingPrompt}
+                otherUserTyping={otherUserTyping}
+                setMessages={setMessages}
+                isConnected={isConnected}
+                user={user}
+                findUser={findUser}
+                setFindUser={setFindUser}
+                endChat={endChat}
+                setEndChat={setEndChat}
+                loginHandler={loginHandler}
+                registerHandler={registerHandler}
+                starRating={starRating}
+                setStarRating={setStarRating}
+                sendStarRating={sendStarRating}
+                percentMatch={percentMatch}
+                numConversations={numConversations}
+              />
+            }
+          />
+          {/* Audio Chat Screen Route and Component */}
+          {/* states and functions are passed as props to the component */}
+          <Route
+            exact
+            path="/audio-chat"
+            element={
+              <AudioChat
+                // handleConnect={openConnectionAudio}
+                // handleClose={sendDisconnectRequest}
+                user={user}
+                findUser={findUser}
+                setFindUser={setFindUser}
+                endChat={endChat}
+                setEndChat={setEndChat}
+                loginHandler={loginHandler}
+                registerHandler={registerHandler}
+              />
+            }
+          />
+          {/* Terms and Conditions Screen Route and Component */}
+          <Route exact path="/term-condition" element={<TermCondition />} />
 
-            {/* Privacy Policy Screen Route and Component */}
-            <Route exact path="/policy" element={<Policy />} />
-          </Routes>
-        </BrowserRouter>
+          {/* Privacy Policy Screen Route and Component */}
+          <Route exact path="/policy" element={<Policy />} />
+        </Routes>
+        {/* </BrowserRouter> */}
         {/* Authenticated Routes start here */}
         {
           // Checking if the user is authenticated or not
