@@ -1,6 +1,6 @@
 .chat_wrapper {
   padding: 10.5rem 0.813rem 5.5rem 0.813rem;
-  background-color: rgba(225, 236, 239, 1);
+  background-color: #e1ecef;
   overflow-y: auto;
   height: calc(100vh - 43px);
 }
@@ -439,6 +439,7 @@
 @media only screen and (max-width: 480px) {
   .chat_wrapper {
     height: 100vh !important;
+    overflow-y: auto !important;
   }
   .connection-login-message {
     margin-top: 4.5rem;

@@ -1,0 +1,75 @@
+.chat__wrapper {
+  padding: 0;
+  margin: 0;
+  background: #e1ecef;
+  height: 100vh;
+  padding-top: 3rem;
+  position: relative;
+  overflow-y: auto;
+}
+
+.chat__body {
+  height: auto;
+  width: auto;
+  position: absolute;
+}
+
+.chat__list {
+  padding: 2rem;
+  list-style: none;
+}
+
+.chat__item {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.user__bubble {
+  margin-right: 1.5rem;
+}
+
+.user__image img {
+  width: 30px;
+  height: 30px;
+}
+
+.message__bubble {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 3rem 3rem 3rem 0;
+}
+
+.chat__body .chat__input {
+  position: absolute;
+  bottom: 0;
+  z-index: 1000;
+  padding: 1rem;
+  background-color: blue;
+  width: 100%;
+}
+
+.chat__body .chat__input .input__field {
+  width: 100%;
+}
+
+/* Media Quries */
+@media only screen and (max-width: 1680px) {
+}
+
+@media only screen and (max-width: 1200px) {
+}
+
+@media only screen and (max-width: 992px) {
+}
+
+@media only screen and (max-width: 768px) {
+}
+
+@media only screen and (max-width: 580px) {
+}
+
+@media only screen and (max-width: 480px) {
+}

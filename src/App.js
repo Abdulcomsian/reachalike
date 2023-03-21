@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { authLogin as LoginAction } from "./store/actions";
 import axios from "axios";
+import NewChat from "./pages/new-chat";
 
 // Some constants
 const BackendAddr = "websocket-dev.bayes-chat.com";
@@ -684,6 +685,59 @@ const App = () => {
 
           {/* Privacy Policy Screen Route and Component */}
           <Route exact path="/policy" element={<Policy />} />
+          <Route
+            exact
+            path="/new-chat"
+            element={
+              <NewChat
+                typingUser={typingUser}
+                setTypingUser={setTypingUser}
+                userIdentify={userIdentify}
+                setUserIdentify={setUserIdentify}
+                sendNotTypingStatus={sendNotTypingStatus}
+                sendTypingStatus={sendTypingStatus}
+                onClickEndBtn={onClickEndBtn}
+                onClickEndConfirmBtn={onClickEndConfirmBtn}
+                onClickConfirm={onClickConfirm}
+                onClickStartNewChatBtn={onClickStartNewChatBtn}
+                searchingUser={searchingUser}
+                setSearchingUser={setSearchingUser}
+                end={end}
+                setEnd={setEnd}
+                endConfirm={endConfirm}
+                setEndConfirm={setEndConfirm}
+                startNew={startNew}
+                setStartNew={setStartNew}
+                ratingPopup={ratingPopup}
+                setRatingPopup={setRatingPopup}
+                setOtherUserTyping={setOtherUserTyping}
+                userStatus={userStatus}
+                isChatActive={isChatActive}
+                setIsChatActive={setIsChatActive}
+                messages={messages}
+                handleConnect={handleConnect}
+                sendMessage={sendMessage}
+                closeConnection={closeConnection}
+                typingPrompt={typingPrompt}
+                setTypingPrompt={setTypingPrompt}
+                otherUserTyping={otherUserTyping}
+                setMessages={setMessages}
+                isConnected={isConnected}
+                user={user}
+                findUser={findUser}
+                setFindUser={setFindUser}
+                endChat={endChat}
+                setEndChat={setEndChat}
+                loginHandler={loginHandler}
+                registerHandler={registerHandler}
+                starRating={starRating}
+                setStarRating={setStarRating}
+                sendStarRating={sendStarRating}
+                percentMatch={percentMatch}
+                numConversations={numConversations}
+              />
+            }
+          />
         </Routes>
         {/* </BrowserRouter> */}
         {/* Authenticated Routes start here */}
