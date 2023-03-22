@@ -202,13 +202,6 @@ const App = () => {
     },
   ]);
 
-  // const location = useLocation()
-  // const groupFromURL = location.hash.slice(1)
-  // const [groupName, setGroupName] = useState(groupFromURL);
-
-  // console.log("Group Name: ", groupName);
-  // console.log("Group Name from URL: ", groupFromURL);
-
 
   //Connection Status variables that will check for different
   //actions that will be executed after the connection between
@@ -378,7 +371,6 @@ const App = () => {
 
   //This function handles the disconnection of the users with each other
   const sendDisconnectRequest = async () => {
-    console.log("Sending disconnect request to server...");
     let messageContent = {
       type: "cmd",
       ct: "disconnect",
@@ -388,7 +380,6 @@ const App = () => {
 
   //This function handles the connection cancellation before the users are connected to each other
   const cancelConnect = () => {
-    console.log("Cancelling the connection...");
     let messageContent = {
       type: "cmd",
       ct: "cancel_connect_t",
@@ -435,7 +426,6 @@ const App = () => {
 
   //This function is adding a single message to the messages array
   const addMessageList = (text) => {
-    console.log("Adding message: " + text);
     setMessages((messages) => [...messages, text]);
   };
 
@@ -457,7 +447,6 @@ const App = () => {
 
   //This function is responsible for connecting a user with another for chatting
   const connectToUser = () => {
-    console.log("Sending connection request to server...");
     let messageContent = {
       type: "cmd",
       ct: "connect_t",
@@ -469,7 +458,6 @@ const App = () => {
   //This function is handling the display of the text that is shown when a user is connected to another
   //The text is shown for a specific time
   const openConnectionText = () => {
-    console.log("Text connection to stranger...");
     setConnectedText(true);
     setIsChatActive(true);
   };
@@ -506,8 +494,6 @@ const App = () => {
     };
     ws.send(JSON.stringify(message));
   }
-
-  console.log("Message from Connection: ", userStatus);
 
   // States that are responsible for the actions that are done on the chat page
   const [searchingUser, setSearchingUser] = useState(false);

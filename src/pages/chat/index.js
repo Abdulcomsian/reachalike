@@ -11,6 +11,7 @@ import { Button, Tooltip } from "reactstrap";
 
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import { toast, Toaster } from "react-hot-toast";
 
 const ChatScreen = (props) => {
   const ref = useRef();
@@ -47,7 +48,8 @@ const ChatScreen = (props) => {
     setTypingUser,
     starRating,
     setStarRating,
-    sendStarRating
+    sendStarRating,
+    getContainerStyle
   } = props;
 
   const [newChat, setNewChat] = useState(false);
@@ -106,7 +108,14 @@ const ChatScreen = (props) => {
       setMessageValue("");
       setChosenEmoji(null);
     } else {
-      alert("Can't send empty message!");
+      // alert("Can't send empty message!");
+      toast.error("Cannot send empty message!", {
+        style: {
+          borderRadius: '999px',
+          background: '#333',
+          color: '#fff',
+        }
+      });
     }
   };
 
@@ -154,7 +163,6 @@ const ChatScreen = (props) => {
     } else {
       setMessageValue(event.target.value + (chosenEmoji ? chosenEmoji.native : ""));
     }
-
   }
 
   const emojiRef = useRef(null);
@@ -203,15 +211,15 @@ const ChatScreen = (props) => {
   // Color Matcher
   function getMatchColor(percentMatch) {
     let color;
-    if (percentMatch < 10) {
+    if (percentMatch < 17) {
       // Shades of gray
       const grayValue = Math.round(percentMatch / 10 * 255);
       color = `rgb(${grayValue}, ${grayValue}, ${grayValue})`;
-    } else if (percentMatch < 30) {
+    } else if (percentMatch < 33) {
       // Light blue
       const blueValue = Math.round((percentMatch - 10) / 20 * 255);
       color = `rgb(0, ${blueValue}, ${blueValue})`;
-    } else if (percentMatch < 70) {
+    } else if (percentMatch < 67) {
       // Shades of #1169d0
       const blueValue = Math.round((percentMatch - 30) / 40 * 255);
       color = `rgb(17, 105, ${blueValue})`;
@@ -236,6 +244,9 @@ const ChatScreen = (props) => {
     >
       {searchingUser ? (
         <div>
+          <div>
+            <Toaster position="top-right" />
+          </div>
           <div className="random-stranger-div position-relative">
             <p>You're now chatting with a random stranger.</p>
           </div>

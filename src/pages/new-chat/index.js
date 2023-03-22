@@ -350,7 +350,13 @@ const NewChat = (props) => {
 
                     </ul>
                     <div className='chat__input'>
-                        <input className='input__field' type='text' placeholder='Your Message here...' />
+                        <input
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
+                            className='input__field'
+                            type='text'
+                            placeholder='Your Message here...'
+                        />
                     </div>
                 </div>
             </div>

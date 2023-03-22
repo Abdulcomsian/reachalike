@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from "react";
-import images from "../../constant/images/index";
 import logo from "../../assets/img/logo.svg";
 import "./style.css";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../components/ConfirmationModal";
 
 const Header = (props) => {
-  let location = useLocation();
-  const navigate = useNavigate();
   const {
-    endChat,
-    setEndChat,
     isChatActive,
     onClickEndConfirmBtn,
     endConfirm,
-    closeConnection,
     cancelConnect,
-    isConnected,
     starRating,
     setStarRating,
     sendStarRating,
     userIdentify,
-    searchingUser
+    searchingUser,
+    loginHandler,
+    registerHandler,
+    nearMeHandler
   } = props;
+
+  let location = useLocation();
+  const navigate = useNavigate();
   const [confirm, setConfirm] = React.useState(false);
-
-
   const toggleModal = () => setConfirm(!confirm);
 
   const changePage = () => {
@@ -45,14 +42,10 @@ const Header = (props) => {
       }
     }
   };
-  const { loginHandler, registerHandler, nearMeHandler } = props;
-
 
   // Getting Groups
   const [groups, setGroups] = useState(null);
   const [selected, setSelected] = React.useState("Default");
-
-  const params = useParams()
 
   const handleSelected = (item) => {
     setSelected(item);
@@ -73,7 +66,11 @@ const Header = (props) => {
   }, [])
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light main-header fixed-top">
+    <nav
+      className="navbar navbar-expand-lg navbar-light main-header sticky-top"
+      id="navbar"
+      style={{ position: "fixed", top: 0, left: 0, right: 0 }}
+    >
       <div className="container-fluid">
         <ConfirmationModal
           confirm={confirm}
@@ -140,66 +137,6 @@ const Header = (props) => {
                     </li>
                   ))
                 }
-                {/* <li>
-                  <a
-                    className={`dropdown-item ${selected === "Default" ? "active" : ""
-                      }`}
-                    href="#"
-                    onClick={() => handleSelected("Default")}
-                  >
-                    Default
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={`dropdown-item ${selected === "Lifestyle" ? "active" : ""
-                      }`}
-                    href="#"
-                    onClick={() => handleSelected("Lifestyle")}
-                  >
-                    Lifestyle
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={`dropdown-item ${selected === "Enterprenuership" ? "active" : ""
-                      }`}
-                    href="#"
-                    onClick={() => handleSelected("Enterprenuership")}
-                  >
-                    Enterprenuership
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={`dropdown-item ${selected === "Business" ? "active" : ""
-                      }`}
-                    href="#"
-                    onClick={() => handleSelected("Business")}
-                  >
-                    Business
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={`dropdown-item ${selected === "Entertainment" ? "active" : ""
-                      }`}
-                    href="#"
-                    onClick={() => handleSelected("Entertainment")}
-                  >
-                    Entertainment
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={`dropdown-item ${selected === "Education" ? "active" : ""
-                      }`}
-                    href="#"
-                    onClick={() => handleSelected("Education")}
-                  >
-                    Education
-                  </a>
-                </li> */}
                 <li>
                   <a
                     className={`dropdown-item ${selected === "Near Me" ? "active" : ""
