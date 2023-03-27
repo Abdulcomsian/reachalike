@@ -49,7 +49,9 @@ const ChatScreen = (props) => {
     starRating,
     setStarRating,
     sendStarRating,
-    getContainerStyle
+    getContainerStyle,
+    loginHandler,
+    registerHandler
   } = props;
 
   const [newChat, setNewChat] = useState(false);
@@ -383,7 +385,6 @@ const ChatScreen = (props) => {
           </div>
           {endConfirm && (
             <div className="disconnected-stranger mb-4">
-              {/* <p className="inter-600">{userIdentify ? "You have disconnected" : "Stranger has disconnected."}</p> */}
               <button
                 className="btn btn-info bg-info px-3"
                 onClick={onClickStartNewChatBtn}
@@ -460,9 +461,6 @@ const ChatScreen = (props) => {
               <div className="voice-msg-div">
                 {/* <img src={images.voice_icon} alt="Microphone" /> */}
                 <i class="fa-solid fa-microphone img" id="voice-msg"></i>
-                {/* <Tooltip placement="right" isOpen={toolTipOpen} target="voice-msg" toggle={toggleToolTip}>
-                  Available Soon!
-                </Tooltip> */}
               </div>
             </div>
             <div
@@ -494,8 +492,8 @@ const ChatScreen = (props) => {
               asRef={ref}
               setRatingModal={setRatingPopup}
               modalUserRatingClose={modalUserRatingClose}
-              loginHandler={props.loginHandler}
-              registerHandler={props.registerHandler}
+              loginHandler={loginHandler}
+              registerHandler={registerHandler}
               userIdentify={userIdentify}
               starRating={starRating}
               setStarRating={setStarRating}
@@ -507,7 +505,12 @@ const ChatScreen = (props) => {
         </div>
       ) : (
         <div>
-          <SearchUser userIdentify={userIdentify} handleConnect={handleConnect} loginHandler={props.loginHandler} registerHandler={props.registerHandler} />
+          <SearchUser
+            userIdentify={userIdentify}
+            handleConnect={handleConnect}
+            loginHandler={loginHandler}
+            registerHandler={registerHandler}
+          />
         </div>
       )}
     </div>

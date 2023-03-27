@@ -410,6 +410,22 @@
 }
 
 @media only screen and (max-width: 992px) {
+  .chat_wrapper {
+    height: 100vh !important;
+    overflow-y: auto !important;
+  }
+  .chat-room-footer .end-chat {
+    margin-right: 1rem;
+    width: 15%;
+  }
+  .chat-room-footer .type-message-div {
+    margin-right: 1rem;
+    width: 70%;
+  }
+  .voice-msg-div .img {
+    font-size: 1.3rem !important;
+    margin-right: 3.7rem;
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -452,5 +468,9 @@
   }
   .random-stranger-div {
     margin-top: 5rem;
+  }
+  .voice-msg-div .img {
+    font-size: 0.9rem !important;
+    margin-right: 0.9rem;
   }
 }
