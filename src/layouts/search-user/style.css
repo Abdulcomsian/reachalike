@@ -5,7 +5,7 @@
   flex-direction: column;
   background-color: rgba(225, 236, 239, 1);
   height: 90dvh;
-  padding-top: 5rem;
+  padding-top: 9rem;
 }
 .search-user-wrapper .connection-login-message {
   /* margin-bottom: 1rem; */

@@ -5,6 +5,9 @@
   height: 100vh;
 }
 
+.disconnected-stranger {
+  padding-bottom: 9rem;
+}
 /* Scrollbar CSS Start */
 .chat_wrapper::-webkit-scrollbar {
   width: 8px;
@@ -397,7 +400,7 @@
 }
 
 .connecting-logo-div .like-text {
-  margin-top: 10rem;
+  /* margin-top: 10rem; */
 }
 
 .connecting-logo-div .buy-me-coffee {
@@ -440,7 +443,7 @@
   }
 
   .connecting-logo-div .like-text {
-    margin-top: 5rem;
+    /* margin-top: 5rem; */
   }
 
   .connecting-logo-div .buy-me-coffee {
@@ -466,7 +469,7 @@
     margin-top: 4.5rem;
   }
   .connecting-logo-div .like-text {
-    margin-top: 0rem;
+    /* margin-top: 0rem; */
   }
   .connecting-logo-div .buy-me-coffee {
     margin-top: 0.3rem;
