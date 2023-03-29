@@ -1,10 +1,11 @@
 .search-user-wrapper {
-  height: calc(100vh - 43px);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   background-color: rgba(225, 236, 239, 1);
+  height: 90dvh;
+  padding-top: 5rem;
 }
 .search-user-wrapper .connection-login-message {
   /* margin-bottom: 1rem; */

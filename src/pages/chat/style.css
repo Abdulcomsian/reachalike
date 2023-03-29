@@ -2,7 +2,7 @@
   padding: 10.5rem 0.813rem 5.5rem 0.813rem;
   background-color: #e1ecef;
   overflow-y: auto;
-  height: calc(100vh - 43px);
+  height: 100vh;
 }
 
 /* Scrollbar CSS Start */
@@ -52,6 +52,7 @@
   height: 1px;
   background: #00000052;
 }
+
 .chat_wrapper .random-stranger-div p {
   position: absolute;
   left: 43%;
@@ -432,6 +433,7 @@
   .chat_wrapper {
     height: 100vh;
     padding-top: 3rem !important;
+    overflow-y: auto;
   }
   .random-stranger-div {
     margin-top: 15rem;
@@ -449,6 +451,9 @@
 @media only screen and (max-width: 580px) {
   .random-stranger-div {
     margin-top: 15rem;
+  }
+  .disconnected-stranger {
+    padding-bottom: 5rem;
   }
 }
 
@@ -472,5 +477,8 @@
   .voice-msg-div .img {
     font-size: 0.9rem !important;
     margin-right: 0.9rem;
+  }
+  .disconnected-stranger {
+    padding-bottom: 5rem;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, createRef } from "react";
 import "./style.css";
 import images from "../../constant/images";
 import SearchUser from "../../layouts/search-user";
@@ -121,9 +121,12 @@ const ChatScreen = (props) => {
     }
   };
 
+  const messageListRef = useRef()
   const scrollToBottom = () => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+
     }
   }
 
@@ -236,6 +239,7 @@ const ChatScreen = (props) => {
 
   return (
     <div
+      ref={messageListRef}
       className={
         requestToChat
           ? "chat_wrapper w-80"
@@ -382,8 +386,29 @@ const ChatScreen = (props) => {
               )}
               {/* Typing Item End */}
             </ul>
+            {endConfirm && (
+              <div className="disconnected-stranger mb-5">
+                <button
+                  className="btn btn-info bg-info px-3"
+                  onClick={onClickStartNewChatBtn}
+                >
+                  New Chat
+                </button>{" "}
+                <span className="inter-600 ms-2 mr-2">or {"   "}</span>
+                <Link
+                  // to="/audio-chat"
+                  className="btn px-3 py-2"
+                  id="audio-switch-action"
+                >
+                  Switch to <span>Audio</span>
+                </Link>
+                <Tooltip placement="top" isOpen={toolTipOpen1} target="audio-switch-action" toggle={toggleToolTip1}>
+                  Available Soon!
+                </Tooltip>
+              </div>
+            )}
           </div>
-          {endConfirm && (
+          {/* {endConfirm && (
             <div className="disconnected-stranger mb-4">
               <button
                 className="btn btn-info bg-info px-3"
@@ -403,7 +428,7 @@ const ChatScreen = (props) => {
                 Available Soon!
               </Tooltip>
             </div>
-          )}
+          )} */}
           <div className="chat-room-footer d-flex align-items-center justify-content-between fixed-bottom py-3 px-4">
             {end ? (
               <div className="end-chat">
