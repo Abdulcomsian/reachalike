@@ -14,7 +14,7 @@
     max-width: 30%;
   }
   .chat_wrapper {
-    overflow-y: hidden;
+    overflow-y: auto;
   }
 }
 @media only screen and (max-width: 1200px) {
