@@ -159,7 +159,7 @@ const Header = (props) => {
             </li>
           </ul>
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0 auth-list">
-            {!sessionStorage.getItem("token") && userToken === null ?
+            {!localStorage.getItem("token") || userToken === null ?
               <>
                 <li className="nav-item me-2">
                   <a

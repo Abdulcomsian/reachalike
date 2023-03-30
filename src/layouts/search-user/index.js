@@ -16,7 +16,7 @@ const SearchUser = (props) => {
     const { handleConnect } = props;
     return (
         <div className="search-user-wrapper text-center">
-            <p className="connection-login-message">You are not connected, please <button onClick={props.loginHandler}>Login</button> or <button onClick={props.registerHandler}>Register</button> for better matches!</p>
+            {!props.userToken ? <p className="connection-login-message">You are not connected, please <button onClick={props.loginHandler}>Login</button> or <button onClick={props.registerHandler}>Register</button> for better matches!</p> : ""}
             <div className="loader-div">
                 <Lottie
                     options={defaultOptions}

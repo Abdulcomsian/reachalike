@@ -51,7 +51,9 @@ const ChatScreen = (props) => {
     sendStarRating,
     getContainerStyle,
     loginHandler,
-    registerHandler
+    registerHandler,
+    userToken,
+    setUserToken
   } = props;
 
   const [newChat, setNewChat] = useState(false);
@@ -535,6 +537,8 @@ const ChatScreen = (props) => {
             handleConnect={handleConnect}
             loginHandler={loginHandler}
             registerHandler={registerHandler}
+            userToken={userToken}
+            setUserToken={setUserToken}
           />
         </div>
       )}

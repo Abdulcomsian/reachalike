@@ -80,7 +80,7 @@ const App = () => {
   };
 
   const logoutHandler = () => {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     setUserToken(null);
   }
 
@@ -108,8 +108,8 @@ const App = () => {
   //     .then((response) => response.json())
   //     .then((data) => {
   //       // After the successful registration process
-  //       // setting up the token in the sessionStorage of the browser
-  //       sessionStorage.setItem("token", data.token);
+  //       // setting up the token in the localStorage of the browser
+  //       localStorage.setItem("token", data.token);
   //       setAuthLogin(false);
   //       toast.success("Registration Successfully!", {
   //         style: {
@@ -153,8 +153,8 @@ const App = () => {
       headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }
     })
       .then((response) => {
-        sessionStorage.setItem("token", response.data.token);
-        setAuthLogin(false);
+        // localStorage.setItem("token", response.data.token);
+        setAuthRegister(false);
         toast.success("Registration Successfully!", {
           style: {
             borderRadius: '999px',
@@ -184,15 +184,13 @@ const App = () => {
     //Login API where it checks for the credentials to be matching the
     // credentials that are saved in the database.
     axios.post('https://websocket-dev.bayes-chat.com/login', userCreds, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
     })
-      .then(data => {
-        //Setting up the token coming from the backend to the sessionStorage
+      .then(response => {
+        //Setting up the token coming from the backend to the localStorage
         //of the browser after successful login
-        sessionStorage.setItem("token", data.data.token)
-        setUserToken(data.data.token);
+        localStorage.setItem("token", response.data.token)
+        setUserToken(response.data.token);
         setAuthLogin(false);
         toast.success("Logged In Successfully!", {
           style: {
@@ -544,7 +542,7 @@ const App = () => {
       type: "cmd",
       ct: "connect_t",
       group: selectedGroup,
-      token: sessionStorage.getItem("token")
+      token: localStorage.getItem("token")
     };
 
     ws.send(JSON.stringify(messageContent));
@@ -700,6 +698,8 @@ const App = () => {
             path="/chat"
             element={
               <ChatScreen
+                userToken={userToken}
+                setUserToken={setUserToken}
                 typingUser={typingUser}
                 setTypingUser={setTypingUser}
                 userIdentify={userIdentify}
@@ -754,6 +754,8 @@ const App = () => {
             path={`/chat/${selectedGroup}`}
             element={
               <ChatScreen
+                userToken={userToken}
+                setUserToken={setUserToken}
                 selectedGroup={selectedGroup}
                 setSelectedGroup={setSelectedGroup}
                 typingUser={typingUser}
