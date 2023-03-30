@@ -64,3 +64,15 @@
   font-family: Sf-Pro-Display-Regular;
   font-size: 12px;
 }
+
+.logout-btn {
+  border: #c1121f 1px solid !important;
+  color: #c1121f !important;
+}
+.logout-btn i {
+  color: #c1121f;
+}
+
+.logout-btn span {
+  color: #c1121f;
+}

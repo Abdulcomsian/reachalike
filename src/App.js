@@ -17,6 +17,7 @@ import store from "./store";
 import { authLogin as LoginAction } from "./store/actions";
 import axios from "axios";
 import NewChat from "./pages/new-chat";
+import { toast, Toaster } from "react-hot-toast";
 
 // Some constants
 const BackendAddr = "websocket-dev.bayes-chat.com";
@@ -48,6 +49,8 @@ const App = () => {
   // Authentication Field State Variables
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("Default");
+  const [userToken, setUserToken] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // Authentication State Object
@@ -76,15 +79,26 @@ const App = () => {
     setConfirmPassword(e.target.value);
   };
 
+  const logoutHandler = () => {
+    sessionStorage.removeItem("token");
+    setUserToken(null);
+  }
+
   // Handling Registration API
   const handleRegistration = (e) => {
     e.preventDefault();
     //Checking to see if the value in the password field matches with the confirm password field
     if (password !== confirmPassword) {
-      alert("Password doesn't match!");
+      // alert("Password doesn't match!");
+      toast.error("Passwords does not match!", {
+        style: {
+          borderRadius: '999px',
+          background: '#333',
+          color: '#fff',
+        }
+      });
       return;
     }
-
     // if above condition turns to be false, then this code executes
     // where I am making the register user call to the register api
     // with the user data that was saved in the userCreds object earlier
@@ -94,11 +108,29 @@ const App = () => {
       .then((response) => response.json())
       .then((data) => {
         // After the successful registration process
-        // setting up the token in the localStorage of the browser
-        localStorage.setItem("token", data.token);
+        // setting up the token in the sessionStorage of the browser
+        sessionStorage.setItem("token", data.token);
+        setAuthLogin(false);
+        toast.success("Registration Successfully!", {
+          style: {
+            borderRadius: '999px',
+            background: '#333',
+            color: '#fff',
+          }
+        });
+        setUserName("")
+        setPassword("")
+        setConfirmPassword("")
       })
       .catch((error) => {
         // if api call fails, it will return errors
+        toast.error("Some error occured! Try again.", {
+          style: {
+            borderRadius: '999px',
+            background: '#333',
+            color: '#fff',
+          }
+        });
         console.error("Error:", error);
       });
   };
@@ -113,13 +145,31 @@ const App = () => {
         'Content-Type': 'application/json'
       },
     })
-      .then(data => (
-        //Setting up the token coming from the backend to the localStorage
+      .then(data => {
+        //Setting up the token coming from the backend to the sessionStorage
         //of the browser after successful login
-        localStorage.setItem("token", data.data.token)
-      ))
+        sessionStorage.setItem("token", data.data.token)
+        setUserToken(data.data.token);
+        setAuthLogin(false);
+        toast.success("Logged In Successfully!", {
+          style: {
+            borderRadius: '999px',
+            background: '#333',
+            color: '#fff',
+          }
+        });
+        setUserName("")
+        setPassword("")
+      })
       .catch(error => {
         //If login fails then it will return an error here
+        toast.error("Authentication Error! Kindly check your creds", {
+          style: {
+            borderRadius: '999px',
+            background: '#333',
+            color: '#fff',
+          }
+        });
         console.error(error);
       });
   }
@@ -450,6 +500,8 @@ const App = () => {
     let messageContent = {
       type: "cmd",
       ct: "connect_t",
+      group: selectedGroup,
+      token: sessionStorage.getItem("token")
     };
 
     ws.send(JSON.stringify(messageContent));
@@ -560,6 +612,11 @@ const App = () => {
           //functions and states passed as props to the component that are being accessed in the component to perform different actions
           loginHandler={loginHandler}
           registerHandler={registerHandler}
+          logoutHandler={logoutHandler}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+          userToken={userToken}
+          setUserToken={setUserToken}
           nearMeHandler={nearMeHandler}
           endChat={endChat}
           setEndChat={setEndChat}
@@ -575,6 +632,7 @@ const App = () => {
           isConnected={isConnected}
           searchingUser={searchingUser}
         />
+        <Toaster position="top-right" />
         {/* The main routes start here that contain the logic of all the components being rendered on the screen */}
         <Routes>
           {/* Main Screen Route and Component */}
@@ -648,6 +706,61 @@ const App = () => {
             }
           />
           {/* Audio Chat Screen Route and Component */}
+          <Route
+            exact
+            path={`/chat/${selectedGroup}`}
+            element={
+              <ChatScreen
+                selectedGroup={selectedGroup}
+                setSelectedGroup={setSelectedGroup}
+                typingUser={typingUser}
+                setTypingUser={setTypingUser}
+                userIdentify={userIdentify}
+                setUserIdentify={setUserIdentify}
+                sendNotTypingStatus={sendNotTypingStatus}
+                sendTypingStatus={sendTypingStatus}
+                onClickEndBtn={onClickEndBtn}
+                onClickEndConfirmBtn={onClickEndConfirmBtn}
+                onClickConfirm={onClickConfirm}
+                onClickStartNewChatBtn={onClickStartNewChatBtn}
+                searchingUser={searchingUser}
+                setSearchingUser={setSearchingUser}
+                end={end}
+                setEnd={setEnd}
+                endConfirm={endConfirm}
+                setEndConfirm={setEndConfirm}
+                startNew={startNew}
+                setStartNew={setStartNew}
+                ratingPopup={ratingPopup}
+                setRatingPopup={setRatingPopup}
+                setOtherUserTyping={setOtherUserTyping}
+                userStatus={userStatus}
+                isChatActive={isChatActive}
+                setIsChatActive={setIsChatActive}
+                messages={messages}
+                handleConnect={handleConnect}
+                sendMessage={sendMessage}
+                closeConnection={closeConnection}
+                typingPrompt={typingPrompt}
+                setTypingPrompt={setTypingPrompt}
+                otherUserTyping={otherUserTyping}
+                setMessages={setMessages}
+                isConnected={isConnected}
+                user={user}
+                findUser={findUser}
+                setFindUser={setFindUser}
+                endChat={endChat}
+                setEndChat={setEndChat}
+                loginHandler={loginHandler}
+                registerHandler={registerHandler}
+                starRating={starRating}
+                setStarRating={setStarRating}
+                sendStarRating={sendStarRating}
+                percentMatch={percentMatch}
+                numConversations={numConversations}
+              />
+            }
+          />
           {/* states and functions are passed as props to the component */}
           <Route
             exact

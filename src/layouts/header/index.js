@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/img/logo.svg";
 import "./style.css";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../components/ConfirmationModal";
 
 const Header = (props) => {
@@ -18,7 +18,12 @@ const Header = (props) => {
     searchingUser,
     loginHandler,
     registerHandler,
-    nearMeHandler
+    nearMeHandler,
+    logoutHandler,
+    selectedGroup,
+    setSelectedGroup,
+    userToken,
+    setUserToken
   } = props;
 
   let location = useLocation();
@@ -45,12 +50,11 @@ const Header = (props) => {
 
   // Getting Groups
   const [groups, setGroups] = useState(null);
-  const [selected, setSelected] = React.useState("Default");
 
   const handleSelected = (item) => {
-    setSelected(item);
-    // navigate(`/${item}`);
-    window.history.pushState(`#${item}`)
+    setSelectedGroup(item);
+    navigate(`/chat/${item}`);
+    // window.history.pushState(null, null, `#${item}`);
   };
 
   useEffect(() => {
@@ -120,26 +124,27 @@ const Header = (props) => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {selected}
+                {selectedGroup}
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 {
                   groups?.map(group => (
                     <li key={group.id}>
-                      <a
-                        className={`dropdown-item ${selected === group.name ? "active" : ""
+                      <Link
+                        className={`dropdown-item ${selectedGroup === group.name ? "active" : ""
                           }`}
-                        href={`#${group.name}`}
+                        to={`/chat/${group.name}`}
+                        // href={`#${group.name}`}
                         onClick={() => handleSelected(group.name)}
                       >
                         {group.name}
-                      </a>
+                      </Link>
                     </li>
                   ))
                 }
                 <li>
                   <a
-                    className={`dropdown-item ${selected === "Near Me" ? "active" : ""
+                    className={`dropdown-item ${selectedGroup === "Near Me" ? "active" : ""
                       }`}
                     href="#"
                     onClick={() => {
@@ -154,24 +159,37 @@ const Header = (props) => {
             </li>
           </ul>
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0 auth-list">
-            <li className="nav-item me-2">
-              <a
-                className="nav-link rounded"
-                aria-current="page"
-                onClick={loginHandler}
-              >
-                Login
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                className="nav-link active rounded"
-                aria-current="page"
-                onClick={registerHandler}
-              >
-                Register
-              </a>
-            </li>
+            {!sessionStorage.getItem("token") && userToken === null ?
+              <>
+                <li className="nav-item me-2">
+                  <a
+                    className="nav-link rounded"
+                    aria-current="page"
+                    onClick={loginHandler}
+                  >
+                    Login
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="nav-link active rounded"
+                    aria-current="page"
+                    onClick={registerHandler}
+                  >
+                    Register
+                  </a>
+                </li>
+              </>
+              :
+              <li className="nav-item">
+                <a
+                  className="nav-link active rounded logout-btn"
+                  aria-current="page"
+                  onClick={logoutHandler}
+                >
+                  <i class="fa-solid fa-right-from-bracket"></i>&nbsp; <span>Logout</span>
+                </a>
+              </li>}
           </ul>
         </div>
       </div>
