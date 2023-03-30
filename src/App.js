@@ -85,6 +85,56 @@ const App = () => {
   }
 
   // Handling Registration API
+  // const handleRegistration = (e) => {
+  //   e.preventDefault();
+  //   //Checking to see if the value in the password field matches with the confirm password field
+  //   if (password !== confirmPassword) {
+  //     // alert("Password doesn't match!");
+  //     toast.error("Passwords does not match!", {
+  //       style: {
+  //         borderRadius: '999px',
+  //         background: '#333',
+  //         color: '#fff',
+  //       }
+  //     });
+  //     return;
+  //   }
+  //   // if above condition turns to be false, then this code executes
+  //   // where I am making the register user call to the register api
+  //   // with the user data that was saved in the userCreds object earlier
+  //   axios.post("https://websocket-dev.bayes-chat.com/register", userCreds, {
+  //     headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // After the successful registration process
+  //       // setting up the token in the sessionStorage of the browser
+  //       sessionStorage.setItem("token", data.token);
+  //       setAuthLogin(false);
+  //       toast.success("Registration Successfully!", {
+  //         style: {
+  //           borderRadius: '999px',
+  //           background: '#333',
+  //           color: '#fff',
+  //         }
+  //       });
+  //       setUserName("")
+  //       setPassword("")
+  //       setConfirmPassword("")
+  //     })
+  //     .catch((error) => {
+  //       // if api call fails, it will return errors
+  //       toast.error("Some error occured! Try again.", {
+  //         style: {
+  //           borderRadius: '999px',
+  //           background: '#333',
+  //           color: '#fff',
+  //         }
+  //       });
+  //       console.error("Error:", error);
+  //     });
+  // };
+
   const handleRegistration = (e) => {
     e.preventDefault();
     //Checking to see if the value in the password field matches with the confirm password field
@@ -99,17 +149,11 @@ const App = () => {
       });
       return;
     }
-    // if above condition turns to be false, then this code executes
-    // where I am making the register user call to the register api
-    // with the user data that was saved in the userCreds object earlier
     axios.post("https://websocket-dev.bayes-chat.com/register", userCreds, {
       headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }
     })
-      .then((response) => response.json())
-      .then((data) => {
-        // After the successful registration process
-        // setting up the token in the sessionStorage of the browser
-        sessionStorage.setItem("token", data.token);
+      .then((response) => {
+        sessionStorage.setItem("token", response.data.token);
         setAuthLogin(false);
         toast.success("Registration Successfully!", {
           style: {
@@ -123,7 +167,6 @@ const App = () => {
         setConfirmPassword("")
       })
       .catch((error) => {
-        // if api call fails, it will return errors
         toast.error("Some error occured! Try again.", {
           style: {
             borderRadius: '999px',
@@ -133,7 +176,7 @@ const App = () => {
         });
         console.error("Error:", error);
       });
-  };
+  }
 
   const handleLogin = (e) => {
     e.preventDefault();
