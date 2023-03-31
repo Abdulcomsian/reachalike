@@ -80,7 +80,7 @@ const App = () => {
   };
 
   const logoutHandler = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setUserToken(null);
   }
 
@@ -108,8 +108,8 @@ const App = () => {
   //     .then((response) => response.json())
   //     .then((data) => {
   //       // After the successful registration process
-  //       // setting up the token in the localStorage of the browser
-  //       localStorage.setItem("token", data.token);
+  //       // setting up the token in the sessionStorage of the browser
+  //       sessionStorage.setItem("token", data.token);
   //       setAuthLogin(false);
   //       toast.success("Registration Successfully!", {
   //         style: {
@@ -153,7 +153,7 @@ const App = () => {
       headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }
     })
       .then((response) => {
-        // localStorage.setItem("token", response.data.token);
+        // sessionStorage.setItem("token", response.data.token);
         setAuthRegister(false);
         toast.success("Registration Successfully!", {
           style: {
@@ -187,9 +187,9 @@ const App = () => {
       headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
     })
       .then(response => {
-        //Setting up the token coming from the backend to the localStorage
+        //Setting up the token coming from the backend to the sessionStorage
         //of the browser after successful login
-        localStorage.setItem("token", response.data.token)
+        sessionStorage.setItem("token", response.data.token)
         setUserToken(response.data.token);
         setAuthLogin(false);
         toast.success("Logged In Successfully!", {
@@ -405,6 +405,10 @@ const App = () => {
               case "disconnect":
                 setUserStatus("disconnected");
                 break;
+              case "user_token":
+                console.log("token from backend: ", message)
+                setUserToken(message.ct)
+                break;
               //default case
               default:
                 console.log("DEFAULT CASE REACHED IN CMD MESSAGE FROM SERVER");
@@ -538,15 +542,35 @@ const App = () => {
 
   //This function is responsible for connecting a user with another for chatting
   const connectToUser = () => {
-    let messageContent = {
-      type: "cmd",
-      ct: "connect_t",
-      group: selectedGroup,
-      token: localStorage.getItem("token")
-    };
-
-    ws.send(JSON.stringify(messageContent));
+    if (userToken !== null) {
+      let messageContent = {
+        type: "cmd",
+        ct: "connect_t",
+        group: selectedGroup,
+        token: userToken
+      };
+      ws.send(JSON.stringify(messageContent));
+    }
+    // This might be wrong
+    else {
+      setTokenWithoutAuth();
+      let messageContent = {
+        type: "cmd",
+        ct: "connect_t",
+        group: selectedGroup,
+        token: userToken
+      };
+      ws.send(JSON.stringify(messageContent));
+    }
   };
+
+  const setTokenWithoutAuth = () => {
+    const messageContent = {
+      type: 'user_token',
+      ct: "token_str"
+    };
+    ws.send(JSON.stringify(messageContent));
+  }
 
   //This function is handling the display of the text that is shown when a user is connected to another
   //The text is shown for a specific time
@@ -672,6 +696,7 @@ const App = () => {
           userIdentify={userIdentify}
           isConnected={isConnected}
           searchingUser={searchingUser}
+          handleConnect={handleConnect}
         />
         <Toaster position="top-right" />
         {/* The main routes start here that contain the logic of all the components being rendered on the screen */}
@@ -751,7 +776,7 @@ const App = () => {
           {/* Audio Chat Screen Route and Component */}
           <Route
             exact
-            path={`/chat/${selectedGroup}`}
+            path={`/${selectedGroup}`}
             element={
               <ChatScreen
                 userToken={userToken}

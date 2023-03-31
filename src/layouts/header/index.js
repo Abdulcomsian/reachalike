@@ -23,7 +23,8 @@ const Header = (props) => {
     selectedGroup,
     setSelectedGroup,
     userToken,
-    setUserToken
+    setUserToken,
+    handleConnect
   } = props;
 
   let location = useLocation();
@@ -38,7 +39,7 @@ const Header = (props) => {
         cancelConnect();
       }
     } else {
-      if (location.pathname === "/chat") {
+      if (location.pathname === "/chat" || location.pathname === `/${selectedGroup}`) {
         setConfirm(true);
       } else if (location.pathname === "/audio-chat") {
         setConfirm(true);
@@ -52,6 +53,7 @@ const Header = (props) => {
   const [groups, setGroups] = useState(null);
 
   const handleSelected = (item) => {
+    handleConnect();
     setSelectedGroup(item);
     navigate(`/chat/${item}`);
     // window.history.pushState(null, null, `#${item}`);
@@ -133,7 +135,7 @@ const Header = (props) => {
                       <Link
                         className={`dropdown-item ${selectedGroup === group.name ? "active" : ""
                           }`}
-                        to={`/chat/${group.name}`}
+                        to={`/${group.name}`}
                         // href={`#${group.name}`}
                         onClick={() => handleSelected(group.name)}
                       >
@@ -159,7 +161,7 @@ const Header = (props) => {
             </li>
           </ul>
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0 auth-list">
-            {!localStorage.getItem("token") || userToken === null ?
+            {!sessionStorage.getItem("token") ?
               <>
                 <li className="nav-item me-2">
                   <a
