@@ -200,6 +200,10 @@ const App = () => {
         //Setting up the token coming from the backend to the sessionStorage
         //of the browser after successful login
         if (response.data.token != null) {
+          //for guest token remove
+          localStorage.removeItem("token_Guest")
+          sessionStorage.removeItem("token_Guest")
+          // for new token
           localStorage.setItem("token", response.data.token)
           sessionStorage.setItem("token", response.data.token)
           setUserToken(response.data.token);
@@ -582,7 +586,16 @@ const App = () => {
         group: selectedGroup,
         token: userToken
       };
-      ws.send(JSON.stringify(messageContent));
+      ws.send(JSON.stringify(messageContent))
+
+      if (!localStorage.getItem("token_Guest") || !sessionStorage.getItem("token")) {
+        ws.addEventListener('message', event => {
+          const message = JSON.parse(event.data);
+          localStorage.setItem("token_Guest", message.ct)
+          sessionStorage.setItem("token_Guest", message.ct)
+          setUserToken(message.ct);
+        });
+      }
     }
   };
 
@@ -757,7 +770,6 @@ const App = () => {
 
   useEffect(() => {
     // update state based on location change
-    console.log(location.pathname);
     if (location.pathname !== "/" && location.pathname !== "/chat/Near%20Me") {
       const path = location.pathname;
       const group = path.substring(1);
