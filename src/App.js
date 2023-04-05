@@ -52,6 +52,8 @@ const App = () => {
   const [selectedGroup, setSelectedGroup] = useState("Default");
   const [userToken, setUserToken] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
+  const location = useLocation();
+
 
   // Authentication State Object
   const [userCreds, setUserCreds] = useState({
@@ -80,8 +82,16 @@ const App = () => {
   };
 
   const logoutHandler = () => {
+    localStorage.removeItem("token");
     sessionStorage.removeItem("token");
     setUserToken(null);
+    toast.success("Logout successfully", {
+      style: {
+        borderRadius: '999px',
+        background: '#333',
+        color: '#fff',
+      }
+    });
   }
 
   // Handling Registration API
@@ -189,18 +199,30 @@ const App = () => {
       .then(response => {
         //Setting up the token coming from the backend to the sessionStorage
         //of the browser after successful login
-        sessionStorage.setItem("token", response.data.token)
-        setUserToken(response.data.token);
-        setAuthLogin(false);
-        toast.success("Logged In Successfully!", {
-          style: {
-            borderRadius: '999px',
-            background: '#333',
-            color: '#fff',
-          }
-        });
-        setUserName("")
-        setPassword("")
+        if (response.data.token != null) {
+          localStorage.setItem("token", response.data.token)
+          sessionStorage.setItem("token", response.data.token)
+          setUserToken(response.data.token);
+          setAuthLogin(false);
+          toast.success("Logged In Successfully!", {
+            style: {
+              borderRadius: '999px',
+              background: '#333',
+              color: '#fff',
+            }
+          });
+          setUserName("")
+          setPassword("")
+        }
+        else {
+          toast.error(response.data.error, {
+            style: {
+              borderRadius: '999px',
+              background: '#333',
+              color: '#fff',
+            }
+          });
+        }
       })
       .catch(error => {
         //If login fails then it will return an error here
@@ -620,6 +642,7 @@ const App = () => {
   const [ratingPopup, setRatingPopup] = useState(false);
   const [userIdentify, setUserIdentify] = useState(false);
   const [typingUser, setTypingUser] = useState("");
+  const [groups, setGroups] = useState([]);
 
   //Sets the End state to true
   //This state is responsible for showing the confirm button
@@ -658,12 +681,89 @@ const App = () => {
     setUserIdentify(false);
   };
 
+  useEffect(() => {
+    fetch("https://websocket-dev.bayes-chat.com/groups")
+      .then(res => res.json())
+      .then(data => {
+        const transformedData = data.groups.map((groupName, index) => {
+          return { id: index, name: groupName }
+        })
+        setGroups(transformedData)
+      })
+      .catch(e => console.log(e.message))
+  }, [])
+
+  const chatScreen = () => {
+    return (
+      <ChatScreen
+        userToken={userToken}
+        setUserToken={setUserToken}
+        selectedGroup={selectedGroup}
+        setSelectedGroup={setSelectedGroup}
+        typingUser={typingUser}
+        setTypingUser={setTypingUser}
+        userIdentify={userIdentify}
+        setUserIdentify={setUserIdentify}
+        sendNotTypingStatus={sendNotTypingStatus}
+        sendTypingStatus={sendTypingStatus}
+        onClickEndBtn={onClickEndBtn}
+        onClickEndConfirmBtn={onClickEndConfirmBtn}
+        onClickConfirm={onClickConfirm}
+        onClickStartNewChatBtn={onClickStartNewChatBtn}
+        searchingUser={searchingUser}
+        setSearchingUser={setSearchingUser}
+        end={end}
+        setEnd={setEnd}
+        endConfirm={endConfirm}
+        setEndConfirm={setEndConfirm}
+        startNew={startNew}
+        setStartNew={setStartNew}
+        ratingPopup={ratingPopup}
+        setRatingPopup={setRatingPopup}
+        setOtherUserTyping={setOtherUserTyping}
+        userStatus={userStatus}
+        isChatActive={isChatActive}
+        setIsChatActive={setIsChatActive}
+        messages={messages}
+        handleConnect={handleConnect}
+        sendMessage={sendMessage}
+        closeConnection={closeConnection}
+        typingPrompt={typingPrompt}
+        setTypingPrompt={setTypingPrompt}
+        otherUserTyping={otherUserTyping}
+        setMessages={setMessages}
+        isConnected={isConnected}
+        user={user}
+        findUser={findUser}
+        setFindUser={setFindUser}
+        endChat={endChat}
+        setEndChat={setEndChat}
+        loginHandler={loginHandler}
+        registerHandler={registerHandler}
+        starRating={starRating}
+        setStarRating={setStarRating}
+        sendStarRating={sendStarRating}
+        percentMatch={percentMatch}
+        numConversations={numConversations}
+      />
+    )
+  }
+
   // Functionality for star rating
   const [starRating, setStarRating] = useState(0);
   function sendStarRating() {
     ws.send(JSON.stringify({ "type": "cmd", "ct": "rate_user", "stars": starRating }));
   }
 
+  useEffect(() => {
+    // update state based on location change
+    console.log(location.pathname);
+    if (location.pathname !== "/" && location.pathname !== "/chat/Near%20Me") {
+      const path = location.pathname;
+      const group = path.substring(1);
+      setSelectedGroup(group);
+    }
+  }, [location]);
   // Component rendering starts here
   return (
     <>
@@ -774,63 +874,22 @@ const App = () => {
             }
           />
           {/* Audio Chat Screen Route and Component */}
-          <Route
+          {/* <Route
             exact
             path={`/${selectedGroup}`}
-            element={
-              <ChatScreen
-                userToken={userToken}
-                setUserToken={setUserToken}
-                selectedGroup={selectedGroup}
-                setSelectedGroup={setSelectedGroup}
-                typingUser={typingUser}
-                setTypingUser={setTypingUser}
-                userIdentify={userIdentify}
-                setUserIdentify={setUserIdentify}
-                sendNotTypingStatus={sendNotTypingStatus}
-                sendTypingStatus={sendTypingStatus}
-                onClickEndBtn={onClickEndBtn}
-                onClickEndConfirmBtn={onClickEndConfirmBtn}
-                onClickConfirm={onClickConfirm}
-                onClickStartNewChatBtn={onClickStartNewChatBtn}
-                searchingUser={searchingUser}
-                setSearchingUser={setSearchingUser}
-                end={end}
-                setEnd={setEnd}
-                endConfirm={endConfirm}
-                setEndConfirm={setEndConfirm}
-                startNew={startNew}
-                setStartNew={setStartNew}
-                ratingPopup={ratingPopup}
-                setRatingPopup={setRatingPopup}
-                setOtherUserTyping={setOtherUserTyping}
-                userStatus={userStatus}
-                isChatActive={isChatActive}
-                setIsChatActive={setIsChatActive}
-                messages={messages}
-                handleConnect={handleConnect}
-                sendMessage={sendMessage}
-                closeConnection={closeConnection}
-                typingPrompt={typingPrompt}
-                setTypingPrompt={setTypingPrompt}
-                otherUserTyping={otherUserTyping}
-                setMessages={setMessages}
-                isConnected={isConnected}
-                user={user}
-                findUser={findUser}
-                setFindUser={setFindUser}
-                endChat={endChat}
-                setEndChat={setEndChat}
-                loginHandler={loginHandler}
-                registerHandler={registerHandler}
-                starRating={starRating}
-                setStarRating={setStarRating}
-                sendStarRating={sendStarRating}
-                percentMatch={percentMatch}
-                numConversations={numConversations}
-              />
-            }
-          />
+            element={chatScreen()}
+          /> */}
+
+          {groups.map((route) => (
+            <Route
+              exact
+              key={route.id}
+              path={`/${route.name}`}
+              element={chatScreen()}
+            />
+          ))}
+
+
           {/* states and functions are passed as props to the component */}
           <Route
             exact
