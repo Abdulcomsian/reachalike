@@ -593,7 +593,6 @@ const App = () => {
           const message = JSON.parse(event.data);
           localStorage.setItem("token_Guest", message.ct)
           sessionStorage.setItem("token_Guest", message.ct)
-          setUserToken(message.ct);
         });
       }
     }
