@@ -12,7 +12,7 @@ const ConfromationModal = (props) => {
 
   const handleChat = () => {
     handleConnect()
-    navigate("/chat");
+    navigate("/Default");
   }
 
   const handleAudioChat = () => {

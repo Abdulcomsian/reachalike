@@ -163,7 +163,13 @@ const App = () => {
       headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }
     })
       .then((response) => {
-        // sessionStorage.setItem("token", response.data.token);
+        if (response.data.token != null) {
+
+          sessionStorage.removeItem("token_Guest", response.data.token);
+         localStorage.removeItem("token_Guest", response.data.token);
+
+         sessionStorage.setItem("token", response.data.token);
+         localStorage.setItem("token", response.data.token);
         setAuthRegister(false);
         toast.success("Registration Successfully!", {
           style: {
@@ -175,6 +181,16 @@ const App = () => {
         setUserName("")
         setPassword("")
         setConfirmPassword("")
+      }
+      else{
+        toast.error(response.data.Error, {
+          style: {
+            borderRadius: '999px',
+            background: '#333',
+            color: '#fff',
+          }
+        });
+      }
       })
       .catch((error) => {
         toast.error("Some error occured! Try again.", {
@@ -337,14 +353,15 @@ const App = () => {
 
   //Establishing a connection to the websocket when the component
   //renders for the first time in the browser window
-  useEffect(() => {
+  const connectionToWebSocket = () => {
     const websocket = new ReconnectingWebSocket(
       `wss://${BackendAddr}/ws`,
       null,
       OptionsWebsocket
     );
+    console.log(websocket);
     //Setting response of websocket into the websocket state object
-    setWs(websocket);
+    setWs(prevState => websocket);
 
     return () => {
       if (websocket) {
@@ -352,6 +369,10 @@ const App = () => {
         setWs(null);
       }
     };
+  }
+
+  useEffect(() => {
+    connectionToWebSocket()
   }, []);
 
   //After setting up the state object, the websocket functions
@@ -567,12 +588,12 @@ const App = () => {
   };
 
   //This function is responsible for connecting a user with another for chatting
-  const connectToUser = () => {
+  const connectToUser = (item) => {
     if (userToken !== null) {
       let messageContent = {
         type: "cmd",
         ct: "connect_t",
-        group: selectedGroup,
+        group: item,
         token: userToken
       };
       ws.send(JSON.stringify(messageContent));
@@ -583,13 +604,13 @@ const App = () => {
       let messageContent = {
         type: "cmd",
         ct: "connect_t",
-        group: selectedGroup,
+        group: item,
         token: userToken
       };
-      ws.send(JSON.stringify(messageContent))
+      ws?.send(JSON.stringify(messageContent))
 
       if (!localStorage.getItem("token_Guest") || !sessionStorage.getItem("token")) {
-        ws.addEventListener('message', event => {
+        ws?.addEventListener('message', event => {
           const message = JSON.parse(event.data);
           localStorage.setItem("token_Guest", message.ct)
           sessionStorage.setItem("token_Guest", message.ct)
@@ -603,7 +624,7 @@ const App = () => {
       type: 'user_token',
       ct: "token_str"
     };
-    ws.send(JSON.stringify(messageContent));
+    ws?.send(JSON.stringify(messageContent));
   }
 
   //This function is handling the display of the text that is shown when a user is connected to another
@@ -620,12 +641,12 @@ const App = () => {
   }
 
   //When the user is connected, this function resets all the necessary state variables
-  function handleConnect() {
+  function handleConnect(item) {
     setMessages([]);
     setRatingPopup(false);
     setEnd(true);
     setIsChatActive(false);
-    connectToUser();
+    connectToUser(item);
   }
 
   //When the other user starts typing, this function runs and sends a command to the websocket for showing the typing status of the user
@@ -686,7 +707,7 @@ const App = () => {
 
   // This funtion is responsible for starting a new chat from the button on the left of the message input
   const onClickStartNewChatBtn = () => {
-    handleConnect();
+    handleConnect(selectedGroup);
     setIsChatActive(false);
     setOtherUserTyping(false);
     setMessages([]);
@@ -768,13 +789,12 @@ const App = () => {
   }
 
   useEffect(() => {
-    // update state based on location change
     if (location.pathname !== "/" && location.pathname !== "/chat/Near%20Me") {
-      const path = location.pathname;
-      const group = path.substring(1);
-      setSelectedGroup(group);
+      const splits = location.pathname.split("/")
+      setSelectedGroup(splits[1])
+      handleConnect(splits[1]);
     }
-  }, [location]);
+  }, [location.pathname, ws]);
   // Component rendering starts here
   return (
     <>
@@ -829,7 +849,7 @@ const App = () => {
           />
           {/* Chat Screen Route and Component */}
           {/* states and functions are passed as props to the component */}
-          <Route
+          {/* <Route
             exact
             path="/chat"
             element={
@@ -883,7 +903,7 @@ const App = () => {
                 numConversations={numConversations}
               />
             }
-          />
+          /> */}
           {/* Audio Chat Screen Route and Component */}
           {/* <Route
             exact

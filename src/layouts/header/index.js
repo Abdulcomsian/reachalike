@@ -53,9 +53,9 @@ const Header = (props) => {
   const [groups, setGroups] = useState(null);
 
   const handleSelected = (item) => {
-    handleConnect();
+    // handleConnect(item);
     setSelectedGroup(item);
-    navigate(`/chat/${item}`);
+    navigate(`/${item}`);
     // window.history.pushState(null, null, `#${item}`);
   };
 
@@ -187,7 +187,7 @@ const Header = (props) => {
                 <a
                   className="nav-link active rounded logout-btn"
                   aria-current="page"
-                  onClick={logoutHandler}
+                  onClick={props.logoutHandler}
                 >
                   <i class="fa-solid fa-right-from-bracket"></i>&nbsp; <span>Logout</span>
                 </a>
