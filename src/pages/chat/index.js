@@ -306,7 +306,7 @@ const ChatScreen = (props) => {
                           {typeof message === "object" ? "Stranger" : "You"}
                         </p>
                       </span>
-                      <div className="user-rating d-flex justify-content-between align-items-center position-absolute">
+                      {/* <div className="user-rating d-flex justify-content-between align-items-center position-absolute">
                         <div className="rating-div d-flex">
                           <span>
                             <i class="fa-solid fa-star"></i>
@@ -325,7 +325,7 @@ const ChatScreen = (props) => {
                           </span>
                         </div>
                         <span className="ms-2 rating-rate">4.2 (45)</span>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="message-detail ms-3">
                       <span className="message-para d-block">
@@ -343,7 +343,7 @@ const ChatScreen = (props) => {
               {/* Typing Item */}
               {otherUserTyping && userStatus !== "disconnected" ? (
                 <li className="scroll-up d-flex align-items-end my-4 pe-5">
-                  <div className="user-detail position-relative cursor-pointer">
+                  <div className="user-detail position-relative ">
                     <span className="user-avatar d-block text-center">
                       <img
                         src={images.sender_icon}

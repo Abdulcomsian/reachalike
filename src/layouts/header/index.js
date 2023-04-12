@@ -33,6 +33,7 @@ const Header = (props) => {
   const toggleModal = () => setConfirm(!confirm);
 
   const changePage = () => {
+    console.log(endConfirm);
     if (!isChatActive || endConfirm) {
       navigate("/");
       if (!searchingUser) {
@@ -55,7 +56,7 @@ const Header = (props) => {
   const handleSelected = (item) => {
     // handleConnect(item);
     setSelectedGroup(item);
-    navigate(`/${item}`);
+    // navigate(`/${item}`);
     // window.history.pushState(null, null, `#${item}`);
   };
 
@@ -135,7 +136,7 @@ const Header = (props) => {
                       <Link
                         className={`dropdown-item ${selectedGroup === group.name ? "active" : ""
                           }`}
-                        to={`/${group.name}`}
+                        // to={`/${group.name}`}
                         // href={`#${group.name}`}
                         onClick={() => handleSelected(group.name)}
                       >

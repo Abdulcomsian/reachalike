@@ -166,31 +166,31 @@ const App = () => {
         if (response.data.token != null) {
 
           sessionStorage.removeItem("token_Guest", response.data.token);
-         localStorage.removeItem("token_Guest", response.data.token);
+          localStorage.removeItem("token_Guest", response.data.token);
 
-         sessionStorage.setItem("token", response.data.token);
-         localStorage.setItem("token", response.data.token);
-        setAuthRegister(false);
-        toast.success("Registration Successfully!", {
-          style: {
-            borderRadius: '999px',
-            background: '#333',
-            color: '#fff',
-          }
-        });
-        setUserName("")
-        setPassword("")
-        setConfirmPassword("")
-      }
-      else{
-        toast.error(response.data.Error, {
-          style: {
-            borderRadius: '999px',
-            background: '#333',
-            color: '#fff',
-          }
-        });
-      }
+          sessionStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", response.data.token);
+          setAuthRegister(false);
+          toast.success("Registration Successfully!", {
+            style: {
+              borderRadius: '999px',
+              background: '#333',
+              color: '#fff',
+            }
+          });
+          setUserName("")
+          setPassword("")
+          setConfirmPassword("")
+        }
+        else {
+          toast.error(response.data.Error, {
+            style: {
+              borderRadius: '999px',
+              background: '#333',
+              color: '#fff',
+            }
+          });
+        }
       })
       .catch((error) => {
         toast.error("Some error occured! Try again.", {
@@ -216,9 +216,7 @@ const App = () => {
         //Setting up the token coming from the backend to the sessionStorage
         //of the browser after successful login
         if (response.data.token != null) {
-          //for guest token remove
-          localStorage.removeItem("token_Guest")
-          sessionStorage.removeItem("token_Guest")
+
           // for new token
           localStorage.setItem("token", response.data.token)
           sessionStorage.setItem("token", response.data.token)
@@ -525,6 +523,7 @@ const App = () => {
     let messageContent = {
       type: "cmd",
       ct: "cancel_connect_t",
+      group: selectedGroup
     };
     ws.send(JSON.stringify(messageContent));
   }
@@ -600,29 +599,34 @@ const App = () => {
     }
     // This might be wrong
     else {
-      setTokenWithoutAuth();
+      // setTokenWithoutAuth();
       let messageContent = {
         type: "cmd",
         ct: "connect_t",
         group: item,
-        token: userToken
+        token: localStorage.getItem("token_Guest")
       };
       ws?.send(JSON.stringify(messageContent))
 
-      if (!localStorage.getItem("token_Guest") || !sessionStorage.getItem("token")) {
+      if (!localStorage.getItem("token_Guest") || !sessionStorage.getItem("token_Guest")) {
         ws?.addEventListener('message', event => {
+          console.log(event.data);
           const message = JSON.parse(event.data);
-          localStorage.setItem("token_Guest", message.ct)
-          sessionStorage.setItem("token_Guest", message.ct)
+          if (message.ct !== "disconnect") {
+            localStorage.setItem("token_Guest", message.ct)
+            sessionStorage.setItem("token_Guest", message.ct)
+          }
+
         });
       }
     }
   };
 
   const setTokenWithoutAuth = () => {
+    const guestToken=localStorage.getItem("token_Guest")
     const messageContent = {
       type: 'user_token',
-      ct: "token_str"
+      ct: userToken?userToken:guestToken
     };
     ws?.send(JSON.stringify(messageContent));
   }
@@ -844,6 +848,7 @@ const App = () => {
                 handleConnect={handleConnect}
                 onClickStartNewChatBtn={onClickStartNewChatBtn}
                 setRatingPopup={setRatingPopup}
+                selectedGroup={selectedGroup}
               />
             }
           />

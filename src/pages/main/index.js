@@ -15,7 +15,7 @@ const MainScreen = (props) => {
     setToolTipOpen(!toolTipOpen)
   }
 
-  const { handleConnect, messages, setMessages } = props;
+  const { handleConnect, selectedGroup, messages, setMessages } = props;
 
   const conformationTextHandler = () => {
     setConformationModal(true);
@@ -120,6 +120,7 @@ const MainScreen = (props) => {
       </div>
       {conformationModal && (
         <ConfrormationModal
+          selectedGroup={selectedGroup}
           handleConnect={handleConnect}
           chatType={chatType}
           asRef={ref}
