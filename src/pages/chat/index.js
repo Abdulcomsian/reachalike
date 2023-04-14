@@ -55,7 +55,7 @@ const ChatScreen = (props) => {
     userToken,
     setUserToken
   } = props;
-
+  
   const [newChat, setNewChat] = useState(false);
   const [connectText, setConnectText] = useState(true);
 

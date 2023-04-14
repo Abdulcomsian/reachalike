@@ -33,7 +33,7 @@ const Header = (props) => {
   const toggleModal = () => setConfirm(!confirm);
 
   const changePage = () => {
-    console.log(endConfirm);
+    console.log("endconform",endConfirm);
     if (!isChatActive || endConfirm) {
       navigate("/");
       if (!searchingUser) {

@@ -120,6 +120,7 @@ const MainScreen = (props) => {
       </div>
       {conformationModal && (
         <ConfrormationModal
+          setMessages={setMessages}
           selectedGroup={selectedGroup}
           handleConnect={handleConnect}
           chatType={chatType}
