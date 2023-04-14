@@ -72,6 +72,14 @@ const Header = (props) => {
       .catch(e => console.log(e.message))
   }, [])
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setUserToken(localStorage.getItem("token"))
+      sessionStorage.setItem("token", localStorage.getItem("token"))
+    }
+  }, [userToken])
+
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light main-header sticky-top"
@@ -162,7 +170,7 @@ const Header = (props) => {
             </li>
           </ul>
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0 auth-list">
-            {!sessionStorage.getItem("token") && !localStorage.getItem("token") ?
+            {(!sessionStorage.getItem("token") && !localStorage.getItem("token")) || !userToken ?
               <>
                 <li className="nav-item me-2">
                   <a
@@ -188,7 +196,7 @@ const Header = (props) => {
                 <a
                   className="nav-link active rounded logout-btn"
                   aria-current="page"
-                  onClick={props.logoutHandler}
+                  onClick={() => logoutHandler()}
                 >
                   <i class="fa-solid fa-right-from-bracket"></i>&nbsp; <span>Logout</span>
                 </a>

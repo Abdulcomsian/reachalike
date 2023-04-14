@@ -82,9 +82,11 @@ const App = () => {
   };
 
   const logoutHandler = () => {
+    console.log("logout");
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
     setUserToken(null);
+    // window.location.reload()
     toast.success("Logout successfully", {
       style: {
         borderRadius: '999px',
@@ -588,14 +590,14 @@ const App = () => {
 
   //This function is responsible for connecting a user with another for chatting
   const connectToUser = (item) => {
-    if (userToken !== null) {
+    if (userToken !== null || localStorage.getItem("token")) {
       let messageContent = {
         type: "cmd",
         ct: "connect_t",
         group: item,
-        token: userToken
+        token: userToken !== null ? userToken : localStorage.getItem("token")
       };
-      ws.send(JSON.stringify(messageContent));
+      ws?.send(JSON.stringify(messageContent));
     }
     // This might be wrong
     else {
@@ -608,11 +610,10 @@ const App = () => {
       };
       ws?.send(JSON.stringify(messageContent))
 
-      if (!localStorage.getItem("token_Guest") || !sessionStorage.getItem("token_Guest")) {
+      if (!localStorage.getItem("token_Guest")) {
         ws?.addEventListener('message', event => {
-          console.log(event.data);
           const message = JSON.parse(event.data);
-          if (message.ct !== "disconnect") {
+          if (message.ct !== "disconnect" && message.ct !== "connect_t" && message.ct !== "The other user has trouble with his connection or has disconnected. You can wait for his reconnection or end the conversation.") {
             localStorage.setItem("token_Guest", message.ct)
             sessionStorage.setItem("token_Guest", message.ct)
           }
@@ -623,10 +624,10 @@ const App = () => {
   };
 
   const setTokenWithoutAuth = () => {
-    const guestToken=localStorage.getItem("token_Guest")
+    const guestToken = localStorage.getItem("token_Guest")
     const messageContent = {
       type: 'user_token',
-      ct: userToken?userToken:guestToken
+      ct: userToken ? userToken : guestToken
     };
     ws?.send(JSON.stringify(messageContent));
   }
