@@ -77,7 +77,7 @@ const Header = (props) => {
       setUserToken(localStorage.getItem("token"))
       sessionStorage.setItem("token", localStorage.getItem("token"))
     }
-  }, [userToken])
+  }, [userToken,registerHandler])
 
 
   return (
@@ -170,6 +170,7 @@ const Header = (props) => {
             </li>
           </ul>
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0 auth-list">
+           
             {(!sessionStorage.getItem("token") && !localStorage.getItem("token")) || !userToken ?
               <>
                 <li className="nav-item me-2">

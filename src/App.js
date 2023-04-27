@@ -4,13 +4,13 @@ import Header from "./layouts/header";
 import MainScreen from "./pages/main";
 import ChatScreen from "./pages/chat";
 import AudioChat from "./pages/audio-chat";
-import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
+import Login from "./pages/auth/login";
 import NearME from "./pages/near-me";
 import TermCondition from "./pages/term-condition";
 import Policy from "./pages/term-condition/index-policy";
 import "./assets/css/media.css";
-import { Route, Routes, BrowserRouter, useLocation, HashRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, useLocation, HashRouter, useNavigate } from "react-router-dom";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -53,6 +53,7 @@ const App = () => {
   const [userToken, setUserToken] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
 
   // Authentication State Object
@@ -167,8 +168,8 @@ const App = () => {
       .then((response) => {
         if (response.data.token != null) {
 
-          sessionStorage.removeItem("token_Guest", response.data.token);
-          localStorage.removeItem("token_Guest", response.data.token);
+          // sessionStorage.removeItem("token_Guest", response.data.token);
+          // localStorage.removeItem("token_Guest", response.data.token);
 
           sessionStorage.setItem("token", response.data.token);
           localStorage.setItem("token", response.data.token);
@@ -612,8 +613,9 @@ const App = () => {
 
       if (!localStorage.getItem("token_Guest")) {
         ws?.addEventListener('message', event => {
+          console.log("log", event.data);
           const message = JSON.parse(event.data);
-          if (message.ct !== "disconnect" && message.ct !== "connect_t" && message.ct !== "The other user has trouble with his connection or has disconnected. You can wait for his reconnection or end the conversation.") {
+          if (message.type == "user_token" && message.ct !== "disconnect" && message.ct !== "connect_t" && message.ct !== "The other user has trouble with his connection or has disconnected. You can wait for his reconnection or end the conversation.") {
             localStorage.setItem("token_Guest", message.ct)
             sessionStorage.setItem("token_Guest", message.ct)
           }
@@ -711,12 +713,13 @@ const App = () => {
   };
 
   // This funtion is responsible for starting a new chat from the button on the left of the message input
-  const onClickStartNewChatBtn = () => {
-    handleConnect(selectedGroup);
+  const onClickStartNewChatBtn = (e) => {
+    // handleConnect(selectedGroup);
     setIsChatActive(false);
     setOtherUserTyping(false);
     setMessages([]);
     setUserIdentify(false);
+    navigate(`/${selectedGroup}`);
   };
 
   useEffect(() => {
@@ -794,7 +797,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (location.pathname !== "/" && location.pathname !== "/chat/Near%20Me") {
+    if (location.pathname !== "/" && location.pathname !== "/chat/Near%20Me" && location.pathname !== "/term-condition" && location.pathname !== "/policy") {
       const splits = location.pathname.split("/")
       setSelectedGroup(splits[1])
       handleConnect(splits[1]);
