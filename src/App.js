@@ -714,7 +714,7 @@ const App = () => {
 
   // This funtion is responsible for starting a new chat from the button on the left of the message input
   const onClickStartNewChatBtn = (e) => {
-    // handleConnect(selectedGroup);
+     handleConnect(selectedGroup);
     setIsChatActive(false);
     setOtherUserTyping(false);
     setMessages([]);
@@ -802,7 +802,7 @@ const App = () => {
       setSelectedGroup(splits[1])
       handleConnect(splits[1]);
     }
-  }, [location.pathname, ws]);
+  }, [ws]);
   // Component rendering starts here
   return (
     <>

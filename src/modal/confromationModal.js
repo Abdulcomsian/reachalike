@@ -11,7 +11,7 @@ const ConfromationModal = (props) => {
   const navigate = useNavigate()
 
   const handleChat = () => {
-    // handleConnect()
+     handleConnect(selectedGroup)
     setMessages();
     navigate(`/${selectedGroup}`);
   }
