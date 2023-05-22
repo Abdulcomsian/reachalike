@@ -52,6 +52,7 @@ const App = () => {
   const [selectedGroup, setSelectedGroup] = useState("Default");
   const [userToken, setUserToken] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [chatType, setChatType] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -148,6 +149,7 @@ const App = () => {
   //     });
   // };
 
+  //handle registration
   const handleRegistration = (e) => {
     e.preventDefault();
     //Checking to see if the value in the password field matches with the confirm password field
@@ -439,8 +441,13 @@ const App = () => {
               //checks for the audio connection
               //not functional right now, just added up some dummy functionality
               case "connect_a":
-                isCaller = message.isCaller;
-                await openConnectionAudio(isCaller);
+                openConnectionText();
+                setIsConnected(true);
+                setConnectionInfo(message.connection_info);
+                setUserStatus("connected");
+                // isCaller = message.isCaller;
+                await openConnectionAudio(message.isCaller);
+                playAudio(event);
                 break;
               //checks for the text connection
               case "connect_t":
@@ -552,6 +559,7 @@ const App = () => {
       };
 
       if (isCaller) {
+        console.log("callee");
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
 
@@ -561,10 +569,37 @@ const App = () => {
         };
         ws.send(JSON.stringify(messageContent));
       } else {
+        console.log("caller");
         // Wait for an offer from the caller
+        peerConnection.onmessage = async (event) => {
+          if (event.data.type === "audio-offer") {
+            const offer = JSON.parse(event.data.offer);
+            peerConnection.setRemoteDescription(offer);
+            console.log("here");
+            // Create an answer and send it back to the caller.
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+
+            const messageContent = {
+              type: "audio-answer",
+              answer: answer,
+            };
+            ws.send(JSON.stringify(messageContent));
+          }
+        };
       }
     } catch (error) {
       console.error("Error while opening audio connection:", error);
+    }
+  };
+  // this function is for aduio play
+  const playAudio = (event) => {
+    console.log(event.data.type);
+    if (event.data.type === "audio-data") {
+      const audioData = JSON.parse(event.data.audioData);
+      const audioElement = document.createElement("audio");
+      audioElement.src = window.URL.createObjectURL(new Blob([audioData]));
+      audioElement.play();
     }
   };
 
@@ -586,6 +621,42 @@ const App = () => {
 
     } else {
       console.warn("Cannot send message: not connected to another user");
+    }
+  };
+
+
+  const connectToAudioUser = (item) => {
+    if (userToken !== null || localStorage.getItem("token")) {
+      let messageContent = {
+        type: "cmd",
+        ct: "connect_a",
+        group: item,
+        token: userToken !== null ? userToken : localStorage.getItem("token")
+      };
+      ws?.send(JSON.stringify(messageContent));
+    }
+    // This might be wrong
+    else {
+      // setTokenWithoutAuth();
+      let messageContent = {
+        type: "cmd",
+        ct: "connect_a",
+        group: item,
+        token: localStorage.getItem("token_Guest")
+      };
+      ws?.send(JSON.stringify(messageContent))
+
+      if (!localStorage.getItem("token_Guest")) {
+        ws?.addEventListener('message', event => {
+          console.log("log", event.data);
+          const message = JSON.parse(event.data);
+          if (message.type == "user_token" && message.ct !== "disconnect" && message.ct !== "connect_t" && message.ct !== "The other user has trouble with his connection or has disconnected. You can wait for his reconnection or end the conversation.") {
+            localStorage.setItem("token_Guest", message.ct)
+            sessionStorage.setItem("token_Guest", message.ct)
+          }
+
+        });
+      }
     }
   };
 
@@ -656,6 +727,10 @@ const App = () => {
     connectToUser(item);
   }
 
+  function handleAudioConnect(item) {
+    connectToAudioUser(item);
+  }
+
   //When the other user starts typing, this function runs and sends a command to the websocket for showing the typing status of the user
   function sendTypingStatus() {
     const message = {
@@ -714,7 +789,7 @@ const App = () => {
 
   // This funtion is responsible for starting a new chat from the button on the left of the message input
   const onClickStartNewChatBtn = (e) => {
-     handleConnect(selectedGroup);
+    handleConnect(selectedGroup);
     setIsChatActive(false);
     setOtherUserTyping(false);
     setMessages([]);
@@ -853,6 +928,10 @@ const App = () => {
                 onClickStartNewChatBtn={onClickStartNewChatBtn}
                 setRatingPopup={setRatingPopup}
                 selectedGroup={selectedGroup}
+                openConnectionAudio={openConnectionAudio}
+                chatType={chatType}
+                setChatType={setChatType}
+                handleAudioConnect={handleAudioConnect}
               />
             }
           />
@@ -936,8 +1015,8 @@ const App = () => {
             path="/audio-chat"
             element={
               <AudioChat
-                // handleConnect={openConnectionAudio}
-                // handleClose={sendDisconnectRequest}
+                handleConnect={openConnectionAudio}
+                handleClose={sendDisconnectRequest}
                 user={user}
                 findUser={findUser}
                 setFindUser={setFindUser}
@@ -945,6 +1024,8 @@ const App = () => {
                 setEndChat={setEndChat}
                 loginHandler={loginHandler}
                 registerHandler={registerHandler}
+                setSearchingUser={setSearchingUser}
+                chatScreen={chatScreen}
               />
             }
           />

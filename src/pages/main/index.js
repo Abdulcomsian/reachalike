@@ -8,14 +8,14 @@ import { Tooltip } from "reactstrap";
 const MainScreen = (props) => {
   const ref = useRef();
   const [conformationModal, setConformationModal] = useState(false);
-  const [chatType, setChatType] = useState(null);
+  // const [chatType, setChatType] = useState(null);
 
   const [toolTipOpen, setToolTipOpen] = useState(false);
   const toggleToolTip = () => {
     setToolTipOpen(!toolTipOpen)
   }
 
-  const { handleConnect, selectedGroup, messages, setMessages } = props;
+  const { handleConnect, selectedGroup, messages, setMessages,openConnectionAudio,chatType ,setChatType,handleAudioConnect} = props;
 
   const conformationTextHandler = () => {
     setConformationModal(true);
@@ -71,7 +71,7 @@ const MainScreen = (props) => {
               </a>
               <a
                 className="audio d-flex align-items-center justify-content-between"
-                // onClick={conformationAudioHandler}
+                onClick={conformationAudioHandler}
                 id="audio-switch-action"
               >
                 <span className="ps-3">
@@ -81,9 +81,9 @@ const MainScreen = (props) => {
                 <span className="icon-span">
                   <i class="fa-solid fa-arrow-right"></i>
                 </span>
-                <Tooltip placement="right" isOpen={toolTipOpen} target="audio-switch-action" toggle={toggleToolTip}>
+                {/* <Tooltip placement="right" isOpen={toolTipOpen} target="audio-switch-action" toggle={toggleToolTip}>
                   Available Soon!
-                </Tooltip>
+                </Tooltip> */}
               </a>
             </div>
           </div>
@@ -125,6 +125,8 @@ const MainScreen = (props) => {
           handleConnect={handleConnect}
           chatType={chatType}
           asRef={ref}
+          openConnectionAudio={openConnectionAudio}
+          handleAudioConnect={handleAudioConnect}
         />
       )}
     </>

@@ -66,7 +66,7 @@ const ChatRoom = () => {
           case "cmd":
             switch (message.ct) {
               case "connect_a":
-                // openConnectionAudio(isCaller)
+                 openConnectionAudio(isCaller)
                 break;
 
               case "connect_t":

@@ -3,7 +3,7 @@ import "./style.css";
 import { useNavigate } from "react-router-dom";
 
 const ConfromationModal = (props) => {
-  const { handleConnect,selectedGroup, asRef, chatType,setMessages } = props
+  const { handleConnect,selectedGroup, asRef, chatType,setMessages,openConnectionAudio,handleAudioConnect } = props
   const [confoamtionBtn, setConformationBtn] = useState(false);
   const [checkedOurAge, setCheckedOurAge] = useState(false);
   const [checkedTermCondtion, setCheckedTermCondtion] = useState(false);
@@ -17,6 +17,8 @@ const ConfromationModal = (props) => {
   }
 
   const handleAudioChat = () => {
+    handleAudioConnect(selectedGroup)
+    // openConnectionAudio()
     navigate("/audio-chat");
   }
 

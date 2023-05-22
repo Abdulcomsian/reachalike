@@ -392,11 +392,11 @@
 }
 
 #audio-switch-action {
-  background-color: #adb5bd;
+  /* background-color: #adb5bd; */
   margin-left: 0.5rem;
 }
 #audio-switch-action:hover {
-  cursor: help;
+  cursor: pointer;
 }
 
 .connecting-logo-div .like-text {

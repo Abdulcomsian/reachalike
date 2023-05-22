@@ -47,3 +47,15 @@
 .audio-footer .footer-button span span {
   color: rgba(52, 201, 255, 1);
 }
+
+.audio_call_chat {
+  width: 100%;
+}
+.audio_call_chat .fixed-bottom {
+  position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 500px;
+    z-index: 1030;
+
+}

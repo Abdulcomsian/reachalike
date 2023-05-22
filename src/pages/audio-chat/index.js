@@ -14,7 +14,7 @@ const AudioChat = (props) => {
   // const [endChat, setEndChat] = useState(false);
 
   // These are the props coming from the parent component
-  const { user, findUser, setFindUser, endChat, setEndChat } = props;
+  const { user, findUser, setFindUser, endChat, setEndChat, setSearchingUser,chatScreen } = props;
   const ref = useRef();
   //These are all the state variables that are being used in the component rendering
   const [mute, setMute] = useState(false);
@@ -25,10 +25,11 @@ const AudioChat = (props) => {
   useEffect(() => {
     // We are calling a setTimeout method to show the connecting animation before
     // the users get connected to each other.
+
     setTimeout(() => {
       setFindUser(true);
       setHide(true);
-    }, 10000);
+    }, 1000);
   }, [findUser]);
 
   // This state variable and the function under it are responsible for
@@ -46,6 +47,7 @@ const AudioChat = (props) => {
           className={
             startChat ? "audio_chat_wrapper w-40" : "audio_chat_wrapper"
           }
+          style={{ height: "100vh" }}
         >
           {/* This is where the conditional rendering of the component starts */}
           {/*  */}
@@ -54,9 +56,10 @@ const AudioChat = (props) => {
               <div
                 className={
                   startChat
-                    ? "audio-body flex-column d-flex h-100"
-                    : "audio-body d-flex  h-100"
+                    ? "audio-body flex-column d-flex "
+                    : "audio-body d-flex "
                 }
+                style={{height:"80vh"}}
               >
                 <div
                   className={
@@ -119,6 +122,7 @@ const AudioChat = (props) => {
                         modalUserRatingClose={modalUserRatingClose}
                         loginHandler={props.loginHandler}
                         registerHandler={props.registerHandler}
+                        setEndChat={setEndChat}
                       />
                     ) : (
                       ""
@@ -144,9 +148,9 @@ const AudioChat = (props) => {
                         }
                       ></i>
                     </button>
-                    {/* <button className="common-footer-btn" onClick={() => setStartChat(!startChat)}>
-                                        <i class="fa-solid fa-envelope"></i>
-                                    </button> */}
+                    <button className="common-footer-btn" onClick={() => setStartChat(!startChat)}>
+                      <i class="fa-solid fa-envelope"></i>
+                    </button>
                   </div>
                 )}
               </div>
@@ -157,7 +161,8 @@ const AudioChat = (props) => {
             </div>
           )}
         </div>
-        {startChat && <ChatScreen requestToChat={requestToChat} />}
+        {/* {startChat && <ChatScreen requestToChat={requestToChat} setSearchingUser={setSearchingUser} />} */}
+       <div className="audio_call_chat">{ startChat && chatScreen()}</div>
       </div>
     </>
   );

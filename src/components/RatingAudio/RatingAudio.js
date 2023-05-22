@@ -28,21 +28,21 @@ const RatingAudio = (props) => {
   };
 
   const location = useLocation();
-
   const submitRatingValue = (rate) => {
     // props.setRatingModal(false);
     props.modalUserRatingClose();
     props.setEndChat(false);
-    // navigate("/");
+    navigate("/");
   };
   console.log(ratingValue);
   return (
+    
     <div className="common-wrapper d-flex align-items-center justify-content-center position-absolute">
       {/* onClick={modalUserRatingClose} */}
       <div className="chat-rating-div" ref={asRef}>
         <h5>Rate User!</h5>
         <p>Click on a star to rate it!</p>
-        {user !== null || user !== "" ? (
+        {(!sessionStorage.getItem("token") && !localStorage.getItem("token"))? (
           <>
             <p style={{ fontSize: "0.8rem" }} className="text-danger">You are not connected, please</p>
             <button style={{ fontSize: "0.9rem", fontWeight: "600" }} className="btn btn-sm my-1 btn-primary" onClick={props.loginHandler}>Login</button>

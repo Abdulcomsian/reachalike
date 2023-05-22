@@ -238,7 +238,6 @@ const ChatScreen = (props) => {
     return color;
   }
 
-
   return (
     <div
       ref={messageListRef}
