@@ -9,7 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename="/Reach-Alike">
+    <BrowserRouter basename="/public/Reach-Alike">
       <App />
     </BrowserRouter>
   </React.StrictMode>

@@ -14,7 +14,7 @@ const AudioChat = (props) => {
   // const [endChat, setEndChat] = useState(false);
 
   // These are the props coming from the parent component
-  const { user, findUser, setFindUser, endChat, setEndChat, setSearchingUser,chatScreen } = props;
+  const { user, findUser, setFindUser, endChat, setEndChat, setSearchingUser,chatScreen,handleClose } = props;
   const ref = useRef();
   //These are all the state variables that are being used in the component rendering
   const [mute, setMute] = useState(false);
@@ -26,11 +26,18 @@ const AudioChat = (props) => {
     // We are calling a setTimeout method to show the connecting animation before
     // the users get connected to each other.
 
-    setTimeout(() => {
+    // setTimeout(() => {
+    //   setFindUser(true);
+    //   setHide(true);
+    // }, 2000);
+    if(findUser)
+    {
       setFindUser(true);
-      setHide(true);
-    }, 1000);
+        setHide(true);
+    }
   }, [findUser]);
+
+ 
 
   // This state variable and the function under it are responsible for
   // toggling the user rating modal's display
@@ -132,7 +139,8 @@ const AudioChat = (props) => {
                   <div className="footer-button-group">
                     <button
                       className="common-footer-btn end-call-btn"
-                      onClick={() => setEndChat(true)}
+                      onClick={() => {setEndChat(true) 
+                      handleClose()}}
                     >
                       <img src={images.call_end} />
                     </button>
@@ -162,7 +170,7 @@ const AudioChat = (props) => {
           )}
         </div>
         {/* {startChat && <ChatScreen requestToChat={requestToChat} setSearchingUser={setSearchingUser} />} */}
-       <div className="audio_call_chat">{ startChat && chatScreen()}</div>
+       <div className="audio_call_chat" style={{display:startChat===true?"":"none"}}>{ chatScreen()}</div>
       </div>
     </>
   );

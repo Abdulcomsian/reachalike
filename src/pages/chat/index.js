@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, createRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
 import images from "../../constant/images";
 import SearchUser from "../../layouts/search-user";
@@ -53,11 +54,13 @@ const ChatScreen = (props) => {
     loginHandler,
     registerHandler,
     userToken,
-    setUserToken
+    setUserToken, handleAudioConnect, selectedGroup,
+    setChatType
   } = props;
-  
+
   const [newChat, setNewChat] = useState(false);
   const [connectText, setConnectText] = useState(true);
+  const navigate = useNavigate();
 
   // ********** My States ********** //
 
@@ -71,6 +74,8 @@ const ChatScreen = (props) => {
   }, [userStatus]);
 
   useEffect(() => {
+    console.log("isChatActive",isChatActive);
+    console.log("searchingUser",searchingUser);
     if (isChatActive) {
       setSearchingUser(true);
       setStartNew(false);
@@ -391,21 +396,25 @@ const ChatScreen = (props) => {
               <div className="disconnected-stranger mb-5">
                 <button
                   className="btn btn-info bg-info px-3"
-                  onClick={onClickStartNewChatBtn}
+                  onClick={()=>{onClickStartNewChatBtn();setChatType("Text")}}
                 >
                   New Chat
                 </button>{" "}
                 <span className="inter-600 ms-2 mr-2">or {"   "}</span>
                 <Link
-                  // to="/audio-chat"
+                  to="/audio-chat"
+                  onClick={() => {
+                    handleAudioConnect(selectedGroup);
+                    // navigate("/audio-chat",{replace:true, });
+                  }}
                   className="btn px-3 py-2"
                   id="audio-switch-action"
                 >
                   Switch to <span>Audio</span>
                 </Link>
-                <Tooltip placement="top" isOpen={toolTipOpen1} target="audio-switch-action" toggle={toggleToolTip1}>
+                {/* <Tooltip placement="top" isOpen={toolTipOpen1} target="audio-switch-action" toggle={toggleToolTip1}>
                   Available Soon!
-                </Tooltip>
+                </Tooltip> */}
               </div>
             )}
           </div>

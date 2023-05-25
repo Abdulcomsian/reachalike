@@ -13,13 +13,14 @@ const ConfromationModal = (props) => {
   const handleChat = () => {
      handleConnect(selectedGroup)
     setMessages();
-    navigate(`/${selectedGroup}`);
+    navigate(`/chat/${selectedGroup}`);
   }
 
   const handleAudioChat = () => {
     handleAudioConnect(selectedGroup)
     // openConnectionAudio()
-    navigate("/audio-chat");
+    // navigate("/audio-chat");
+    navigate(`/audio/${selectedGroup}`);
   }
 
   const ourAgeHandler = () => {

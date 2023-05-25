@@ -445,9 +445,10 @@ const App = () => {
                 setIsConnected(true);
                 setConnectionInfo(message.connection_info);
                 setUserStatus("connected");
+                setFindUser(true)
                 // isCaller = message.isCaller;
-                await openConnectionAudio(message.isCaller);
-                playAudio(event);
+                // await openConnectionAudio(message.isCaller);
+                // playAudio(event);
                 break;
               //checks for the text connection
               case "connect_t":
@@ -714,6 +715,7 @@ const App = () => {
 
   //This function is responsible for closing the connection between the two users
   function closeConnection() {
+    console.log("close");
     sendDisconnectRequest();
     setIsConnected(false);
   }
@@ -771,7 +773,7 @@ const App = () => {
     setStartNew(true);
     setEnd(true);
     setEndConfirm(true);
-    setRatingPopup(true);
+    chatType === "Text" ? setRatingPopup(true) : setStartNew(true);;
     // closeConnection();
     setUserIdentify(true);
     sendDisconnectRequest();
@@ -782,7 +784,7 @@ const App = () => {
     setStartNew(true);
     setEnd(true);
     setEndConfirm(true);
-    setRatingPopup(true);
+    chatType === "Text" ? setRatingPopup(true) : setStartNew(true);;
     // closeConnection();
     // sendDisconnectRequest();
   };
@@ -808,6 +810,24 @@ const App = () => {
       })
       .catch(e => console.log(e.message))
   }, [])
+
+  const audioScreen = () => {
+    return (
+      <AudioChat
+        handleConnect={openConnectionAudio}
+        handleClose={onClickEndConfirmBtn}
+        user={user}
+        findUser={findUser}
+        setFindUser={setFindUser}
+        endChat={endChat}
+        setEndChat={setEndChat}
+        loginHandler={loginHandler}
+        registerHandler={registerHandler}
+        setSearchingUser={setSearchingUser}
+        chatScreen={chatScreen}
+      />
+    )
+  }
 
   const chatScreen = () => {
     return (
@@ -861,6 +881,9 @@ const App = () => {
         sendStarRating={sendStarRating}
         percentMatch={percentMatch}
         numConversations={numConversations}
+        handleAudioConnect={handleAudioConnect}
+        chatType={chatType}
+        setChatType={setChatType}
       />
     )
   }
@@ -1003,20 +1026,28 @@ const App = () => {
             <Route
               exact
               key={route.id}
-              path={`/${route.name}`}
+              path={`/chat/${route.name}`}
               element={chatScreen()}
+            />
+          ))}
+          {groups.map((route) => (
+            <Route
+              exact
+              key={route.id}
+              path={`/audio/${route.name}`}
+              element={audioScreen()}
             />
           ))}
 
 
           {/* states and functions are passed as props to the component */}
-          <Route
+          {/* <Route
             exact
             path="/audio-chat"
             element={
               <AudioChat
                 handleConnect={openConnectionAudio}
-                handleClose={sendDisconnectRequest}
+                handleClose={onClickEndConfirmBtn}
                 user={user}
                 findUser={findUser}
                 setFindUser={setFindUser}
@@ -1028,7 +1059,7 @@ const App = () => {
                 chatScreen={chatScreen}
               />
             }
-          />
+          /> */}
           {/* Terms and Conditions Screen Route and Component */}
           <Route exact path="/term-condition" element={<TermCondition />} />
 
