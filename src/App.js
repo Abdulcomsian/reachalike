@@ -53,6 +53,7 @@ const App = () => {
   const [userToken, setUserToken] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [chatType, setChatType] = useState(null);
+  const [startChat, setStartChat] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -715,7 +716,6 @@ const App = () => {
 
   //This function is responsible for closing the connection between the two users
   function closeConnection() {
-    console.log("close");
     sendDisconnectRequest();
     setIsConnected(false);
   }
@@ -730,6 +730,9 @@ const App = () => {
   }
 
   function handleAudioConnect(item) {
+    setFindUser(false)
+    setStartChat(false)
+    setMessages([])
     connectToAudioUser(item);
   }
 
@@ -770,21 +773,20 @@ const App = () => {
 
   // This function is responsible for hadling the functionality after the user disconnects the chat
   const onClickEndConfirmBtn = () => {
-    setStartNew(true);
     setEnd(true);
     setEndConfirm(true);
-    chatType === "Text" ? setRatingPopup(true) : setStartNew(true);;
-    // closeConnection();
+    chatType === "Text" ? setRatingPopup(true) : setStartNew(true);
+    closeConnection();
     setUserIdentify(true);
-    sendDisconnectRequest();
+    // sendDisconnectRequest();
   };
 
   // This function is responsible for hadling the functionality after the user disconnects the chat from the navbar
   const onClickConfirm = () => {
-    setStartNew(true);
+    // setStartNew(true);
     setEnd(true);
     setEndConfirm(true);
-    chatType === "Text" ? setRatingPopup(true) : setStartNew(true);;
+    chatType === "Text" ? setRatingPopup(true) : setStartNew(true);
     // closeConnection();
     // sendDisconnectRequest();
   };
@@ -796,7 +798,7 @@ const App = () => {
     setOtherUserTyping(false);
     setMessages([]);
     setUserIdentify(false);
-    navigate(`/${selectedGroup}`);
+    navigate(`/chat/${selectedGroup}`);
   };
 
   useEffect(() => {
@@ -825,6 +827,19 @@ const App = () => {
         registerHandler={registerHandler}
         setSearchingUser={setSearchingUser}
         chatScreen={chatScreen}
+        onClickEndBtn={onClickEndBtn}
+        userStatus={userStatus}
+        onClickConfirm={onClickConfirm}
+        handleAudioConnect={handleAudioConnect}
+        selectedGroup={selectedGroup}
+        handleChatConnect={handleConnect}
+        startChat={startChat}
+        setStartChat={setStartChat}
+        setEndConfirm={setEndConfirm}
+        end={end}
+        setEnd={setEnd}
+        setMessages={setMessages}
+        setChatType={setChatType}
       />
     )
   }
@@ -896,9 +911,18 @@ const App = () => {
 
   useEffect(() => {
     if (location.pathname !== "/" && location.pathname !== "/chat/Near%20Me" && location.pathname !== "/term-condition" && location.pathname !== "/policy") {
-      const splits = location.pathname.split("/")
-      setSelectedGroup(splits[1])
-      handleConnect(splits[1]);
+      const decodedUrl = decodeURIComponent(location.pathname);
+      const splits = decodedUrl.split("/")
+      if (splits[1] === "chat") {
+        setSelectedGroup(splits[2])
+        setChatType("Text")
+        handleConnect(splits[2]);
+      }
+      else {
+        setSelectedGroup(splits[2])
+        setChatType("Audio")
+        handleAudioConnect(splits[2]);
+      }
     }
   }, [ws]);
   // Component rendering starts here

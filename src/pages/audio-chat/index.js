@@ -12,14 +12,33 @@ import RatingAudio from "../../components/RatingAudio/RatingAudio";
 const AudioChat = (props) => {
   // const [findUser, setFindUser] = useState(false);
   // const [endChat, setEndChat] = useState(false);
-
   // These are the props coming from the parent component
-  const { user, findUser, setFindUser, endChat, setEndChat, setSearchingUser,chatScreen,handleClose } = props;
+  const {
+    user,
+    handleChatConnect,
+    setMessages,
+    findUser,
+    setFindUser,
+    handleAudioConnect,
+    selectedGroup,
+    endChat,
+    setEndChat,
+    setSearchingUser,
+    chatScreen,
+    handleClose,
+    setEndConfirm,
+    onClickEndBtn,
+    userStatus,
+    onClickConfirm, startChat,
+    setStartChat,
+    setEnd,
+    setChatType
+  } = props;
   const ref = useRef();
   //These are all the state variables that are being used in the component rendering
   const [mute, setMute] = useState(false);
-  const [startChat, setStartChat] = useState(false);
   const [requestToChat, setRequestToChat] = useState(true);
+  const [hide, setHide] = useState(true);
 
   // This side effect sets the dummy chat connection with the other user
   useEffect(() => {
@@ -30,18 +49,28 @@ const AudioChat = (props) => {
     //   setFindUser(true);
     //   setHide(true);
     // }, 2000);
-    if(findUser)
-    {
+    if (findUser) {
       setFindUser(true);
-        setHide(true);
+      setEndConfirm(false);
+      setEnd(false)
+      setEndChat(false)
     }
   }, [findUser]);
 
- 
+  // ********** UseEffect Running on Mount ********** //
+  useEffect(() => {
+    if (userStatus === "disconnected") {
+      // onClickEndConfirmBtn();
+      setEndChat(true)
+      setStartChat(false)
+      onClickConfirm();
+       setMessages([]);
+    }
+  }, [userStatus]);
 
   // This state variable and the function under it are responsible for
   // toggling the user rating modal's display
-  const [hide, setHide] = useState(true);
+ 
   const modalUserRatingClose = (val) => {
     setHide(false);
     setEndChat(true);
@@ -66,7 +95,7 @@ const AudioChat = (props) => {
                     ? "audio-body flex-column d-flex "
                     : "audio-body d-flex "
                 }
-                style={{height:"80vh"}}
+                style={{ height: "80vh" }}
               >
                 <div
                   className={
@@ -110,14 +139,26 @@ const AudioChat = (props) => {
                     <div className="footer-button">
                       <button
                         className="btn btn-info bg-info px-3"
-                        onClick={() => [setFindUser(false), setEndChat(false)]}
+                        onClick={() => [
+                          setFindUser(false),
+                          setEndChat(false),
+                          setStartChat(false),
+                          setHide(true),
+                          setChatType("Audio"),
+                          handleAudioConnect(selectedGroup)
+                        ]}
                       >
                         New Audio Chat
                       </button>
                       <span className="inter-600 ms-2 mr-2">or{"  "}</span>
                       <Link
-                        to="/chat"
+                        to={`/chat/${selectedGroup}`}
                         className="btn btn-primary bg-primary px-3 py-2"
+                        onClick={() => {
+                          setChatType("Text")
+                          handleChatConnect(selectedGroup)
+                          setMessages([]);
+                        }}
                       >
                         Switch to <span>Text</span>
                       </Link>
@@ -139,8 +180,12 @@ const AudioChat = (props) => {
                   <div className="footer-button-group">
                     <button
                       className="common-footer-btn end-call-btn"
-                      onClick={() => {setEndChat(true) 
-                      handleClose()}}
+                      onClick={() => {
+                        setEndChat(true);
+                        // setFindUser(false)
+                        // onClickEndBtn()
+                        handleClose();
+                      }}
                     >
                       <img src={images.call_end} />
                     </button>
@@ -170,7 +215,7 @@ const AudioChat = (props) => {
           )}
         </div>
         {/* {startChat && <ChatScreen requestToChat={requestToChat} setSearchingUser={setSearchingUser} />} */}
-       <div className="audio_call_chat" style={{display:startChat===true?"":"none"}}>{ chatScreen()}</div>
+        <div className="audio_call_chat" style={{ display: startChat === true ? "" : "none" }}>{chatScreen()}</div>
       </div>
     </>
   );

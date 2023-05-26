@@ -31,8 +31,8 @@ const RatingAudio = (props) => {
   const submitRatingValue = (rate) => {
     // props.setRatingModal(false);
     props.modalUserRatingClose();
-    props.setEndChat(false);
-    navigate("/");
+    // props.setEndChat(false);
+    // navigate("/");
   };
   console.log(ratingValue);
   return (

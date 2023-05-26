@@ -74,8 +74,6 @@ const ChatScreen = (props) => {
   }, [userStatus]);
 
   useEffect(() => {
-    console.log("isChatActive",isChatActive);
-    console.log("searchingUser",searchingUser);
     if (isChatActive) {
       setSearchingUser(true);
       setStartNew(false);
@@ -396,14 +394,15 @@ const ChatScreen = (props) => {
               <div className="disconnected-stranger mb-5">
                 <button
                   className="btn btn-info bg-info px-3"
-                  onClick={()=>{onClickStartNewChatBtn();setChatType("Text")}}
+                  onClick={() => { onClickStartNewChatBtn(); setChatType("Text") }}
                 >
                   New Chat
                 </button>{" "}
                 <span className="inter-600 ms-2 mr-2">or {"   "}</span>
                 <Link
-                  to="/audio-chat"
+                  to={`/audio/${selectedGroup}`}
                   onClick={() => {
+                    setChatType("Text")
                     handleAudioConnect(selectedGroup);
                     // navigate("/audio-chat",{replace:true, });
                   }}

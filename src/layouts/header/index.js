@@ -33,14 +33,13 @@ const Header = (props) => {
   const toggleModal = () => setConfirm(!confirm);
 
   const changePage = () => {
-    console.log("endconform",endConfirm);
     if (!isChatActive || endConfirm) {
       navigate("/");
       if (!searchingUser) {
         cancelConnect();
       }
     } else {
-      if (location.pathname === "/chat" || location.pathname === `/${selectedGroup}`) {
+      if (location.pathname === "/chat" || location.pathname === `/chat/${selectedGroup}` || location.pathname === `/audio/${selectedGroup}`) {
         setConfirm(true);
       } else if (location.pathname === "/audio-chat") {
         setConfirm(true);

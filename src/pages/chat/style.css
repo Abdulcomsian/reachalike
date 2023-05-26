@@ -3,11 +3,13 @@
   background-color: #e1ecef;
   overflow-y: auto;
   height: 100vh;
+  position: relative;
 }
 
 .disconnected-stranger {
   padding-bottom: 9rem;
 }
+
 /* Scrollbar CSS Start */
 .chat_wrapper::-webkit-scrollbar {
   width: 8px;
@@ -34,6 +36,7 @@
   background: #b2e1fa;
   border-radius: 10px;
 }
+
 .chat_wrapper::-webkit-scrollbar-thumb {
   background: #b2e1fa;
   border-radius: 10px;
@@ -44,6 +47,7 @@
 .chat_wrapper::-moz-scrollbar-thumb:hover {
   background: #b2e1fa;
 }
+
 .chat_wrapper::-webkit-scrollbar-thumb:hover {
   background: #b2e1fa;
 }
@@ -70,27 +74,35 @@
   font-size: 0.75rem;
   letter-spacing: 0.01em;
 }
+
 .chat-room {
-  /* height: calc(100vh - 375px); */
+  height: calc(100vh - 375px);
   padding-top: 2.313rem;
+  overflow-y: scroll;
 }
+
 /* .chat-room ul li:last-child {
   margin-bottom: 2.5rem !important;
 } */
+
+
 
 .chat-room .message-detail {
   margin-top: -1rem;
   position: relative;
 }
+
 .chat-room .message-detail .message-para {
   background: #fff;
   padding: 0.625rem 1rem;
   border-radius: 25px 25px 25px 0px;
   max-width: 500px;
 }
+
 .chat-room ul li {
   position: relative;
 }
+
 .chat-room ul li .user-rating {
   background: #fff;
   padding: 0.3rem;
@@ -103,9 +115,11 @@
   z-index: 9999;
   transition: all 0.5s linear;
 }
+
 .chat-room ul li .user-rating span {
   font-size: 0.75rem;
 }
+
 .chat-room ul li .user-rating span.rating-rate {
   letter-spacing: 0.01em;
   color: #18213f;
@@ -116,18 +130,22 @@
   display: block;
   width: 35px;
 }
+
 .chat-room ul li .user-detail {
   min-width: 50px;
   text-align: center;
 }
+
 .chat-room ul li .user-detail:hover .user-rating {
   opacity: 1;
 }
+
 .chat-room ul li .indentifier {
   font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 0.625rem;
 }
+
 .chat-room ul li .message-time {
   letter-spacing: 0.01em;
   color: #18213f;
@@ -135,21 +153,25 @@
   font-size: 0.625rem;
   font-family: "Inter", sans-serif;
 }
+
 .chat-room ul li .stranger-indentifier {
   font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 0.625rem;
   color: rgba(17, 105, 208, 1);
 }
+
 .chat-room-footer {
   background: #e1ecef;
   box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.1);
 }
+
 .chat-room-footer .end-chat {
   width: 7%;
 }
+
 .chat-room-footer .end-chat button {
   padding: 1rem 0rem;
   background-color: rgba(192, 46, 46, 1);
@@ -160,12 +182,14 @@
   letter-spacing: 0.01em;
   width: 100%;
 }
+
 .type-message-div {
   background: #ffffff;
   box-shadow: 0px 2.93298px 2.93298px rgba(0, 0, 0, 0.06);
   padding: 1rem 1.4rem;
   width: 82%;
 }
+
 .type-message-div .emoji-div,
 .type-message-div .img-div,
 .type-message-div .voice-msg-div {
@@ -181,6 +205,7 @@
 .type-message-div .voice-msg-div .img {
   width: 20px;
 }
+
 .type-message-div .voice-msg-div .img {
   margin-left: 4rem !important;
   font-size: 1.5rem;
@@ -191,10 +216,12 @@
   .type-message-div .voice-msg-div img {
     margin-left: 2rem !important;
   }
+
   .chat-room-footer .end-chat button {
     padding: 1rem 0rem;
     width: 100%;
   }
+
   .type-message-div .emoji-div,
   .type-message-div .img-div,
   .type-message-div .voice-msg-div {
@@ -204,6 +231,7 @@
     cursor: pointer;
     justify-content: center;
   }
+
   .type-message-div input {
     width: 70%;
     margin-left: 1rem;
@@ -232,13 +260,16 @@
     margin-right: 1.2rem;
   }
 }
+
 .type-message-div input {
   width: 91%;
   border: none;
 }
+
 .send-message {
   width: 8%;
 }
+
 .send-message button {
   padding: 1rem 0rem;
   background-color: rgba(52, 201, 255, 1);
@@ -250,29 +281,36 @@
   width: 100%;
   position: relative;
 }
+
 .send-message button span {
   position: absolute;
   right: 25px;
   top: 15px;
 }
+
 .rating-div span {
   color: rgba(55, 193, 240, 1);
 }
+
 .rating-div span.with-out-rating {
   color: rgba(75, 127, 141, 1);
 }
+
 .rating-div .connected-user-text {
   font-family: "Inter", sans-serif;
   font-weight: 600;
   color: rgba(0, 133, 255, 1);
 }
+
 .disconnected-stranger {
   text-align: center;
 }
+
 .disconnected-stranger p {
   color: rgba(192, 46, 46, 1);
   margin-bottom: 13px;
 }
+
 .disconnected-stranger button {
   background-color: rgba(52, 201, 255, 1);
   border: none;
@@ -318,11 +356,13 @@
   align-items: center;
   justify-content: center;
 }
+
 .typing-bubble .typing {
   position: relative;
   margin-left: -50px;
   margin-top: 0.8rem;
 }
+
 .typing-bubble .typing span {
   content: "";
   animation: blink 1.5s infinite;
@@ -335,21 +375,26 @@
   bottom: 50%;
   border-radius: 50%;
 }
+
 .typing-bubble .typing span:nth-child(2) {
   animation-delay: 0.2s;
   margin-left: 15px;
 }
+
 .typing-bubble .typing span:nth-child(3) {
   animation-delay: 0.4s;
   margin-left: 30px;
 }
+
 @keyframes blink {
   0% {
     opacity: 0.1;
   }
+
   20% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.1;
   }
@@ -376,7 +421,7 @@
 }
 
 @media screen and (max-width: 540px) {
-  .chat-room .messages-list > li:last-child {
+  .chat-room .messages-list>li:last-child {
     padding-bottom: 5rem !important;
   }
 }
@@ -395,6 +440,7 @@
   /* background-color: #adb5bd; */
   margin-left: 0.5rem;
 }
+
 #audio-switch-action:hover {
   cursor: pointer;
 }
@@ -407,25 +453,26 @@
   margin-top: 1.5rem;
 }
 
-@media only screen and (max-width: 1680px) {
-}
+@media only screen and (max-width: 1680px) {}
 
-@media only screen and (max-width: 1200px) {
-}
+@media only screen and (max-width: 1200px) {}
 
 @media only screen and (max-width: 992px) {
   .chat_wrapper {
     height: 100vh !important;
     overflow-y: auto !important;
   }
+
   .chat-room-footer .end-chat {
     margin-right: 1rem;
     width: 15%;
   }
+
   .chat-room-footer .type-message-div {
     margin-right: 1rem;
     width: 70%;
   }
+
   .voice-msg-div .img {
     font-size: 1.3rem !important;
     margin-right: 3.7rem;
@@ -438,6 +485,7 @@
     padding-top: 3rem !important;
     overflow-y: auto;
   }
+
   .random-stranger-div {
     margin-top: 15rem;
   }
@@ -455,6 +503,7 @@
   .random-stranger-div {
     margin-top: 15rem;
   }
+
   .disconnected-stranger {
     padding-bottom: 5rem;
   }
@@ -465,22 +514,28 @@
     height: 100vh !important;
     overflow-y: auto !important;
   }
+
   .connection-login-message {
     margin-top: 4.5rem;
   }
+
   .connecting-logo-div .like-text {
     /* margin-top: 0rem; */
   }
+
   .connecting-logo-div .buy-me-coffee {
     margin-top: 0.3rem;
   }
+
   .random-stranger-div {
     margin-top: 5rem;
   }
+
   .voice-msg-div .img {
     font-size: 0.9rem !important;
     margin-right: 0.9rem;
   }
+
   .disconnected-stranger {
     padding-bottom: 5rem;
   }

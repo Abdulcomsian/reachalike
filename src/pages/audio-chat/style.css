@@ -52,10 +52,11 @@
   width: 100%;
 }
 .audio_call_chat .fixed-bottom {
-  position: fixed;
+  position: absolute;
     right: 0;
     bottom: 0;
-    left: 500px;
+    left: 0;
+    width: 100%;
     z-index: 1030;
 
 }
