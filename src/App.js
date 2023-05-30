@@ -840,6 +840,8 @@ const App = () => {
         setEnd={setEnd}
         setMessages={setMessages}
         setChatType={setChatType}
+        sendStarRating={sendStarRating}
+        setStarRating={setStarRating}
       />
     )
   }

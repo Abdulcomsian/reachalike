@@ -18,19 +18,21 @@ const tooltipArray = [
 ];
 
 const RatingAudio = (props) => {
-  const { asRef, user } = props;
+  const { asRef, user,sendStarRating,setStarRating } = props;
   const [ratingValue, setRatingValue] = useState(0);
 
   const navigate = useNavigate();
 
   const handleRating = (rate) => {
     setRatingValue(rate);
+    setStarRating(rate)
   };
 
   const location = useLocation();
   const submitRatingValue = (rate) => {
     // props.setRatingModal(false);
     props.modalUserRatingClose();
+    sendStarRating()
     // props.setEndChat(false);
     // navigate("/");
   };

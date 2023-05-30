@@ -32,7 +32,9 @@ const AudioChat = (props) => {
     onClickConfirm, startChat,
     setStartChat,
     setEnd,
-    setChatType
+    setChatType,
+    sendStarRating,
+    setStarRating
   } = props;
   const ref = useRef();
   //These are all the state variables that are being used in the component rendering
@@ -171,6 +173,8 @@ const AudioChat = (props) => {
                         loginHandler={props.loginHandler}
                         registerHandler={props.registerHandler}
                         setEndChat={setEndChat}
+                        sendStarRating={sendStarRating}
+                        setStarRating={setStarRating}
                       />
                     ) : (
                       ""

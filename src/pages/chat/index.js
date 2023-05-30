@@ -86,6 +86,8 @@ const ChatScreen = (props) => {
     }
   }, [isChatActive]);
 
+  console.log("ratingPopup", ratingPopup);
+
   // ********** Navigation Modal Functions ********** //
 
   const modalUserRatingClose = (val) => {
@@ -402,11 +404,11 @@ const ChatScreen = (props) => {
                 <Link
                   to={`/audio/${selectedGroup}`}
                   onClick={() => {
-                    setChatType("Text")
+                    setChatType("Audio")
                     handleAudioConnect(selectedGroup);
                     // navigate("/audio-chat",{replace:true, });
                   }}
-                  className="btn px-3 py-2"
+                  className="btn btn-primary bg-primary px-3 py-2"
                   id="audio-switch-action"
                 >
                   Switch to <span>Audio</span>
@@ -492,10 +494,10 @@ const ChatScreen = (props) => {
                 onBlur={handleInputBlur}
                 onChange={userStatus !== "disconnected" ? handleMessageChange : null}
               />
-              <div className="voice-msg-div">
-                {/* <img src={images.voice_icon} alt="Microphone" /> */}
-                <i class="fa-solid fa-microphone img" id="voice-msg"></i>
-              </div>
+              {/* <div className="voice-msg-div"> */}
+              {/* <img src={images.voice_icon} alt="Microphone" /> */}
+              {/* <i class="fa-solid fa-microphone img" id="voice-msg"></i> */}
+              {/* </div> */}
             </div>
             <div
               className={
