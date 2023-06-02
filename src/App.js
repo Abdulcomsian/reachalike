@@ -842,6 +842,7 @@ const App = () => {
         setChatType={setChatType}
         sendStarRating={sendStarRating}
         setStarRating={setStarRating}
+        messages={messages}
       />
     )
   }

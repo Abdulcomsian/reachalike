@@ -60,3 +60,18 @@
     z-index: 1030;
 
 }
+.msg-btn {
+  position: relative;
+}
+
+.msg-btn::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: -3px;
+  right: 2px;
+  background-color: orange;
+}

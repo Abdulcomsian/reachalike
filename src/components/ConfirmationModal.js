@@ -27,7 +27,7 @@ const ConfirmationModal = (props) => {
   };
 
   const onClickConfirm = () => {
-    setRatingModal(true);
+    // setRatingModal(true);
     setYes(false);
     props.onClickEndConfirmBtn();
     props.setConfirm(false);

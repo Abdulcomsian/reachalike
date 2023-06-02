@@ -86,7 +86,6 @@ const ChatScreen = (props) => {
     }
   }, [isChatActive]);
 
-  console.log("ratingPopup", ratingPopup);
 
   // ********** Navigation Modal Functions ********** //
 

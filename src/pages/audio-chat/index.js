@@ -17,6 +17,7 @@ const AudioChat = (props) => {
     user,
     handleChatConnect,
     setMessages,
+    messages,
     findUser,
     setFindUser,
     handleAudioConnect,
@@ -29,18 +30,20 @@ const AudioChat = (props) => {
     setEndConfirm,
     onClickEndBtn,
     userStatus,
-    onClickConfirm, startChat,
+    onClickConfirm,
+    startChat,
     setStartChat,
     setEnd,
     setChatType,
     sendStarRating,
-    setStarRating
+    setStarRating,
   } = props;
   const ref = useRef();
   //These are all the state variables that are being used in the component rendering
   const [mute, setMute] = useState(false);
   const [requestToChat, setRequestToChat] = useState(true);
   const [hide, setHide] = useState(true);
+  const [checkMessage, setCheckMessage] = useState(false);
 
   // This side effect sets the dummy chat connection with the other user
   useEffect(() => {
@@ -54,8 +57,8 @@ const AudioChat = (props) => {
     if (findUser) {
       setFindUser(true);
       setEndConfirm(false);
-      setEnd(false)
-      setEndChat(false)
+      setEnd(false);
+      setEndChat(false);
     }
   }, [findUser]);
 
@@ -63,20 +66,25 @@ const AudioChat = (props) => {
   useEffect(() => {
     if (userStatus === "disconnected") {
       // onClickEndConfirmBtn();
-      setEndChat(true)
-      setStartChat(false)
+      setEndChat(true);
+      setStartChat(false);
       onClickConfirm();
-       setMessages([]);
+      setMessages([]);
     }
   }, [userStatus]);
 
   // This state variable and the function under it are responsible for
   // toggling the user rating modal's display
- 
+
   const modalUserRatingClose = (val) => {
     setHide(false);
     setEndChat(true);
   };
+
+  useEffect(()=>{
+    setCheckMessage(true)
+    console.log("message")
+  },[messages])
 
   return (
     <>
@@ -104,8 +112,8 @@ const AudioChat = (props) => {
                     startChat
                       ? "audio-body-left w-100 d-flex align-items-center justify-content-center"
                       : !endChat
-                        ? "audio-body-left d-flex align-items-center justify-content-center"
-                        : "audio-body-left w-100 d-flex align-items-center justify-content-center"
+                      ? "audio-body-left d-flex align-items-center justify-content-center"
+                      : "audio-body-left w-100 d-flex align-items-center justify-content-center"
                   }
                 >
                   <div className="common-audio">
@@ -147,7 +155,7 @@ const AudioChat = (props) => {
                           setStartChat(false),
                           setHide(true),
                           setChatType("Audio"),
-                          handleAudioConnect(selectedGroup)
+                          handleAudioConnect(selectedGroup),
                         ]}
                       >
                         New Audio Chat
@@ -157,8 +165,8 @@ const AudioChat = (props) => {
                         to={`/chat/${selectedGroup}`}
                         className="btn btn-primary bg-primary px-3 py-2"
                         onClick={() => {
-                          setChatType("Text")
-                          handleChatConnect(selectedGroup)
+                          setChatType("Text");
+                          handleChatConnect(selectedGroup);
                           setMessages([]);
                         }}
                       >
@@ -205,7 +213,17 @@ const AudioChat = (props) => {
                         }
                       ></i>
                     </button>
-                    <button className="common-footer-btn" onClick={() => setStartChat(!startChat)}>
+                    <button
+                      className={
+                        messages.length > 0 && checkMessage===true && startChat!==true
+                          ? "common-footer-btn msg-btn"
+                          : "common-footer-btn"
+                      }
+                      onClick={() => {
+                        setStartChat(!startChat);
+                        setCheckMessage(false);
+                      }}
+                    >
                       <i class="fa-solid fa-envelope"></i>
                     </button>
                   </div>
@@ -219,7 +237,12 @@ const AudioChat = (props) => {
           )}
         </div>
         {/* {startChat && <ChatScreen requestToChat={requestToChat} setSearchingUser={setSearchingUser} />} */}
-        <div className="audio_call_chat" style={{ display: startChat === true ? "" : "none" }}>{chatScreen()}</div>
+        <div
+          className="audio_call_chat"
+          style={{ display: startChat === true ? "" : "none" }}
+        >
+          {chatScreen()}
+        </div>
       </div>
     </>
   );
